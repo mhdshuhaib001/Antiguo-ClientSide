@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
-import SignupForm from '../containers/Signup';
-import LoginForm from '../containers/Login';
-import { AuthResponse } from '../types/userTypes/apiTypes';
+import { useNavigate } from 'react-router-dom'; 
+import SignupForm from '../../containers/Signup';
+import LoginForm from '../../containers/Login';
+import { AuthResponse } from '../../types/userTypes/apiTypes';
 
 const Registration: React.FC = () => {
   const [showLogin, setShowLogin] = useState<boolean>(false);
+  const navigate = useNavigate(); 
 
   const handleSignup = (data: AuthResponse) => {
     console.log('Signup Data:', data);
-    // Handle post-signup logic (e.g., navigate to a different page)
   };
 
   const handleLogin = (data: { email: string; password: string }) => {
     console.log('Login Data:', data);
-    // Handle post-login logic
+  };
+
+  const handleLoginRedirect = () => {
+    navigate('/login');
   };
 
   return (
@@ -30,7 +34,7 @@ const Registration: React.FC = () => {
         >
           <div className="absolute bottom-0 right-0 w-60 h-80 bg-gray-100 rounded-lg flex items-center justify-center shadow-lg">
             <img
-              src="https://via.placeholder.com/150"
+              src="/assets/signup.jpg"
               alt="Decorative"
               className="w-full h-full object-cover rounded-lg"
             />
@@ -76,12 +80,12 @@ const Registration: React.FC = () => {
               <div className="text-center mb-4">
                 <p className="text-gray-600">
                   Already have an account?{" "}
-                  <button
-                    onClick={() => setShowLogin(true)}
+                  <a
+                  onClick={()=>setShowLogin(true)}
                     className="text-blue-500 hover:underline"
                   >
                     Log in here
-                  </button>
+                  </a>
                 </p>
               </div>
             </>

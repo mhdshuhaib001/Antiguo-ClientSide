@@ -1,28 +1,35 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { AuthRequest, AuthResponse } from '../../types/userTypes/apiTypes';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { AuthRequest, AuthResponse } from "../../types/userTypes/apiTypes";
 
 export const ApiSlice = createApi({
-    reducerPath: 'api',
-    baseQuery: fetchBaseQuery({ 
-        baseUrl: 'http://localhost:8000', 
-        credentials: 'include'  
+  reducerPath: "api",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:8000",
+    credentials: "include"
+  }),
+  endpoints: builder => ({
+    signup: builder.mutation<AuthResponse, AuthRequest>({
+      query: signupData => ({
+        url: "/api/auth/signup",
+        method: "POST",
+        body: signupData
+      })
     }),
-    endpoints: (builder) => ({
-        signup: builder.mutation<AuthResponse, AuthRequest>({
-            query: (signupData) => ({
-                url: '/api/auth/signup',
-                method: 'POST',
-                body: signupData,
-            }),
-        }),
-        sendOtp: builder.mutation<void, { email: string }>({
-            query: (otpData) => ({
-                url: '/api/auth/send-otp',
-                method: 'POST',
-                body: otpData,
-            }),
-        }),
+    sendOtp: builder.mutation<void, { email: string; otp: number }>({
+      query: otpData => ({
+        url: "/api/auth/send-otp",
+        method: "POST",
+        body: otpData
+      })
     }),
+    login: builder.mutation<AuthResponse, AuthRequest>({
+      query: loginData => ({
+        url: "/api/auth/login",
+        method: "POST",
+        body: loginData
+      })
+    })
+  })
 });
 
-export const { useSignupMutation, useSendOtpMutation } = ApiSlice;
+export const { useSignupMutation, useSendOtpMutation ,useLoginMutation} = ApiSlice;

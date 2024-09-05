@@ -7,9 +7,9 @@ export interface Post{
 // respose for the user-related oprations
 
 export interface User{
-    id: number
-    username: string
+    name: string
     email: string
+    password: string
 }
 
 export interface AuthRequest{
@@ -20,6 +20,9 @@ export interface AuthRequest{
 }
 
 export interface AuthResponse {
-    token: string;
+    accessToken?: string;
+    password: string;
+    email: string;
+    token: string;  
     user: User;
-  }
+  } 
