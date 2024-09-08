@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { useLoginMutation } from "../services/apis/apiSlice";
+import { useLoginMutation } from "../services/apis/userApi";
 import { validateEmail, validatePassword } from "../utils/validationUtils";
 import { AuthRequest, AuthResponse } from "../types/userTypes/apiTypes";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/slices/userSlice";
+
 
 interface LoginFormProps {
     onLogin: (data: AuthResponse) => void;
@@ -15,6 +18,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     const [passwordError, setPasswordError] = useState<string | null>(null);
     const [login] = useLoginMutation();
     const navigate = useNavigate();
+    const dispatch = useDispatch()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -41,11 +45,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
                 console.log("Submit called with data:", { email, password });
 
                 const result:any = await login(user).unwrap();
+                console.log(result,'hallo this is the redult')
 
                 const authToken = result.user.accessToken;
                     localStorage.setItem('authToken', authToken);
+                    const userDetails = result.user;
+                    console.log(userDetails)
+                    dispatch(setUser(userDetails));
                     onLogin(result);
-                    navigate('/user/home');
+                    navigate('/home');
               
 
             } catch (error) {

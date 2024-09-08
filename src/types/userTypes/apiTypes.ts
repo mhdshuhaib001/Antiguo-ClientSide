@@ -4,12 +4,12 @@ export interface Post{
     content: string;
 }
 
-// respose for the user-related oprations
-
 export interface User{
+    userData: any;
+    id: string,
     name: string
     email: string
-    password: string
+    // password: string
 }
 
 export interface AuthRequest{

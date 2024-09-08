@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useSignupMutation, useSendOtpMutation } from '../services/apis/apiSlice';
-import { AuthResponse } from '../types/userTypes/apiTypes';
+import { useSignupMutation, useSendOtpMutation } from '../services/apis/userApi';
+import { AuthResponse, User } from '../types/userTypes/apiTypes';
 import { useNavigate } from 'react-router-dom';
 import { validateEmail, validateName, validatePassword } from '../utils/validationUtils';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../store/slices/userSlice';
 
-const SignupForm: React.FC<{ onSignup: (data: AuthResponse) => void }> = ({ onSignup }) => {
+interface SignupFormProps  {
+  onSignup: (data: AuthResponse) => void;
+}
+const SignupForm: React.FC<SignupFormProps> = ({ onSignup }) => {
   const [signup] = useSignupMutation();
   const [sendOtp] = useSendOtpMutation();
+
+  const dispatch = useDispatch();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -77,6 +84,10 @@ const SignupForm: React.FC<{ onSignup: (data: AuthResponse) => void }> = ({ onSi
 
       try {
         const result = await signup({ name, email, password, otp }).unwrap();
+        const user: User = result.user; 
+console.log(user,'this is the user');
+
+        dispatch(setUser( user))
         onSignup(result as AuthResponse);
         alert('Signup completed successfully.');
         navigate('/user/home');

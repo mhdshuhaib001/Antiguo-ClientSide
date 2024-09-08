@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [token, setTocken] = useState<string | null>("");
+  const navigate = useNavigate()
 
   useEffect(() => {
     const storedTocken = localStorage.getItem("authToken");
@@ -55,7 +57,7 @@ const Header: React.FC = () => {
 
           {/* Profile Button */}
           {token
-            ? <button className="bg-gray-900 text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4">
+            ? <button className="bg-gray-900 text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4" onClick={()=>{navigate('/profile')}}>
                 Profile
               </button>
             : <button className="bg-gray-900 text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4">

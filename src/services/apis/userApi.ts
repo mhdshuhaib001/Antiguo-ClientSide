@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { AuthRequest, AuthResponse } from "../../types/userTypes/apiTypes";
 
 export const ApiSlice = createApi({
-  reducerPath: "api",
+  reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8000",
     credentials: "include"
