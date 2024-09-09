@@ -1,7 +1,7 @@
 import { AuthRequest } from "../userTypes/apiTypes";
 
 export interface SellerCreationRequest {
-    userId?: string;
+    UserID?: string;
     CompanyName: string;
     contactInfo?: string;
     about?: string;
@@ -11,7 +11,7 @@ export interface SellerCreationRequest {
 
 export interface SellerResponse {
     id: string;
-    userId?: string;
+    UserId?: string;
     CompanyName: string;
     contactInfo?: string;
     about?: string;
@@ -26,7 +26,7 @@ export interface FormDataType {
     category: string;
     description: string;
     condition: string;
-    images: File[]; 
+    images: string[]; 
     auctionFormat: string;
     auctionDuration: string;
     reservePrice: string;
@@ -35,4 +35,11 @@ export interface FormDataType {
     handlingTime: string;
     returnPolicy: string;
   }
+  
+
+  export interface AddProductResponse {
+    success: boolean;
+    message: string;
+  } 
+  
   

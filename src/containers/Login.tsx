@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slices/userSlice";
 
-
 interface LoginFormProps {
     onLogin: (data: AuthResponse) => void;
 }
@@ -18,7 +17,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     const [passwordError, setPasswordError] = useState<string | null>(null);
     const [login] = useLoginMutation();
     const navigate = useNavigate();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -43,18 +42,27 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             const user: AuthRequest = { email, password };
             try {
                 console.log("Submit called with data:", { email, password });
-
                 const result:any = await login(user).unwrap();
-                console.log(result,'hallo this is the redult')
 
-                const authToken = result.user.accessToken;
-                    localStorage.setItem('authToken', authToken);
-                    const userDetails = result.user;
-                    console.log(userDetails)
-                    dispatch(setUser(userDetails));
-                    onLogin(result);
-                    navigate('/home');
-              
+                console.log(result, 'Login successful result');
+
+                const authToken = result.accessToken;
+                console.log('authToken',authToken);
+                
+                localStorage.setItem('authToken', authToken!);
+
+                const userDetails = result.userData
+                console.log(userDetails, 'User Details');
+
+                dispatch(setUser({
+                    _id: userDetails._id,
+                    name: userDetails.name,
+                    email: userDetails.email,
+                }));
+
+                onLogin(result);
+
+                navigate('/home');
 
             } catch (error) {
                 console.error("Login failed", error);
@@ -62,15 +70,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         }
     };
 
-
-
     return (
         <form onSubmit={handleSubmit}>
             <div className="mb-4">
-                <label
-                    className="block text-gray-700 text-sm font-bold mb-2"
-                    htmlFor="email"
-                >
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                     Email
                 </label>
                 <input
@@ -89,10 +92,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             </div>
 
             <div className="mb-4">
-                <label
-                    className="block text-gray-700 text-sm font-bold mb-2"
-                    htmlFor="password"
-                >
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                     Password
                 </label>
                 <input
@@ -111,10 +111,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             </div>
 
             <div className="mb-4 text-right">
-                <a
-                    href="/forgot-password"
-                    className="text-black-500 hover:text-blue-700 text-sm"
-                >
+                <a href="/forgot-password" className="text-black-500 hover:text-blue-700 text-sm">
                     Forgot Password?
                 </a>
             </div>
@@ -127,10 +124,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
                     Sign In
                 </button>
             </div>
-
-   
         </form>
     );
 };
 
 export default LoginForm;
+    

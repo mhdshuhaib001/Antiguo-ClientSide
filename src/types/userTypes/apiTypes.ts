@@ -12,17 +12,26 @@ export interface User{
     // password: string
 }
 
+
+// export interface User {
+//     _id: string;
+//     name: string;
+//     email: string;
+//   }
+  
+
 export interface AuthRequest{
     name? : string
     email: string
     password: string
     otp? : string
 }
-
+    
 export interface AuthResponse {
+    _id: string;
+    user: any;
     accessToken?: string;
     password: string;
     email: string;
     token: string;  
-    user: User;
   } 

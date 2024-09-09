@@ -1,30 +1,34 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '../../types/userTypes/apiTypes';
 
 interface UserState {
-  user: User | null;
-  isAuthenticated: boolean;
+    _id: string;
+    name: string;
+    email: string;
+    isSeller: boolean;
 }
 
 const initialState: UserState = {
-  user: null,
-  isAuthenticated: false,
+    _id: '',
+    name: '',
+    email: '',
+    isSeller: false,
 };
 
 const userSlice = createSlice({
-  name: 'user',
-  initialState,
-  reducers: {
-    setUser: (state, action: PayloadAction<User>) => {
-      state.user = action.payload;
-      state.isAuthenticated = true;
+    name: 'user',
+    initialState,
+    reducers: {
+        setUser: (state, action: PayloadAction<{ _id: string; name: string; email: string }>) => {
+            const { _id, name, email } = action.payload;
+            state._id = _id;
+            state.name = name;
+            state.email = email;
+        },
+        setSeller: (state, action: PayloadAction<boolean>) => {
+            state.isSeller = action.payload; 
+        }
     },
-    clearUser: (state) => {
-      state.user = null;
-      state.isAuthenticated = false;
-    },
-  },
 });
 
-export const { setUser, clearUser } = userSlice.actions;
+export const { setUser, setSeller } = userSlice.actions;
 export default userSlice.reducer;
