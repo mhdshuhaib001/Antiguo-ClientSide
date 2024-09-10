@@ -3,17 +3,18 @@ import { useSignupMutation, useSendOtpMutation } from '../services/apis/userApi'
 import { AuthResponse, User } from '../types/userTypes/apiTypes';
 import { useNavigate } from 'react-router-dom';
 import { validateEmail, validateName, validatePassword } from '../utils/validationUtils';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../store/slices/userSlice';
+import { toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
-interface SignupFormProps  {
+interface SignupFormProps {
   onSignup: (data: AuthResponse) => void;
 }
+
 const SignupForm: React.FC<SignupFormProps> = ({ onSignup }) => {
   const [signup] = useSignupMutation();
   const [sendOtp] = useSendOtpMutation();
 
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -24,7 +25,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignup }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
   const [otpExpired, setOtpExpired] = useState(false);
-  const navigate = useNavigate();
+  const [canResendOtp, setCanResendOtp] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
   const [nameError, setNameError] = useState<string | null>(null);
@@ -41,6 +42,8 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignup }) => {
       if (timeLeft === 0) {
         setOtpExpired(true);
         setOtpError('OTP has expired. Please request a new OTP.');
+        setCanResendOtp(true); 
+        toast.error('OTP has expired. Please request a new OTP.'); 
       }
 
       return () => clearInterval(timer);
@@ -50,86 +53,113 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignup }) => {
   const handleSendOtp = async () => {
     setError(null);
     setIsSubmitting(true);
-
     try {
       await sendOtp({ email, otp: 0 }).unwrap();
       setIsOtpStep(true);
       setTimeLeft(60);
       setOtpError(null);
+      setCanResendOtp(false); 
     } catch (err: any) {
-      console.error('Failed to send OTP:', err);
-      setError('Failed to send OTP. Please try again.');
+      console.log(err, 'heyyyyyyyy');
+      if (err.status === 400) {
+        if (err.data === "Email already exists") {
+          console.error('Email already exists:', err);
+          setError('Email already exists. Please use a different email.');
+        } else {
+          console.error('Failed to send OTP:', err);
+          setError('Failed to send OTP. Please try again.');
+        }
+      } else {
+        console.error('Unexpected error:', err);
+        setError('An unexpected error occurred. Please try again.');
+        toast.error('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
+    
+  };
+
+  const handleResendOtp = () => {
+    setOtpExpired(false);
+    setTimeLeft(60);
+    setCanResendOtp(false);
+    handleSendOtp();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);
-
+  
     if (isOtpStep) {
       if (otpExpired) {
         setOtpError('OTP has expired. Please request a new OTP.');
         setIsSubmitting(false);
         return;
       }
-
+  
       if (!otp) {
         setOtpError('Please enter the OTP.');
         setIsSubmitting(false);
         return;
       }
-
+  
       try {
-        const result = await signup({ name, email, password, otp }).unwrap();
-        const user: User = result.user; 
-console.log(user,'this is the user');
-
-        dispatch(setUser( user))
+        const result = await signup({name, email, password, otp }).unwrap();
+        console.log('Signup result:', result.token);
+        // console.log(user)
+        
         onSignup(result as AuthResponse);
-        alert('Signup completed successfully.');
-        navigate('/user/home');
-      } catch (err) {
+        toast.success('Signup completed successfully.'); 
+        navigate('/home');
+      } catch (err: any) {
         console.error('Signup failed:', err);
-        setError('Signup failed. Please try again.');
+        if (err.data && err.data.message) {
+          if (err.data.message.includes('OTP')) {
+            setOtpError('The OTP you entered is incorrect.');
+          } else {
+            toast.error(err.data.message);
+          }
+        } else {
+          toast.error('Signup failed. Please try again.');
+        }
       } finally {
         setIsSubmitting(false);
       }
     } else {
       let hasError = false;
-
+  
       if (!validateName(name)) {
         setNameError('Name must be at least 3 characters long and contain only letters.');
         hasError = true;
       } else {
         setNameError(null);
       }
-
+  
       if (!validateEmail(email)) {
         setEmailError('Please enter a valid email.');
         hasError = true;
       } else {
         setEmailError(null);
       }
-
+  
       if (!validatePassword(password)) {
         setPasswordError('Password must be at least 8 characters long.');
         hasError = true;
       } else {
         setPasswordError(null);
       }
-
+  
       if (hasError) {
         setIsSubmitting(false);
         return;
       }
-
+  
       await handleSendOtp();
     }
   };
-
+  
   return (
     <form onSubmit={handleSubmit}>
       {!isOtpStep ? (
@@ -199,6 +229,12 @@ console.log(user,'this is the user');
         </>
       ) : (
         <>
+          {isOtpStep && (
+            <div className="mb-4 text-center text-gray-600-600">
+              OTP has been sent to your email. Please check your inbox.
+            </div>
+          )}
+
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="otp">
               OTP
@@ -219,9 +255,21 @@ console.log(user,'this is the user');
             />
             {otpError && <p className="text-red-500 text-xs italic">{otpError}</p>}
           </div>
+
           <div className="mb-4 text-blue-600">
             {timeLeft > 0 ? `OTP expires in 00:${String(timeLeft).padStart(2, '0')}` : 'OTP expired'}
           </div>
+
+          {otpExpired && canResendOtp && (
+            <button
+              type="button"
+              onClick={handleResendOtp}
+              className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Resending OTP...' : 'Resend OTP'}
+            </button>
+          )}
         </>
       )}
 
@@ -241,21 +289,7 @@ console.log(user,'this is the user');
 };
 
 export default SignupForm;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function dispatch(arg0: { payload: { _id: string; name: string; email: string; }; type: "user/setUser"; }) {
+  throw new Error('Function not implemented.');
+}
 

@@ -1,11 +1,11 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { useSelector } from 'react-redux'; // To get userId from Redux
-import { RootState } from '../../store/Store'; // Adjust based on your store structure
+import { useSelector } from 'react-redux'; 
+import { RootState } from '../../store/Store';
 import { useAddProductMutation } from '../../services/apis/sellerApi'; 
 import 'tailwindcss/tailwind.css';
 
 const ProductListingForm: React.FC = () => {
-  const userId = useSelector((state: RootState) => state.User._id); // Get userId from Redux
+  const userId = useSelector((state: RootState) => state.User._id);
   const [addProduct] = useAddProductMutation();
   const [formData, setFormData] = useState({
     itemTitle: '',
@@ -71,7 +71,8 @@ const ProductListingForm: React.FC = () => {
     };
 
     try {
-      await addProduct(dataToSend).unwrap();
+      const productData = await addProduct(dataToSend).unwrap();
+      console.log(productData)
       setSuccessMsg('Product listing submitted successfully!');
     } catch (err) {
       console.error('Failed to submit product listing:', err);
@@ -80,7 +81,7 @@ const ProductListingForm: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto mt-10 p-5 shadow-md bg-white">
+    <div className="mt-10 p-5 shadow-md bg-white m-0">
       <form onSubmit={handleSubmit}>
         {/* Item Details */}
         <div className="border border-gray-300 p-4 bg-white rounded-md mb-8">
@@ -136,7 +137,12 @@ const ProductListingForm: React.FC = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm mb-2">Images:</label>
+            <label className="block text-gray-700 text-sm mb-2 flex items-center gap-2">
+              <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m0 0l-3-3m3 3H4M12 4V2M12 12h4M12 12V8M12 12V2M8 4h4M8 4H4m4 0h4M4 4v4m4-4v4m0 0h4M4 4h4M8 8h4M8 8v4M8 8H4M4 8v4m4 0h4" />
+              </svg>
+              Images:
+            </label>
             <input
               type="file"
               name="images"
@@ -144,9 +150,12 @@ const ProductListingForm: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded-md"
               multiple
             />
-            {previewSources.map((preview, index) => (
-              <img key={index} src={preview} alt={`Image preview ${index + 1}`} className="mt-4 w-32 h-32 object-cover"/>
-            ))}
+            <p className="text-gray-500 text-sm mt-1">Upload images by clicking or dragging files here.</p>
+            <div className="flex space-x-4 mt-4">
+              {previewSources.map((preview, index) => (
+                <img key={index} src={preview} alt={`Image preview ${index + 1}`} className="w-32 h-32 object-cover"/>
+              ))}
+            </div>
           </div>
         </div>
         {/* Auction Details */}
@@ -163,8 +172,8 @@ const ProductListingForm: React.FC = () => {
                 required
               >
                 <option value="">Select Auction Format</option>
-                <option value="english">English Auction</option>
-                <option value="dutch">Dutch Auction</option>
+                <option value="auction">Auction</option>
+                <option value="buy-it-now">Buy It Now</option>
               </select>
             </div>
             <div className="mb-4">
@@ -205,8 +214,8 @@ const ProductListingForm: React.FC = () => {
                 required
               >
                 <option value="">Select Shipping Type</option>
-                <option value="standard">Standard Shipping</option>
-                <option value="express">Express Shipping</option>
+                <option value="standard">Standard</option>
+                <option value="express">Express</option>
               </select>
             </div>
             <div className="mb-4">
@@ -238,21 +247,22 @@ const ProductListingForm: React.FC = () => {
                 value={formData.returnPolicy}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
-                rows={4}
+                rows={3}
                 required
               />
             </div>
           </div>
         </div>
+        {/* Submit Button */}
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
         >
-          Submit Product
+          Submit Listing
         </button>
+        {successMsg && <p className="text-green-500 mt-4">{successMsg}</p>}
+        {errMsg && <p className="text-red-500 mt-4">{errMsg}</p>}
       </form>
-      {successMsg && <p className="text-green-500 mt-4">{successMsg}</p>}
-      {errMsg && <p className="text-red-500 mt-4">{errMsg}</p>}
     </div>
   );
 };

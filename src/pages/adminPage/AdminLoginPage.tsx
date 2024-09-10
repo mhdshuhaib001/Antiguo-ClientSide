@@ -1,16 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import LoginForm from '../../containers/Login'; 
+import LoginForm from '../../containers/adminContainer/AdminLogin'; 
 
-const AdminLogin: React.FC = () => {
+const AdminLoginPage: React.FC = () => {
   const navigate = useNavigate(); 
 
   const handleLogin = (data: { email: string; password: string }) => {
     console.log('Login Data:', data);
-  };
-
-  const handleRedirect = () => {
-    navigate('/admin-dashboard');  
+   
   };
 
   return (
@@ -54,7 +51,6 @@ const AdminLogin: React.FC = () => {
 
           <div className="text-center mt-4">
             <p className="text-gray-600">
-        
             </p>
           </div>
         </div>
@@ -63,4 +59,4 @@ const AdminLogin: React.FC = () => {
   );
 };
 
-export default AdminLogin;
+export default AdminLoginPage;

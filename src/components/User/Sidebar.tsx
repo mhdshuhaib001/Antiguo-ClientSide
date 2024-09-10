@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
           <a href="#payments" className="text-white hover:bg-gray-700 hover:text-gray-200 p-2 rounded transition duration-200">Payments</a>
           <a href="#orders" className="text-white hover:bg-gray-700 hover:text-gray-200 p-2 rounded transition duration-200">Orders</a>
           <a href="#password" className="text-white hover:bg-gray-700 hover:text-gray-200 p-2 rounded transition duration-200">Password</a>
-          <a href="#settings" className="text-white hover:bg-gray-700 hover:text-gray-200 p-2 rounded transition duration-200">Settings</a>
+          <a href="#settings" className="text-white hover:bg-gray-700 hover:text-gray-200 p-2 rounded transition duration-200 border-red">LogOut</a>
         </nav>
       </aside>
     </div>

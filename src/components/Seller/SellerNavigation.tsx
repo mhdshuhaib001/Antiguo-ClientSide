@@ -9,13 +9,13 @@ const SellerNavigation: React.FC = () => {
         {/* Navigation Links */}
         <div className="absolute inset-x-0 top-0 flex justify-items-start px-6">
           <Link
-            to="/seller/dashboard"
+            to="/seller/product-management  "
             className="text-gray-800 text-sm font-medium py-2 px-4 hover:bg-gray-100"
           >
             Seller Dashboard
-          </Link>
+          </Link> 
           <Link
-            to="/product-management"
+          to="/profile/seller/product-management"
             className="text-gray-800 text-sm font-medium py-2 px-4 hover:bg-gray-100"
           >
             Product Management

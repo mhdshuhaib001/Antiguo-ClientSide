@@ -10,6 +10,7 @@ export interface SellerCreationRequest {
 
 
 export interface SellerResponse {
+    sellerToken:string
     id: string;
     UserId?: string;
     CompanyName: string;

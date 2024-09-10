@@ -42,31 +42,38 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             const user: AuthRequest = { email, password };
             try {
                 console.log("Submit called with data:", { email, password });
-                const result:any = await login(user).unwrap();
-
+                const result: any = await login(user).unwrap();
+            
                 console.log(result, 'Login successful result');
-
+            
                 const authToken = result.accessToken;
-                console.log('authToken',authToken);
+                console.log('authToken', authToken);
                 
                 localStorage.setItem('authToken', authToken!);
-
-                const userDetails = result.userData
+            
+                const userDetails = result.userData;
                 console.log(userDetails, 'User Details');
-
+            
                 dispatch(setUser({
                     _id: userDetails._id,
                     name: userDetails.name,
                     email: userDetails.email,
+                    role: "user"
                 }));
-
+            
                 onLogin(result);
-
+            
                 navigate('/home');
-
-            } catch (error) {
+            } catch (error: any) {
                 console.error("Login failed", error);
+            
+                if (error?.data?.message) {
+                    setPasswordError(error.data.message);
+                } else {
+                    setPasswordError("Login failed. Please try again.");
+                }
             }
+            
         }
     };
 
@@ -129,4 +136,3 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 };
 
 export default LoginForm;
-    

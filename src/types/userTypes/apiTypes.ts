@@ -6,7 +6,7 @@ export interface Post{
 
 export interface User{
     userData: any;
-    id: string,
+    _id: string,
     name: string
     email: string
     // password: string
@@ -28,6 +28,7 @@ export interface AuthRequest{
 }
     
 export interface AuthResponse {
+    userData: any;
     _id: string;
     user: any;
     accessToken?: string;
@@ -35,3 +36,6 @@ export interface AuthResponse {
     email: string;
     token: string;  
   } 
+
+
+  

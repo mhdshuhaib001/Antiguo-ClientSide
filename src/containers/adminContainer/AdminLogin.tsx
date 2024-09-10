@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useAdminLoginMutation } from '../../services/apis/adminApi'; 
+import { useNavigate } from 'react-router-dom';
 
-const LoginForm: React.FC = () => {
-  // Static email and password values
-  const email = "example@example.com";
-  const password = "password123";
+// Define props type
+interface AdminLoginFormProps {
+  onLogin: (data: { email: string; password: string }) => void;
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
+const adminLogin: React.FC<AdminLoginFormProps> = ({ onLogin }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [adminLogin, { isLoading, isError, isSuccess }] = useAdminLoginMutation();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submit called with data:", { email, password });
-    // Perform login logic here if needed
+    try {
+      const adminData = await adminLogin({ email, password }).unwrap();
+      localStorage.setItem('adminToken', adminData.adminToken);
+      console.log("Login successful:", adminData);
+
+
+      onLogin({ email, password }); 
+      navigate('/admin/admin-dashboard');
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   return (
@@ -24,10 +41,10 @@ const LoginForm: React.FC = () => {
           type="email"
           id="email"
           name="email"
-          defaultValue={email}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="Your email"
-          readOnly // Optional: Makes the input read-only
         />
       </div>
 
@@ -42,10 +59,10 @@ const LoginForm: React.FC = () => {
           type="password"
           id="password"
           name="password"
-          defaultValue={password}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="Your password"
-          readOnly // Optional: Makes the input read-only
         />
       </div>
 
@@ -62,12 +79,16 @@ const LoginForm: React.FC = () => {
         <button
           type="submit"
           className="w-full bg-black hover:bg-gray-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
+          disabled={isLoading}
         >
           Sign In
         </button>
       </div>
+
+      {isError && <div className="text-red-500">Login failed. Please check your credentials.</div>}
+      {isSuccess && <div className="text-green-500">Login successful!</div>}
     </form>
   );
 };
 
-export default LoginForm;
+export default adminLogin;

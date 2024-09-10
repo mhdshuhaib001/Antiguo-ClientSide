@@ -49,7 +49,7 @@ const BrandModal: React.FC<BrandModalProps> = ({ isOpen, onClose, brandName, set
 
                     <button
                         onClick={onBrandCreate}
-                        className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                        className="w-full bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-500"
                     >
                         Add Brand
                     </button>

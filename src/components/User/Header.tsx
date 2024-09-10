@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [token, setTocken] = useState<string | null>("");
+  const [token, setToken] = useState<string | null>(null);
   const navigate = useNavigate()
 
   useEffect(() => {
-    const storedTocken = localStorage.getItem("authToken");
-    console.log(storedTocken);
-    
-    setTocken(storedTocken);
-  });
+    const storedToken = localStorage.getItem("accessToken");
+    console.log(storedToken);
+    setToken(storedToken);
+}, []); 
+
 
   return (
     <header className="bg-white shadow-md py-2">

@@ -20,12 +20,17 @@ export const sellerApi = createApi({
       }),
     }),
     addProduct: builder.mutation<AddProductResponse, FormDataType>({
-      query: (formData) => ({
-        url: '/api/seller/createproduct',
-        method: 'POST',
-        body: formData,
-      }),
+      query: (formData) => {
+        console.log('Form Data:', formData);
+    
+        return {
+          url: '/api/seller/createproduct',
+          method: 'POST',
+          body: formData,
+        };
+      },
     }),
+    
   }),
 });
 

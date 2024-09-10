@@ -1,4 +1,6 @@
+// src/pages/SellerDashBord.tsx
 import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom'; // Import Outlet
 import BrandModal from '../../components/User/BrandModal';
 import TermsModal from '../../components/User/TermsModal';
 import { useCreateSellerMutation } from '../../services/apis/sellerApi';
@@ -18,7 +20,7 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
   const isSeller = useSelector((state: RootState) => state.User.isSeller); // Assuming isSeller is in the User state
 
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // Add useDispatch for Redux actions
+  const dispatch = useDispatch();
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
   const [companyName, setCompanyName] = useState('');
@@ -57,11 +59,15 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
       };
 
       const response = await createSeller(sellerData).unwrap();
-      if (response) {
-        dispatch(setSeller(true));
+      console.log(response);
 
+      if (response) {
+        localStorage.setItem('sellerToken', response.sellerToken);
+
+        dispatch(setSeller(true));
         navigate('/profile/productadd');
       }
+
       setSuccessMessage('Brand created successfully!');
       setErrorMessage('');
       closeBrandModal();
@@ -82,9 +88,9 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
         Seller Dashboard
       </h1>
       
-      <div className="flex flex-col items-center justify-center flex-grow">
+      <div className="flex flex-col items-center justify-center flex-grow ">
         {isSeller ? (
-         <SellerNavigation/>
+          <SellerNavigation/>
         ) : (
           <div className="text-center">
             <h2 className="text-xl font-medium mb-4 text-center sm:text-2xl">
@@ -102,6 +108,9 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
           </div>
         )}
       </div>
+
+      {/* Render nested routes here */}
+      <Outlet />
 
       {/* Terms and Conditions Modal */}
       <TermsModal

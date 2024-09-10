@@ -1,25 +1,27 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { sellerApi } from '../services/apis/sellerApi'; // Import the seller API service
-import { ApiSlice } from '../services/apis/userApi'; // Import the user API service
-import userReducer from './slices/userSlice'; // Example user slice
+import { sellerApi } from '../services/apis/sellerApi';
+import { ApiSlice } from '../services/apis/userApi';
+import userReducer from './slices/userSlice';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { adminApi } from '../services/apis/adminApi';
 
 // Combine reducers
 const rootReducer = combineReducers({
-  User: userReducer, // Example user reducer
-  [sellerApi.reducerPath]: sellerApi.reducer, // Add the seller API reducer
-  [ApiSlice.reducerPath]: ApiSlice.reducer, // Add the user API reducer
+  User: userReducer, 
+  [sellerApi.reducerPath]: sellerApi.reducer,
+  [ApiSlice.reducerPath]: ApiSlice.reducer, 
+  [adminApi.reducerPath]: adminApi.reducer,
 });
 
 // Persist configuration
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: [sellerApi.reducerPath, ApiSlice.reducerPath], // Don't persist API data
+  blacklist: [sellerApi.reducerPath, ApiSlice.reducerPath, adminApi.reducerPath],
 };
 
-// Create a persisted reducer
+//   persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 // Configure the store
@@ -30,7 +32,8 @@ const store = configureStore({
       serializableCheck: false,
     })
     .concat(sellerApi.middleware)
-    .concat(ApiSlice.middleware),
+    .concat(ApiSlice.middleware)
+    .concat(adminApi.middleware), 
 });
 
 export const persistor = persistStore(store);
