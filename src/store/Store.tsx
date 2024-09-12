@@ -8,9 +8,9 @@ import { adminApi } from '../services/apis/adminApi';
 
 // Combine reducers
 const rootReducer = combineReducers({
-  User: userReducer, 
+  User: userReducer,
   [sellerApi.reducerPath]: sellerApi.reducer,
-  [ApiSlice.reducerPath]: ApiSlice.reducer, 
+  [ApiSlice.reducerPath]: ApiSlice.reducer,
   [adminApi.reducerPath]: adminApi.reducer,
 });
 
@@ -18,7 +18,11 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: [sellerApi.reducerPath, ApiSlice.reducerPath, adminApi.reducerPath],
+  blacklist: [
+    sellerApi.reducerPath,
+    ApiSlice.reducerPath,
+    adminApi.reducerPath,
+  ],
 };
 
 //   persisted reducer
@@ -31,9 +35,9 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     })
-    .concat(sellerApi.middleware)
-    .concat(ApiSlice.middleware)
-    .concat(adminApi.middleware), 
+      .concat(sellerApi.middleware)
+      .concat(ApiSlice.middleware)
+      .concat(adminApi.middleware),
 });
 
 export const persistor = persistStore(store);

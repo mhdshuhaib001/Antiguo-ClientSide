@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAdminLoginMutation } from '../../services/apis/adminApi'; 
+import { useAdminLoginMutation } from '../../services/apis/adminApi';
 import { useNavigate } from 'react-router-dom';
 
 // Define props type
@@ -10,7 +10,8 @@ interface AdminLoginFormProps {
 const adminLogin: React.FC<AdminLoginFormProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [adminLogin, { isLoading, isError, isSuccess }] = useAdminLoginMutation();
+  const [adminLogin, { isLoading, isError, isSuccess }] =
+    useAdminLoginMutation();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -18,13 +19,12 @@ const adminLogin: React.FC<AdminLoginFormProps> = ({ onLogin }) => {
     try {
       const adminData = await adminLogin({ email, password }).unwrap();
       localStorage.setItem('adminToken', adminData.adminToken);
-      console.log("Login successful:", adminData);
+      console.log('Login successful:', adminData);
 
-
-      onLogin({ email, password }); 
+      onLogin({ email, password });
       navigate('/admin/admin-dashboard');
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error('Login failed:', error);
     }
   };
 
@@ -85,7 +85,11 @@ const adminLogin: React.FC<AdminLoginFormProps> = ({ onLogin }) => {
         </button>
       </div>
 
-      {isError && <div className="text-red-500">Login failed. Please check your credentials.</div>}
+      {isError && (
+        <div className="text-red-500">
+          Login failed. Please check your credentials.
+        </div>
+      )}
       {isSuccess && <div className="text-green-500">Login successful!</div>}
     </form>
   );

@@ -1,26 +1,34 @@
 import React from 'react';
-import { useFetchAllUsersQuery, useUpdateUserStatusMutation } from '../../services/apis/adminApi'; 
+import {
+  useFetchAllUsersQuery,
+  useUpdateUserStatusMutation,
+} from '../../services/apis/adminApi';
 
 const AdminUserTable: React.FC = () => {
   const { data: users = [], isLoading } = useFetchAllUsersQuery();
   const [updateUserStatus] = useUpdateUserStatusMutation();
 
-  const handleStatusChange = async (username: string, newStatus: "Active" | "Inactive") => {
+  const handleStatusChange = async (
+    username: string,
+    newStatus: 'Active' | 'Inactive'
+  ) => {
     try {
       await updateUserStatus({ username, status: newStatus }).unwrap();
-      alert(`User ${newStatus === "Active" ? "unblocked" : "blocked"} successfully!`);
+      alert(
+        `User ${newStatus === 'Active' ? 'unblocked' : 'blocked'} successfully!`
+      );
     } catch (error) {
-      console.error("Failed to update status:", error);
-      alert("Failed to update user status. Please try again.");
+      console.error('Failed to update status:', error);
+      alert('Failed to update user status. Please try again.');
     }
   };
 
-  const getStatusTextColor = (status: "Active" | "Inactive") => {
-    return status === "Active" ? "text-green-600" : "text-red-600";
+  const getStatusTextColor = (status: 'Active' | 'Inactive') => {
+    return status === 'Active' ? 'text-green-600' : 'text-red-600';
   };
 
-  const getDropdownTextColor = (status: "Active" | "Inactive") => {
-    return status === "Active" ? "text-green-600" : "text-red-600";
+  const getDropdownTextColor = (status: 'Active' | 'Inactive') => {
+    return status === 'Active' ? 'text-green-600' : 'text-red-600';
   };
 
   if (isLoading) {
@@ -53,20 +61,35 @@ const AdminUserTable: React.FC = () => {
                 <select
                   className={`px-3 py-1 rounded text-black bg-black text-white`}
                   value={user.status}
-                  onChange={(e) => handleStatusChange(user.username, e.target.value as "Active" | "Inactive")}
+                  onChange={(e) =>
+                    handleStatusChange(
+                      user.username,
+                      e.target.value as 'Active' | 'Inactive'
+                    )
+                  }
                 >
-                  <option value="Active" className={getDropdownTextColor("Active")}>Unblock</option>
-                  <option value="Inactive" className={getDropdownTextColor("Inactive")}>Block</option>
+                  <option
+                    value="Active"
+                    className={getDropdownTextColor('Active')}
+                  >
+                    Unblock
+                  </option>
+                  <option
+                    value="Inactive"
+                    className={getDropdownTextColor('Inactive')}
+                  >
+                    Block
+                  </option>
                 </select>
               </td>
               <td className="py-2 px-4 border-b">
                 <span
                   className={`py-1 px-3 rounded ${
-                    user.role === "Admin"
-                      ? "bg-blue-500 text-white"
-                      : user.role === "Seller"
-                      ? "bg-green-500 text-white"
-                      : "bg-yellow-500 text-white" 
+                    user.role === 'Admin'
+                      ? 'bg-blue-500 text-white'
+                      : user.role === 'Seller'
+                        ? 'bg-green-500 text-white'
+                        : 'bg-yellow-500 text-white'
                   }
                   `}
                 >

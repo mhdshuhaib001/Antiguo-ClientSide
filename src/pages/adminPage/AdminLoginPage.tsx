@@ -1,13 +1,12 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import LoginForm from '../../containers/adminContainer/AdminLogin'; 
+import { useNavigate } from 'react-router-dom';
+import LoginForm from '../../containers/adminContainer/AdminLogin';
 
 const AdminLoginPage: React.FC = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleLogin = (data: { email: string; password: string }) => {
     console.log('Login Data:', data);
-   
   };
 
   return (
@@ -24,18 +23,20 @@ const AdminLoginPage: React.FC = () => {
         >
           <div className="absolute bottom-0 right-0 w-60 h-80 bg-gray-100 rounded-lg flex items-center justify-center shadow-lg">
             <img
-              src="/assets/signup.jpg" 
+              src="/assets/signup.jpg"
               alt="Decorative"
               className="w-full h-full object-cover rounded-lg"
             />
           </div>
 
           <div className="absolute top-0 left-0 p-8">
-            <h1 className="text-4xl mb-3 font-lalezar text-white">Admin Portal</h1>
+            <h1 className="text-4xl mb-3 font-lalezar text-white">
+              Admin Portal
+            </h1>
             <div className="relative mt-40 text-start md:text-center">
               <p className="text-4xl font-bold text-white whitespace-pre-line">
-                Admin Login{"\n"}
-                Access Your{"\n"}
+                Admin Login{'\n'}
+                Access Your{'\n'}
                 Dashboard Now!
               </p>
             </div>
@@ -50,8 +51,7 @@ const AdminLoginPage: React.FC = () => {
           <LoginForm onLogin={handleLogin} />
 
           <div className="text-center mt-4">
-            <p className="text-gray-600">
-            </p>
+            <p className="text-gray-600"></p>
           </div>
         </div>
       </div>

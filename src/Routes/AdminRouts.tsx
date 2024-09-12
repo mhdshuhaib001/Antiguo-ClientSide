@@ -10,8 +10,11 @@ const AdminRoute: React.FC = () => {
       {/* Admin login route */}
       <Route path="/" element={<AdminLogin />} />
 
-      <Route path="/admin-dashboard" element={<AdminRoutProtector element={AdminDashbord } />}>
-          <Route path="userManagment" element={<AdminUserTable />} />
+      <Route
+        path="/admin-dashboard"
+        element={<AdminRoutProtector element={AdminDashbord} />}
+      >
+        <Route path="userManagment" element={<AdminUserTable />} />
       </Route>
     </Routes>
   );

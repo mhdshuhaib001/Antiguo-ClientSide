@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { useSelector } from 'react-redux'; 
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
-import { useAddProductMutation } from '../../services/apis/sellerApi'; 
+import { useAddProductMutation } from '../../services/apis/sellerApi';
 import 'tailwindcss/tailwind.css';
 
 const ProductListingForm: React.FC = () => {
@@ -19,7 +19,7 @@ const ProductListingForm: React.FC = () => {
     shippingCost: '',
     handlingTime: '',
     returnPolicy: '',
-    images: [] as string[]
+    images: [] as string[],
   });
   const [fileInputState, setFileInputState] = useState('');
   const [previewSources, setPreviewSources] = useState<string[]>([]);
@@ -27,11 +27,13 @@ const ProductListingForm: React.FC = () => {
   const [successMsg, setSuccessMsg] = useState('');
   const [errMsg, setErrMsg] = useState('');
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -41,7 +43,7 @@ const ProductListingForm: React.FC = () => {
       const fileArray = Array.from(files);
       setSelectedFiles(fileArray);
 
-      const previewPromises = fileArray.map(file => {
+      const previewPromises = fileArray.map((file) => {
         return new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
           reader.onloadend = () => resolve(reader.result as string);
@@ -50,15 +52,17 @@ const ProductListingForm: React.FC = () => {
         });
       });
 
-      Promise.all(previewPromises).then(previews => {
-        setPreviewSources(previews);
-        setFormData(prevFormData => ({
-          ...prevFormData,
-          images: previews
-        }));
-      }).catch(() => {
-        setErrMsg('Failed to read file(s).');
-      });
+      Promise.all(previewPromises)
+        .then((previews) => {
+          setPreviewSources(previews);
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            images: previews,
+          }));
+        })
+        .catch(() => {
+          setErrMsg('Failed to read file(s).');
+        });
     }
   };
 
@@ -67,12 +71,12 @@ const ProductListingForm: React.FC = () => {
 
     const dataToSend = {
       ...formData,
-      userId  
+      userId,
     };
 
     try {
       const productData = await addProduct(dataToSend).unwrap();
-      console.log(productData)
+      console.log(productData);
       setSuccessMsg('Product listing submitted successfully!');
     } catch (err) {
       console.error('Failed to submit product listing:', err);
@@ -88,7 +92,9 @@ const ProductListingForm: React.FC = () => {
           <h2 className="text-lg font-semibold mb-4">Item Details</h2>
           <div className="flex items-center gap-4 mb-4">
             <div className="w-2/3">
-              <label className="block text-gray-700 text-sm mb-2">Item Title:</label>
+              <label className="block text-gray-700 text-sm mb-2">
+                Item Title:
+              </label>
               <input
                 type="text"
                 name="itemTitle"
@@ -99,7 +105,9 @@ const ProductListingForm: React.FC = () => {
               />
             </div>
             <div className="w-1/3">
-              <label className="block text-gray-700 text-sm mb-2">Category:</label>
+              <label className="block text-gray-700 text-sm mb-2">
+                Category:
+              </label>
               <select
                 name="category"
                 value={formData.category}
@@ -115,7 +123,9 @@ const ProductListingForm: React.FC = () => {
             </div>
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm mb-2">Description:</label>
+            <label className="block text-gray-700 text-sm mb-2">
+              Description:
+            </label>
             <textarea
               name="description"
               value={formData.description}
@@ -126,7 +136,9 @@ const ProductListingForm: React.FC = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm mb-2">Condition:</label>
+            <label className="block text-gray-700 text-sm mb-2">
+              Condition:
+            </label>
             <textarea
               name="condition"
               value={formData.condition}
@@ -138,8 +150,19 @@ const ProductListingForm: React.FC = () => {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm mb-2 flex items-center gap-2">
-              <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m0 0l-3-3m3 3H4M12 4V2M12 12h4M12 12V8M12 12V2M8 4h4M8 4H4m4 0h4M4 4v4m4-4v4m0 0h4M4 4h4M8 8h4M8 8v4M8 8H4M4 8v4m4 0h4" />
+              <svg
+                className="w-6 h-6 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 8v4l3 3m0 0l-3-3m3 3H4M12 4V2M12 12h4M12 12V8M12 12V2M8 4h4M8 4H4m4 0h4M4 4v4m4-4v4m0 0h4M4 4h4M8 8h4M8 8v4M8 8H4M4 8v4m4 0h4"
+                />
               </svg>
               Images:
             </label>
@@ -150,10 +173,17 @@ const ProductListingForm: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded-md"
               multiple
             />
-            <p className="text-gray-500 text-sm mt-1">Upload images by clicking or dragging files here.</p>
+            <p className="text-gray-500 text-sm mt-1">
+              Upload images by clicking or dragging files here.
+            </p>
             <div className="flex space-x-4 mt-4">
               {previewSources.map((preview, index) => (
-                <img key={index} src={preview} alt={`Image preview ${index + 1}`} className="w-32 h-32 object-cover"/>
+                <img
+                  key={index}
+                  src={preview}
+                  alt={`Image preview ${index + 1}`}
+                  className="w-32 h-32 object-cover"
+                />
               ))}
             </div>
           </div>
@@ -163,7 +193,9 @@ const ProductListingForm: React.FC = () => {
           <h2 className="text-lg font-semibold mb-4">Auction Details</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm mb-2">Auction Format:</label>
+              <label className="block text-gray-700 text-sm mb-2">
+                Auction Format:
+              </label>
               <select
                 name="auctionFormat"
                 value={formData.auctionFormat}
@@ -177,7 +209,9 @@ const ProductListingForm: React.FC = () => {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm mb-2">Auction Duration:</label>
+              <label className="block text-gray-700 text-sm mb-2">
+                Auction Duration:
+              </label>
               <input
                 type="text"
                 name="auctionDuration"
@@ -188,7 +222,9 @@ const ProductListingForm: React.FC = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm mb-2">Reserve Price:</label>
+              <label className="block text-gray-700 text-sm mb-2">
+                Reserve Price:
+              </label>
               <input
                 type="number"
                 name="reservePrice"
@@ -205,7 +241,9 @@ const ProductListingForm: React.FC = () => {
           <h2 className="text-lg font-semibold mb-4">Shipping Details</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm mb-2">Shipping Type:</label>
+              <label className="block text-gray-700 text-sm mb-2">
+                Shipping Type:
+              </label>
               <select
                 name="shippingType"
                 value={formData.shippingType}
@@ -219,7 +257,9 @@ const ProductListingForm: React.FC = () => {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm mb-2">Shipping Cost:</label>
+              <label className="block text-gray-700 text-sm mb-2">
+                Shipping Cost:
+              </label>
               <input
                 type="number"
                 name="shippingCost"
@@ -230,7 +270,9 @@ const ProductListingForm: React.FC = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm mb-2">Handling Time:</label>
+              <label className="block text-gray-700 text-sm mb-2">
+                Handling Time:
+              </label>
               <input
                 type="text"
                 name="handlingTime"
@@ -241,7 +283,9 @@ const ProductListingForm: React.FC = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm mb-2">Return Policy:</label>
+              <label className="block text-gray-700 text-sm mb-2">
+                Return Policy:
+              </label>
               <textarea
                 name="returnPolicy"
                 value={formData.returnPolicy}
@@ -256,7 +300,7 @@ const ProductListingForm: React.FC = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
+          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition duration-300"
         >
           Submit Listing
         </button>

@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const AdminSideBare: React.FC = () => {
   return (
@@ -23,9 +23,13 @@ const AdminSideBare: React.FC = () => {
         <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
           <Link to="/admin/admin-dashboard/userManagment">Users</Link>
         </li>
-        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">Products</li>
+        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
+          Products
+        </li>
         <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">Orders</li>
-        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">Settings</li>
+        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
+          Settings
+        </li>
       </ul>
     </aside>
   );

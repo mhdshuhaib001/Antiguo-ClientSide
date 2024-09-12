@@ -4,7 +4,10 @@ import { Outlet } from 'react-router-dom'; // Import Outlet
 import BrandModal from '../../components/User/BrandModal';
 import TermsModal from '../../components/User/TermsModal';
 import { useCreateSellerMutation } from '../../services/apis/sellerApi';
-import { SellerCreationRequest, SellerResponse } from "../../types/sellerTypes/sellerApiTypes";
+import {
+  SellerCreationRequest,
+  SellerResponse,
+} from '../../interface/sellerTypes/sellerApiTypes';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/Store'; // Ensure this path is correct
 import { setSeller } from '../../store/slices/userSlice'; // Import setSeller action
@@ -12,11 +15,11 @@ import { useNavigate } from 'react-router-dom';
 import SellerNavigation from '../../components/Seller/SellerNavigation';
 
 interface SellerProps {
-    onSellerCreate?: (data: SellerResponse) => void;
+  onSellerCreate?: (data: SellerResponse) => void;
 }
 
 const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
-  const userId = useSelector((state: RootState) => state.User._id); 
+  const userId = useSelector((state: RootState) => state.User._id);
   const isSeller = useSelector((state: RootState) => state.User.isSeller); // Assuming isSeller is in the User state
 
   const navigate = useNavigate();
@@ -71,7 +74,7 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
       setSuccessMessage('Brand created successfully!');
       setErrorMessage('');
       closeBrandModal();
-      
+
       if (onSellerCreate) {
         onSellerCreate(response);
       }
@@ -87,17 +90,18 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
       <h1 className="text-2xl font-medium mb-6 sm:text-3xl">
         Seller Dashboard
       </h1>
-      
+
       <div className="flex flex-col items-center justify-center flex-grow ">
         {isSeller ? (
-          <SellerNavigation/>
+          <SellerNavigation />
         ) : (
           <div className="text-center">
             <h2 className="text-xl font-medium mb-4 text-center sm:text-2xl">
               Sell Your Antique Items
             </h2>
             <p className="text-gray-800 mb-6 text-center text-sm sm:text-base md:text-lg">
-              It’s quick and easy to list your antiques. Start selling and see the value of your cherished items grow!
+              It’s quick and easy to list your antiques. Start selling and see
+              the value of your cherished items grow!
             </p>
             <button
               onClick={openTermsModal}

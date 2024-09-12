@@ -1,40 +1,38 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import SignupForm from '../../containers/Signup';
-import LoginForm from '../../containers/Login';
-import { AuthResponse } from '../../types/userTypes/apiTypes';
+import { useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
+import SignupForm from '../../containers/userContainer/Signup';
+import LoginForm from '../../containers/userContainer/Login';
+import { AuthResponse } from '../../interface/userTypes/apiTypes';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../store/slices/userSlice';
+import { useGoogleAuthMutation } from '../../services/apis/userApi';
 
 const Registration: React.FC = () => {
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [isOtpStep, setIsOtpStep] = useState<boolean>(false);
-  const navigate = useNavigate(); 
-  const dispatch = useDispatch(); 
-
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [googleAuth] = useGoogleAuthMutation();
   const handleSignup = (data: AuthResponse) => {
     console.log('Signup Data:', data);
-    
-    dispatch(setUser({
-      _id: data.userData?._id,
-      email: data.userData?.email,
-      name: data.userData?.name,
-      role: data.userData?.role
-    }));
-console.log(data.token,'tocken cheking in here')
-    localStorage.setItem('accessToken', data.token);
 
+    dispatch(
+      setUser({
+        _id: data.userData?._id,
+        email: data.userData?.email,
+        name: data.userData?.name,
+        role: data.userData?.role,
+      }),
+    );
+    localStorage.setItem('accessToken', data.token);
+    navigate('/home');
   };
 
   const handleLogin = (data: { email: string; password: string }) => {
     console.log('Login Data:', data);
   };
-
-  const handleLoginRedirect = () => {
-
-    navigate('/login');
-  };
+  // const handleGoogleRegistration = useGoog;
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
@@ -61,8 +59,8 @@ console.log(data.token,'tocken cheking in here')
             <h1 className="text-4xl mb-3 font-lalezar text-white">Antiguo</h1>
             <div className="relative mt-40 text-start md:text-center">
               <p className="text-4xl font-bold text-white whitespace-pre-line">
-                Start Your{"\n"}
-                Vintage Auction{"\n"}
+                Start Your{'\n'}
+                Vintage Auction{'\n'}
                 Adventure Now!
               </p>
             </div>
@@ -73,15 +71,36 @@ console.log(data.token,'tocken cheking in here')
       {/* Right Side */}
       <div className="w-full md:w-1/2 bg-white flex items-center justify-center p-4">
         <div className="w-full max-w-sm p-6 bg-white rounded-lg shadow-lg">
-          {!isOtpStep ? (
+          {/* Conditional Rendering for Login and Signup */}
+          {showLogin ? (
+            <>
+              <h2 className="text-2xl font-bold mb-4 text-center">Sign In</h2>
+              <LoginForm onLogin={handleLogin} />
+            </>
+          ) : (
+            <>
+              {isOtpStep ? (
+                <h2 className="text-2xl font-bold mb-4 text-center">OTP</h2>
+              ) : (
+                <h2 className="text-2xl font-bold mb-4 text-center">Sign Up</h2>
+              )}
+
+              <SignupForm
+                onSignup={handleSignup}
+                isOtpStep={isOtpStep}
+                setIsOtpStep={setIsOtpStep}
+              />
+            </>
+          )}
+
+          {/* Authentication Links and Separator */}
+          {!isOtpStep && (
             <>
               {showLogin ? (
                 <>
-                  <h2 className="text-2xl font-bold mb-4 text-center">Sign In</h2>
-                  <LoginForm onLogin={handleLogin} />
                   <div className="text-center mb-4">
                     <p className="text-gray-600">
-                      Don't have an account?{" "}
+                      Don't have an account?{' '}
                       <button
                         onClick={() => setShowLogin(false)}
                         className="text-blue-500 hover:underline"
@@ -90,47 +109,42 @@ console.log(data.token,'tocken cheking in here')
                       </button>
                     </p>
                   </div>
+                  <div className="flex items-center justify-center my-4">
+                    <hr className="w-1/4 border-gray-300" />
+                    <span className="mx-4 text-gray-500">or</span>
+                    <hr className="w-1/4 border-gray-300" />
+                  </div>
                 </>
               ) : (
                 <>
-                  <h2 className="text-2xl font-bold mb-4 text-center">Sign Up</h2>
-                  <SignupForm onSignup={handleSignup} />
                   <div className="text-center mb-4">
                     <p className="text-gray-600">
-                      Already have an account?{" "}
-                      <a
+                      Already have an account?{' '}
+                      <button
                         onClick={() => setShowLogin(true)}
                         className="text-blue-500 hover:underline"
                       >
                         Log in here
-                      </a>
+                      </button>
                     </p>
+                  </div>
+                  <div className="flex items-center justify-center my-4">
+                    <hr className="w-1/4 border-gray-300" />
+                    <span className="mx-4 text-gray-500">or</span>
+                    <hr className="w-1/4 border-gray-300" />
                   </div>
                 </>
               )}
+
+              {/* Google Sign-In Button */}
+              <button
+                type="button"
+                className="w-full text-black border-solid font-bold py-2 px-4 rounded flex items-center justify-center border border-gray-300"
+              >
+                <img src="/assets/Google.png" alt="Google" className="w-5 h-5 mr-2" />
+                Sign in with Google
+              </button>
             </>
-          ) : null}
-
-          {!isOtpStep && (
-            <div className="flex items-center justify-center my-4">
-              <hr className="w-1/4 border-gray-300" />
-              <span className="mx-4 text-gray-500">or</span>
-              <hr className="w-1/4 border-gray-300" />
-            </div>
-          )}
-
-          {!isOtpStep && (
-            <button
-              type="button"
-              className="w-full text-black border-solid font-bold py-2 px-4 rounded flex items-center justify-center border border-gray-300"
-            >
-              <img
-                src="/assets/Google.png"
-                alt="Google"
-                className="w-5 h-5 mr-2"
-              />
-              Sign in with Google
-            </button>
           )}
         </div>
       </div>

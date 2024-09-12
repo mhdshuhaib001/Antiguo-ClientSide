@@ -1,19 +1,18 @@
-import Header from "../../components/User/Header";
-import HeroSection from "../../components/User/HeroSection";
-import ProductCard from "../../components/User/ProductCard";
+import React from 'react';
+import Header from '../../components/User/Header';
+import HeroSection from '../../components/User/HeroSection';
+import ProductCard from '../../components/User/ProductCard';
 
 const LandingPage: React.FC<{}> = () => {
-    return(
-      <>
+  return (
+    <>
       <div className="mx-2">
-     <Header/>
-     <HeroSection/>
-     <ProductCard/>
-     </div>
-      </>
-    )
-  };
-  
+        <Header />
+        <HeroSection />
+        <ProductCard />
+      </div>
+    </>
+  );
+};
 
-
-export default LandingPage
+export default LandingPage;

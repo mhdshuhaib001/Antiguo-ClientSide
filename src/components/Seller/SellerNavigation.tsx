@@ -13,9 +13,9 @@ const SellerNavigation: React.FC = () => {
             className="text-gray-800 text-sm font-medium py-2 px-4 hover:bg-gray-100"
           >
             Seller Dashboard
-          </Link> 
+          </Link>
           <Link
-          to="/profile/seller/product-management"
+            to="/profile/seller/product-management"
             className="text-gray-800 text-sm font-medium py-2 px-4 hover:bg-gray-100"
           >
             Product Management
@@ -26,9 +26,7 @@ const SellerNavigation: React.FC = () => {
       </div>
 
       {/* Define Routes for different sections */}
-      <div className="flex-grow">
-        {/* Routes would be defined here */}
-      </div>
+      <div className="flex-grow">{/* Routes would be defined here */}</div>
     </div>
   );
 };

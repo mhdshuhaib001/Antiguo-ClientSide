@@ -1,18 +1,19 @@
-import React from "react";
+import React from 'react';
 
 const HeroSection: React.FC = () => {
   return (
     <section
       className="relative bg-[#81d750] overflow-hidden h-[85vh]"
       style={{
-        borderBottomLeftRadius: "40px",
-        borderBottomRightRadius: "40px"
+        borderBottomLeftRadius: '40px',
+        borderBottomRightRadius: '40px',
       }}
     >
-      {" "}{/* Background Image */}
+      {' '}
+      {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url(/path/to/your/background-image.jpg)" }}
+        style={{ backgroundImage: 'url(/path/to/your/background-image.jpg)' }}
       >
         <div className="absolute inset-0 bg-black opacity-50" />
       </div>
@@ -52,10 +53,10 @@ const HeroSection: React.FC = () => {
           <div
             className="w-[260.75px] h-[410.69px] bg-white shadow-lg "
             style={{
-              borderTopLeftRadius: "30px",
-              borderBottomLeftRadius: "10px",
-              borderBottomRightRadius: "30px",
-              borderTopRightRadius: "10px"
+              borderTopLeftRadius: '30px',
+              borderBottomLeftRadius: '10px',
+              borderBottomRightRadius: '30px',
+              borderTopRightRadius: '10px',
             }}
           >
             <img
@@ -68,10 +69,10 @@ const HeroSection: React.FC = () => {
           <div
             className="w-[266px] h-[295px] bg-white shadow-lg"
             style={{
-              borderTopLeftRadius: "30px",
-              borderBottomLeftRadius: "10px",
-              borderBottomRightRadius: "30px",
-              borderTopRightRadius: "10px"
+              borderTopLeftRadius: '30px',
+              borderBottomLeftRadius: '10px',
+              borderBottomRightRadius: '30px',
+              borderTopRightRadius: '10px',
             }}
           >
             <img

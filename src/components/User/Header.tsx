@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [token, setToken] = useState<string | null>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("accessToken");
+    const storedToken = localStorage.getItem('accessToken');
     console.log(storedToken);
     setToken(storedToken);
-}, []); 
-
+  }, []);
 
   return (
     <header className="bg-white shadow-md py-2">
@@ -56,13 +55,20 @@ const Header: React.FC = () => {
           </a>
 
           {/* Profile Button */}
-          {token
-            ? <button className="bg-gray-900 text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4" onClick={()=>{navigate('/profile')}}>
-                Profile
-              </button>
-            : <button className="bg-gray-900 text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4">
-                Register
-              </button>}
+          {token ? (
+            <button
+              className="bg-gray-900 text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4"
+              onClick={() => {
+                navigate('/profile');
+              }}
+            >
+              Profile
+            </button>
+          ) : (
+            <button className="bg-gray-900 text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4">
+              Register
+            </button>
+          )}
         </nav>
 
         {/* Mobile Menu */}
@@ -91,7 +97,7 @@ const Header: React.FC = () => {
       </div>
 
       {/* Mobile Menu Items */}
-      <div className={`md:hidden ${isMenuOpen ? "block" : "hidden"} px-6 mt-4`}>
+      <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'} px-6 mt-4`}>
         <a
           href="#auction"
           className="block py-2 text-gray-600 hover:text-gray-900"
