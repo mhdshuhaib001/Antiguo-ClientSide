@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import useSignupValidation from '../../hooks/useSignupValidation';
-import { GoogleLogin } from '@react-oauth/google';
 
 import { useSignupMutation, useSendOtpMutation } from '../../services/apis/userApi';
 import { AuthResponse } from '../../interface/userTypes/apiTypes';

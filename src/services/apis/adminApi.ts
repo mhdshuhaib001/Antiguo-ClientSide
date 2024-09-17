@@ -1,14 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import {
-  AdminLoginRequest,
-  AdminLoginResponse,
-} from '../../interface/adminTypes/adminApiTypes';
+import { AdminLoginRequest, AdminLoginResponse } from '../../interface/adminTypes/adminApiTypes';
 import { User } from '../../interface/userTypes/apiTypes';
 
 export const adminApi = createApi({
   reducerPath: 'adminApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8000',
+    baseUrl: 'http://localhost:8001',
     credentials: 'include',
   }),
   endpoints: (builder) => ({
@@ -38,8 +35,5 @@ export const adminApi = createApi({
   }),
 });
 
-export const {
-  useAdminLoginMutation,
-  useFetchAllUsersQuery,
-  useUpdateUserStatusMutation,
-} = adminApi;
+export const { useAdminLoginMutation, useFetchAllUsersQuery, useUpdateUserStatusMutation } =
+  adminApi;

@@ -4,7 +4,7 @@ import { AuthRequest, AuthResponse } from '../../interface/userTypes/apiTypes';
 export const ApiSlice = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8000',
+    baseUrl: 'http://localhost:8001',
     credentials: 'include',
   }),
   endpoints: (builder) => ({
@@ -36,8 +36,28 @@ export const ApiSlice = createApi({
         body: tokenData,
       }),
     }),
+    emailSend: builder.mutation<AuthResponse, { email: string }>({
+      query: (emailData) => ({
+        url: '/api/auth/forget-password-request',
+        method: 'POST',
+        body: emailData,
+      }),
+    }),
+    forgetPassword: builder.mutation<AuthResponse, {token:string, newPassword: string }>({
+      query: (newPasswordData) => ({
+        url: '/api/auth/forget-password',
+        method: 'POST',
+        body: newPasswordData,
+      }),
+    }),
   }),
 });
 
-export const { useSignupMutation, useSendOtpMutation, useLoginMutation, useGoogleAuthMutation } =
-  ApiSlice;
+export const { 
+  useSignupMutation, 
+  useSendOtpMutation, 
+  useLoginMutation, 
+  useGoogleAuthMutation, 
+  useEmailSendMutation,
+  useForgetPasswordMutation
+} = ApiSlice;

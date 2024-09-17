@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { useLoginValidation } from '../../hooks/useLoginValidation';
 import { useLoginMutation } from '../../services/apis/userApi';
@@ -112,7 +112,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
       <div className="mb-4 text-right">
         <a
-          href="/forgot-password"
+          onClick={()=> navigate('/forget-password-request')}
           className="text-black-500 hover:text-blue-700 text-sm"
         >
           Forgot Password?

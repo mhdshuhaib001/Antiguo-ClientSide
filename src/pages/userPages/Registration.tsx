@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import SignupForm from '../../containers/userContainer/Signup';
 import LoginForm from '../../containers/userContainer/Login';
 import { AuthResponse } from '../../interface/userTypes/apiTypes';
@@ -14,6 +14,7 @@ const Registration: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [googleAuth] = useGoogleAuthMutation();
+
   const handleSignup = (data: AuthResponse) => {
     console.log('Signup Data:', data);
 
@@ -32,7 +33,43 @@ const Registration: React.FC = () => {
   const handleLogin = (data: { email: string; password: string }) => {
     console.log('Login Data:', data);
   };
-  // const handleGoogleRegistration = useGoog;
+
+  // Handle Google Authentication
+  const handleGoogleSuccess = async (response: CredentialResponse) => {
+    console.log('Google Auth Success', response);
+
+    if (response.credential) {
+      try {
+        const googleResponse = await googleAuth({ idToken: response.credential }).unwrap();
+
+        // Dispatch user info and set token
+        dispatch(
+          setUser({
+            _id: googleResponse.userData?._id,
+            email: googleResponse.userData?.email,
+            name: googleResponse.userData?.name,
+            role: googleResponse.userData?.role,
+          }),
+        );
+        localStorage.setItem('accessToken', googleResponse.token);
+        navigate('/home');
+      } catch (error) {
+        console.error('Google Auth Failed');
+      }
+    }
+  };
+
+  // Option 1: Simple fix, removing the error parameter from onError handler
+  const handleGoogleFailure = () => {
+    console.error('Google Auth Failed');
+  };
+
+  // Option 2: Keep the error parameter (Optional), casting to match expected type
+  /*
+  const handleGoogleFailure = (error: any) => {
+    console.error('Google Auth Failed', error);
+  };
+  */
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
@@ -137,13 +174,11 @@ const Registration: React.FC = () => {
               )}
 
               {/* Google Sign-In Button */}
-              <button
-                type="button"
-                className="w-full text-black border-solid font-bold py-2 px-4 rounded flex items-center justify-center border border-gray-300"
-              >
-                <img src="/assets/Google.png" alt="Google" className="w-5 h-5 mr-2" />
-                Sign in with Google
-              </button>
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleFailure}
+                useOneTap
+              />
             </>
           )}
         </div>

@@ -9,7 +9,7 @@ import {
 export const sellerApi = createApi({
   reducerPath: 'sellerApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8000',
+    baseUrl: 'http://localhost:8001',
     credentials: 'include',
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json');
