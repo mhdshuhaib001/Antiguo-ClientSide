@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEmailSendMutation } from '../../services/apis/userApi'; 
+import { useEmailSendMutation } from '../../services/apis/userApi';
+import { toast } from 'react-hot-toast';
+import { AuthResponse } from "../../interface/userTypes/apiTypes";
 
 const Email: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [success, setSuccess] = useState<string | null>(null);
   const [emailSend, { isLoading, isError }] = useEmailSendMutation();
-const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -20,21 +22,33 @@ const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+  
     if (!error && email) {
       try {
-        await emailSend({ email }).unwrap(); 
-        navigate('/signup')
-        setSuccess('Password reset link has been sent to your email.');
-
-        setEmail(''); 
-        setError(''); 
-      } catch (err) {
-        setError('An error occurred. Please try again.');
+        // Call the API and unwrap the response
+        const result: AuthResponse = await emailSend({ email }).unwrap();
+  
+        // Display the success message returned from the backend
+        toast.success(result.message);
+  
+        setTimeout(()=>{
+          navigate('/signup')
+        },3000)
+ 
+  
+        setEmail('');
+        setError('');
+      } catch (err: any) {
+        const errorMessage = err?.data?.message || 'An error occurred. Please try again.';
+        toast.error(errorMessage);
+        setError(errorMessage);
       }
     } else if (!email) {
       setError('Email is required');
     }
   };
+  
+  
 
   return (
     <form onSubmit={handleSubmit} className="mb-8">
@@ -53,7 +67,6 @@ const navigate = useNavigate()
           aria-describedby="email-error"
         />
         {error && <p id="email-error" className="text-red-500 text-sm mt-1">{error}</p>}
-        {success && <p className="text-green-500 text-sm mt-1">{success}</p>}
       </div>
       <div className="flex justify-center">
         <button

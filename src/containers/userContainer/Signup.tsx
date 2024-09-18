@@ -5,8 +5,7 @@ import useSignupValidation from '../../hooks/useSignupValidation';
 import { useSignupMutation, useSendOtpMutation } from '../../services/apis/userApi';
 import { AuthResponse } from '../../interface/userTypes/apiTypes';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-hot-toast';
 import OtpForm from './OtpForm';
 
 const SignupForm: React.FC<{
@@ -100,7 +99,7 @@ const SignupForm: React.FC<{
         const result = await signup(values).unwrap();
         console.log(result, 'result the main of this ');
         onSignup(result as AuthResponse);
-        navigate('/home');
+        navigate('/');
         setFormError(null);
       } catch (err: any) {
         console.error('Signup failed:', err);

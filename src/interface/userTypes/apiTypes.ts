@@ -26,6 +26,7 @@ export interface AuthRequest {
 }
 
 export interface AuthResponse {
+  message:string;
   userData: any;
   _id: string;
   user: any;
