@@ -99,7 +99,7 @@ const SignupForm: React.FC<{
         const result = await signup(values).unwrap();
         console.log(result, 'result the main of this ');
         onSignup(result as AuthResponse);
-        navigate('/');
+        // navigate('/');
         setFormError(null);
       } catch (err: any) {
         console.error('Signup failed:', err);

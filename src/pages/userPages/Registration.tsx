@@ -27,7 +27,7 @@ const Registration: React.FC = () => {
       }),
     );
     localStorage.setItem('accessToken', data.token);
-    navigate('/home');
+    navigate('/');
   };
 
   const handleLogin = (data: { email: string; password: string }) => {

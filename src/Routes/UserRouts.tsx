@@ -11,6 +11,9 @@ import AuthRoute from './ProtectRout/AuthRoute';
 import ForgetPasswordPage from '../pages/userPages/PasswordForgetPage';
 import EmailSendPage from '../pages/userPages/EmailSendPage';
 
+import Password from '../pages/userPages/Password';
+import ProductListTable from '../components/User/ProductTable';
+
 const UserRoute: React.FC = () => {
   return (
     <Routes>
@@ -20,11 +23,17 @@ const UserRoute: React.FC = () => {
       <Route path="/forget-password-request" element={<EmailSendPage />} />
 
       <Route path="/profile" element={<UserProtectedRoute element={Profile} />}>
+        <Route path="password" element={<Password />} />
         <Route path="seller" element={<UserProtectedRoute element={Seller} />}>
           <Route
             path="product-management"
+            element={<UserProtectedRoute element={ProductListTable} />}
+          />
+           <Route
+            path="addproduct"
             element={<UserProtectedRoute element={ProductListingForm} />}
           />
+         
         </Route>
       </Route>
     </Routes>

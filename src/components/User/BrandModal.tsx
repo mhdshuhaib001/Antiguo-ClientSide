@@ -32,12 +32,7 @@ const BrandModal: React.FC<BrandModalProps> = ({
             className="text-gray-500 hover:text-gray-900"
             aria-label="Close"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -50,10 +45,7 @@ const BrandModal: React.FC<BrandModalProps> = ({
 
         {/* Modal Body */}
         <div className="space-y-4">
-          <label
-            htmlFor="brandName"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="brandName" className="block text-sm font-medium text-gray-700">
             Brand Name
           </label>
           <input
@@ -65,16 +57,12 @@ const BrandModal: React.FC<BrandModalProps> = ({
             placeholder="Enter brand name"
           />
 
-          {errorMessage && (
-            <p className="text-red-500 text-sm">{errorMessage}</p>
-          )}
-          {successMessage && (
-            <p className="text-green-500 text-sm">{successMessage}</p>
-          )}
+          {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+          {successMessage && <p className="text-green-500 text-sm">{successMessage}</p>}
 
           <button
             onClick={onBrandCreate}
-            className="w-full bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-500"
+            className="w-full bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-500"
           >
             Add Brand
           </button>

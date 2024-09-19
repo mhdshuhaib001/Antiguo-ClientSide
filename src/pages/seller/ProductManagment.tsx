@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 import { useAddProductMutation } from '../../services/apis/sellerApi';
-import 'tailwindcss/tailwind.css';
+import { ChevronDown, Upload, Settings } from 'lucide-react';
 
 const ProductListingForm: React.FC = () => {
   const userId = useSelector((state: RootState) => state.User._id);
@@ -21,9 +21,7 @@ const ProductListingForm: React.FC = () => {
     returnPolicy: '',
     images: [] as string[],
   });
-  const [fileInputState, setFileInputState] = useState('');
   const [previewSources, setPreviewSources] = useState<string[]>([]);
-  const [selectedFiles, setSelectedFiles] = useState<File[] | undefined>();
   const [successMsg, setSuccessMsg] = useState('');
   const [errMsg, setErrMsg] = useState('');
 
@@ -41,8 +39,6 @@ const ProductListingForm: React.FC = () => {
     const files = e.target.files;
     if (files) {
       const fileArray = Array.from(files);
-      setSelectedFiles(fileArray);
-
       const previewPromises = fileArray.map((file) => {
         return new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
@@ -64,6 +60,10 @@ const ProductListingForm: React.FC = () => {
           setErrMsg('Failed to read file(s).');
         });
     }
+  };
+
+  const handleDropzoneChange = (e: ChangeEvent<HTMLInputElement>) => {
+    handleFileInputChange(e); // Reuse file input change handler
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -149,30 +149,32 @@ const ProductListingForm: React.FC = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm mb-2 flex items-center gap-2">
-              <svg
-                className="w-6 h-6 text-gray-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 8v4l3 3m0 0l-3-3m3 3H4M12 4V2M12 12h4M12 12V8M12 12V2M8 4h4M8 4H4m4 0h4M4 4v4m4-4v4m0 0h4M4 4h4M8 8h4M8 8v4M8 8H4M4 8v4m4 0h4"
-                />
-              </svg>
+            <label className="block text-gray-700 text-sm mb-2">
               Images:
             </label>
-            <input
-              type="file"
-              name="images"
-              onChange={handleFileInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              multiple
-            />
+            <div className="flex items-center justify-center w-full">
+              <label
+                htmlFor="dropzone-file"
+                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+              >
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <Upload className="w-8 h-8 mb-4 text-gray-400" size={48} />
+                  <p className="mb-2 text-sm text-gray-500">
+                    <span className="font-semibold">Click to upload</span> or drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    SVG, PNG, JPG or GIF (MAX. 800x400px)
+                  </p>
+                </div>
+                <input
+                  id="dropzone-file"
+                  type="file"
+                  className="hidden"
+                  multiple
+                  onChange={handleDropzoneChange}
+                />
+              </label>
+            </div>
             <p className="text-gray-500 text-sm mt-1">
               Upload images by clicking or dragging files here.
             </p>
@@ -244,17 +246,14 @@ const ProductListingForm: React.FC = () => {
               <label className="block text-gray-700 text-sm mb-2">
                 Shipping Type:
               </label>
-              <select
+              <input
+                type="text"
                 name="shippingType"
                 value={formData.shippingType}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
                 required
-              >
-                <option value="">Select Shipping Type</option>
-                <option value="standard">Standard</option>
-                <option value="express">Express</option>
-              </select>
+              />
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm mb-2">
@@ -286,27 +285,37 @@ const ProductListingForm: React.FC = () => {
               <label className="block text-gray-700 text-sm mb-2">
                 Return Policy:
               </label>
-              <textarea
+              <input
+                type="text"
                 name="returnPolicy"
                 value={formData.returnPolicy}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-md"
-                rows={3}
                 required
               />
             </div>
           </div>
         </div>
         {/* Submit Button */}
-        <button
-          type="submit"
-          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition duration-300"
-        >
-          Submit Listing
-        </button>
-        {successMsg && <p className="text-green-500 mt-4">{successMsg}</p>}
-        {errMsg && <p className="text-red-500 mt-4">{errMsg}</p>}
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600"
+          >
+            Submit Listing
+          </button>
+        </div>
       </form>
+      {successMsg && (
+        <div className="mt-4 text-green-500">
+          {successMsg}
+        </div>
+      )}
+      {errMsg && (
+        <div className="mt-4 text-red-500">
+          {errMsg}
+        </div>
+      )}
     </div>
   );
 };

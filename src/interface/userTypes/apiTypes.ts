@@ -35,3 +35,10 @@ export interface AuthResponse {
   email: string;
   token: string;
 }
+
+export interface ErrorType{
+  data:{
+    status:string,
+    messsage:string
+  }
+}

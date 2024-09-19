@@ -16,7 +16,8 @@ const Header: React.FC = () => {
     <header className="bg-white shadow-md py-2">
       <div className="container mx-auto flex justify-between items-center px-6">
         {/* Logo */}
-        <div className="text-xl font-bold text-gray-800">AuctionGems</div>
+        <div onClick={()=>navigate('/')}
+         className="text-xl font-bold text-gray-800">AuctionGems</div>
 
         {/* Navigation */}
         <nav className="hidden md:flex space-x-4 items-center">
@@ -65,7 +66,7 @@ const Header: React.FC = () => {
               Profile
             </button>
           ) : (
-            <button className="bg-gray-900 text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4">
+            <button onClick={()=>{navigate('/signup')}} className="bg-gray-900 text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4">
               Register
             </button>
           )}

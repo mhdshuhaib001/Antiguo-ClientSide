@@ -10,10 +10,10 @@ const Sidebar: React.FC = () => {
   const handleLogout = () => {
     dispatch(userLogOut());
     localStorage.removeItem('accessToken');
-    navigate('/home');
+    navigate('/');
   };
   return (
-    <div className="min-h-screen bg-white flex items-center ps-8 flex-col md:flex-row">
+    <div className="min-h-screen  flex items-center ps-8 flex-col md:flex-row">
       <aside className="w-full md:w-64 bg-gray-800 shadow-lg rounded-md">
         <div className="p-4">
           <h2 className="text-xl text-white font-bold">My Profile</h2>
@@ -57,7 +57,7 @@ const Sidebar: React.FC = () => {
             Orders
           </a>
           <a
-            href="#password"
+            href="/profile/password"
             className="text-white hover:bg-gray-700 hover:text-gray-200 p-2 rounded transition duration-200"
           >
             Password

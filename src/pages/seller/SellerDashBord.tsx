@@ -1,6 +1,6 @@
 // src/pages/SellerDashBord.tsx
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom'; // Import Outlet
+import { Outlet } from 'react-router-dom'; 
 import BrandModal from '../../components/User/BrandModal';
 import TermsModal from '../../components/User/TermsModal';
 import { useCreateSellerMutation } from '../../services/apis/sellerApi';
@@ -9,10 +9,11 @@ import {
   SellerResponse,
 } from '../../interface/sellerTypes/sellerApiTypes';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store/Store'; // Ensure this path is correct
-import { setSeller } from '../../store/slices/userSlice'; // Import setSeller action
+import { RootState } from '../../store/Store'; 
+import { setSeller } from '../../store/slices/userSlice'; 
 import { useNavigate } from 'react-router-dom';
 import SellerNavigation from '../../components/Seller/SellerNavigation';
+import { ErrorType } from '../../interface/userTypes/apiTypes';
 
 interface SellerProps {
   onSellerCreate?: (data: SellerResponse) => void;
@@ -20,8 +21,8 @@ interface SellerProps {
 
 const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
   const userId = useSelector((state: RootState) => state.User._id);
-  const isSeller = useSelector((state: RootState) => state.User.isSeller); // Assuming isSeller is in the User state
-
+  const isSeller = useSelector((state: RootState) => state.User.isSeller); 
+console.log(userId,'this is the userid')
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
@@ -47,51 +48,76 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
     closeTermsModal();
     openBrandModal();
   };
-
   const brandCreate = async () => {
     try {
+      console.log('Creating brand...');
+  
+      // Basic Validation: Check if brand name is empty
       if (!companyName.trim()) {
         setErrorMessage('Brand name cannot be empty.');
         setSuccessMessage('');
         return;
       }
-
+  
+      // Validation: Check for minimum length
+      if (companyName.length < 3) {
+        setErrorMessage('Brand name must be at least 3 characters long.');
+        setSuccessMessage('');
+        return;
+      }
+  
+      // Validation: Check for maximum length
+      if (companyName.length > 50) {
+        setErrorMessage('Brand name cannot exceed 50 characters.');
+        setSuccessMessage('');
+        return;
+      }
+  
+      // Validation: Only allow alphanumeric characters and spaces
+      const brandNameRegex = /^[a-zA-Z0-9 ]+$/;
+      if (!brandNameRegex.test(companyName)) {
+        setErrorMessage('Brand name can only contain alphanumeric characters and spaces.');
+        setSuccessMessage('');
+        return;
+      }
+  
       const sellerData: SellerCreationRequest = {
         CompanyName: companyName,
         UserID: userId,
       };
-
+  
+  
       const response = await createSeller(sellerData).unwrap();
-      console.log(response);
-
+      console.log('Response from API:', response);
+  
       if (response) {
         localStorage.setItem('sellerToken', response.sellerToken);
-
         dispatch(setSeller(true));
-        navigate('/profile/productadd');
+        navigate('/profile/seller/addproduct');
       }
-
+  
       setSuccessMessage('Brand created successfully!');
       setErrorMessage('');
       closeBrandModal();
-
+  
       if (onSellerCreate) {
         onSellerCreate(response);
       }
     } catch (error) {
       console.error('Brand creation failed', error);
-      setErrorMessage('An error occurred while creating the brand.');
+      setErrorMessage((error as any)?.data?.message );
       setSuccessMessage('');
     }
   };
+  
 
   return (
-    <div className="flex flex-col h-full w-full p-6 bg-white shadow-md overflow-auto">
-      <h1 className="text-2xl font-medium mb-6 sm:text-3xl">
+    <div className="flex flex-col h-full w-full p-6  shadow-md overflow-auto">
+      <h1 className="text-2xl font-medium mb-3 sm:text-3xl">
         Seller Dashboard
       </h1>
 
-      <div className="flex flex-col items-center justify-center flex-grow ">
+      <div className="flex flex-col items-center  ">
         {isSeller ? (
           <SellerNavigation />
         ) : (

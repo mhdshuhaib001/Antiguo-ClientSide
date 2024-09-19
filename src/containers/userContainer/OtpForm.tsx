@@ -14,7 +14,7 @@ const OtpForm: React.FC<OtpFormProps> = ({
   touched,
   timer,
   handleResendOtp,
-  isOtpLoading,
+ 
 }) => {
   return (
     <>
