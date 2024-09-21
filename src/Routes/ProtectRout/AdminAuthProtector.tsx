@@ -6,18 +6,21 @@ interface AuthRouteProps {
   element: React.ComponentType;
 }
 
-const AdminRoutProtector: React.FC<AuthRouteProps> = ({ element: Component }) => {
+const AdminAuthRoute: React.FC<AuthRouteProps> = ({ element: Component }) => {
   const navigate = useNavigate();
   const adminToken = getAdminToken();
 
   useEffect(() => {
-    if (!adminToken) {
-      navigate('/admin'); // Redirect to login if no admin token
+    if (adminToken) {
+      navigate('/admin/admin-dashboard'); 
     }
   }, [adminToken, navigate]);
 
-  // Render the protected component if the token exists
-  return adminToken ? <Component /> : null;
+  if (adminToken) {
+    return null;
+  }
+
+  return <Component />;
 };
 
-export default AdminRoutProtector;
+export default AdminAuthRoute;

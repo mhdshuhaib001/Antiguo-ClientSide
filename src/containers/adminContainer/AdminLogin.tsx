@@ -18,15 +18,18 @@ const adminLogin: React.FC<AdminLoginFormProps> = ({ onLogin }) => {
     e.preventDefault();
     try {
       const adminData = await adminLogin({ email, password }).unwrap();
+      
       localStorage.setItem('adminToken', adminData.adminToken);
-      console.log('Login successful:', adminData);
-
+      
+      console.log('Login successful:', adminData.adminToken);
+      
       onLogin({ email, password });
       navigate('/admin/admin-dashboard');
     } catch (error) {
       console.error('Login failed:', error);
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit}>

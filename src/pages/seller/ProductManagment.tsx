@@ -3,7 +3,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 import { useAddProductMutation } from '../../services/apis/sellerApi';
 import { ChevronDown, Upload, Settings } from 'lucide-react';
+import { productListSchema } from '../../hooks/ProductValidation';
+import { Formik } from 'formik';
 
+  
 const ProductListingForm: React.FC = () => {
   const userId = useSelector((state: RootState) => state.User._id);
   const [addProduct] = useAddProductMutation();
@@ -316,8 +319,10 @@ const ProductListingForm: React.FC = () => {
           {errMsg}
         </div>
       )}
-    </div>
+    </div> 
   );
 };
 
 export default ProductListingForm;
+
+

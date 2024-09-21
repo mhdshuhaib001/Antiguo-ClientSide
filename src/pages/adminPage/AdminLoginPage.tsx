@@ -1,10 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import LoginForm from '../../containers/adminContainer/AdminLogin';
 
 const AdminLoginPage: React.FC = () => {
-  const navigate = useNavigate();
-
   const handleLogin = (data: { email: string; password: string }) => {
     console.log('Login Data:', data);
   };

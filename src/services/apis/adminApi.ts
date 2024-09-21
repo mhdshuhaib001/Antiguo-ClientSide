@@ -22,14 +22,11 @@ export const adminApi = createApi({
         method: 'GET',
       }),
     }),
-    updateUserStatus: builder.mutation<
-      { success: boolean },
-      { username: string; status: 'Active' | 'Inactive' }
-    >({
-      query: ({ username, status }) => ({
-        url: `/api/admin/user-action`,
+    updateUserStatus: builder.mutation<any, { userId: string; isActive: boolean }>({
+      query: ({ userId, isActive }) => ({
+        url: `/api/admin/user-status`,
         method: 'POST',
-        body: { username, status },
+        body: { userId, isActive },
       }),
     }),
   }),

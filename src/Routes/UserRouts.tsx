@@ -12,7 +12,8 @@ import ForgetPasswordPage from '../pages/userPages/PasswordForgetPage';
 import EmailSendPage from '../pages/userPages/EmailSendPage';
 
 import Password from '../pages/userPages/Password';
-import ProductListTable from '../components/User/ProductTable';
+import ProductListTable from '../components/Seller/ProductTable';
+import AuctionItemForm from '../components/Seller/auction-item-form';
 
 const UserRoute: React.FC = () => {
   return (
@@ -23,7 +24,7 @@ const UserRoute: React.FC = () => {
       <Route path="/forget-password-request" element={<EmailSendPage />} />
 
       <Route path="/profile" element={<UserProtectedRoute element={Profile} />}>
-        <Route path="password" element={<Password />} />
+        <Route path="password" element={<AuctionItemForm />} />
         <Route path="seller" element={<UserProtectedRoute element={Seller} />}>
           <Route
             path="product-management"

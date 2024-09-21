@@ -12,6 +12,6 @@ export const getSellerToken = (): string | null => {
 
 export const getAdminToken = (): string | null => {
   const adminToken = localStorage.getItem('adminToken');
-  console.log('Token in getToken:', adminToken);
+  console.log('Admin Token in getToken:', adminToken);
   return adminToken;
 };

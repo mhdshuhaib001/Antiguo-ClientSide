@@ -1,4 +1,3 @@
-// src/routes/ProtectRout/AuthRoute.tsx
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getToken } from '../../utils/getHelper';
@@ -11,7 +10,6 @@ const AuthRoute: React.FC<AuthRouteProps> = ({ element: Component }) => {
   const token = getToken();
 
   useEffect(() => {
-    console.log('Token check for authentication route:', token);
     if (token) {
       navigate('/home');
     }

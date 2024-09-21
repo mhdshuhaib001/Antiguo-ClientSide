@@ -41,7 +41,7 @@ const ProductListTable: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">All Product List</h1>
         <button
-          onClick={() => navigate('/seller/addproduct')}
+          onClick={() => navigate('/profile/seller/addproduct')}
           className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition duration-300 w-full sm:w-auto"
         >
           List Item

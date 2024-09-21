@@ -1,5 +1,4 @@
-// src/pages/SellerDashBord.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom'; 
 import BrandModal from '../../components/User/BrandModal';
 import TermsModal from '../../components/User/TermsModal';
@@ -13,7 +12,6 @@ import { RootState } from '../../store/Store';
 import { setSeller } from '../../store/slices/userSlice'; 
 import { useNavigate } from 'react-router-dom';
 import SellerNavigation from '../../components/Seller/SellerNavigation';
-import { ErrorType } from '../../interface/userTypes/apiTypes';
 
 interface SellerProps {
   onSellerCreate?: (data: SellerResponse) => void;
@@ -21,8 +19,6 @@ interface SellerProps {
 
 const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
   const userId = useSelector((state: RootState) => state.User._id);
-  const isSeller = useSelector((state: RootState) => state.User.isSeller); 
-console.log(userId,'this is the userid')
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
@@ -30,8 +26,18 @@ console.log(userId,'this is the userid')
   const [companyName, setCompanyName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-
+  
   const [createSeller] = useCreateSellerMutation();
+  
+  // State to track if the seller token is present
+  const [hasSellerToken, setHasSellerToken] = useState<boolean>(false);
+
+  useEffect(() => {
+    const sellerToken = localStorage.getItem('sellerToken');
+    if (sellerToken) {
+      setHasSellerToken(true);
+    }
+  }, []);
 
   const openTermsModal = () => setIsTermsModalOpen(true);
   const closeTermsModal = () => setIsTermsModalOpen(false);
@@ -48,77 +54,69 @@ console.log(userId,'this is the userid')
     closeTermsModal();
     openBrandModal();
   };
+
   const brandCreate = async () => {
     try {
-      console.log('Creating brand...');
-  
-      // Basic Validation: Check if brand name is empty
       if (!companyName.trim()) {
         setErrorMessage('Brand name cannot be empty.');
         setSuccessMessage('');
         return;
       }
-  
-      // Validation: Check for minimum length
+
       if (companyName.length < 3) {
         setErrorMessage('Brand name must be at least 3 characters long.');
         setSuccessMessage('');
         return;
       }
-  
-      // Validation: Check for maximum length
+
       if (companyName.length > 50) {
         setErrorMessage('Brand name cannot exceed 50 characters.');
         setSuccessMessage('');
         return;
       }
-  
-      // Validation: Only allow alphanumeric characters and spaces
+
       const brandNameRegex = /^[a-zA-Z0-9 ]+$/;
       if (!brandNameRegex.test(companyName)) {
         setErrorMessage('Brand name can only contain alphanumeric characters and spaces.');
         setSuccessMessage('');
         return;
       }
-  
+
       const sellerData: SellerCreationRequest = {
         CompanyName: companyName,
         UserID: userId,
       };
-  
-  
+
       const response = await createSeller(sellerData).unwrap();
-      console.log('Response from API:', response);
-  
+
       if (response) {
         localStorage.setItem('sellerToken', response.sellerToken);
+        setHasSellerToken(true); 
         dispatch(setSeller(true));
         navigate('/profile/seller/addproduct');
       }
-  
+
       setSuccessMessage('Brand created successfully!');
       setErrorMessage('');
       closeBrandModal();
-  
+
       if (onSellerCreate) {
         onSellerCreate(response);
       }
     } catch (error) {
-      console.error('Brand creation failed', error);
-      setErrorMessage((error as any)?.data?.message );
+      setErrorMessage((error as any)?.data?.message);
       setSuccessMessage('');
     }
   };
-  
 
   return (
-    <div className="flex flex-col h-full w-full p-6  shadow-md overflow-auto">
+    <div className="flex flex-col h-full w-full p-6 shadow-md overflow-auto">
       <h1 className="text-2xl font-medium mb-3 sm:text-3xl">
         Seller Dashboard
       </h1>
 
-      <div className="flex flex-col items-center  ">
-        {isSeller ? (
+      <div className="flex flex-col items-center">
+        {hasSellerToken ? (
           <SellerNavigation />
         ) : (
           <div className="text-center">
@@ -139,17 +137,14 @@ console.log(userId,'this is the userid')
         )}
       </div>
 
-      {/* Render nested routes here */}
       <Outlet />
 
-      {/* Terms and Conditions Modal */}
       <TermsModal
         isOpen={isTermsModalOpen}
         onClose={closeTermsModal}
         onAccept={handleAcceptTerms}
       />
 
-      {/* Brand Name Modal */}
       <BrandModal
         isOpen={isBrandModalOpen}
         onClose={closeBrandModal}

@@ -26,7 +26,8 @@ const Registration: React.FC = () => {
         role: data.userData?.role,
       }),
     );
-    localStorage.setItem('accessToken', data.token);
+
+    localStorage.setItem('accessToken', data.accessToken || '');
     navigate('/');
   };
 
@@ -51,7 +52,7 @@ const Registration: React.FC = () => {
             role: googleResponse.userData?.role,
           }),
         );
-        localStorage.setItem('accessToken', googleResponse.token);
+        localStorage.setItem('User', googleResponse.accessToken||'');
         navigate('/home');
       } catch (error) {
         console.error('Google Auth Failed');

@@ -5,11 +5,13 @@ export interface Post {
 }
 
 export interface User {
+  isActive?: string ;
   userData: any;
   _id: string;
   name: string;
   email: string;
-  // password: string
+  status:string
+  role:"user"|"seller"
 }
 
 // export interface User {
@@ -30,10 +32,9 @@ export interface AuthResponse {
   userData: any;
   _id: string;
   user: any;
-  accessToken?: string;
+  accessToken?: string|undefined;
   password: string;
   email: string;
-  token: string;
 }
 
 export interface ErrorType{
