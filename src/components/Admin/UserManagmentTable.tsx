@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useFetchAllUsersQuery, useUpdateUserStatusMutation } from '../../services/apis/adminApi';
 import { User } from '../../interface/userTypes/apiTypes';
+import toast from 'react-hot-toast';
 
 export default function UserManagementTable() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -9,11 +10,10 @@ export default function UserManagementTable() {
   const { data: users = [], isLoading } = useFetchAllUsersQuery();
   const [updateUserBlock] = useUpdateUserStatusMutation();
 
-  // Initialize local users with fetched data
   const [localUsers, setLocalUsers] = useState(users);
   useEffect(() => {
     if (users) {
-      setLocalUsers(users); 
+      setLocalUsers(users);
     }
   }, [users]);
 
@@ -32,18 +32,20 @@ export default function UserManagementTable() {
   const endIndex = startIndex + itemsPerPage;
   const currentUsers = filteredUsers.slice(startIndex, endIndex);
 
-  const handleBlockUnblock = async (userId: string, isActive: boolean) => {
+  const handleBlockUnblock = async (userId: string) => {
     try {
-      await updateUserBlock({ userId, isActive }); 
-      setLocalUsers((prevUsers:any) =>
-        prevUsers.map((user:{_id:string}) =>
-          user._id === userId
-            ? { ...user, isActive, status: isActive ? 'Active' : 'Block' }
-            : user
-        )
-      ); 
+      const response = await updateUserBlock({ userId });
+      console.log(response, 'userResponse');
+      const newIsActive = response.data.isActive;
+      setLocalUsers((prevUsers: any[]) =>
+        prevUsers.map((user) => (user._id === userId ? { ...user, isActive: newIsActive } : user)),
+      );
+      toast.success(`User ${newIsActive ? 'unblocked' : 'blocked'} successfully!`);
+
     } catch (error) {
       console.error('Error updating user status:', error);
+      toast.error('Error updating user status. Please try again.');
+
     }
   };
 
@@ -52,7 +54,7 @@ export default function UserManagementTable() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>; // Loading state
+    return <div>Loading...</div>;
   }
 
   return (
@@ -119,12 +121,12 @@ export default function UserManagementTable() {
                 </td>
                 <td className="p-3">
                   <select
-                    value={user.isActive ? 'true' : 'false'}
-                    onChange={(e) => handleBlockUnblock(user._id, e.target.value === 'true')}
+                    value={user.isActive ? 'block' : 'unblock'}
+                    onChange={(e) => handleBlockUnblock(user._id)}
                     className="border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="true">Active</option>
-                    <option value="false">Blocked</option>
+                    <option value="block">Block</option>
+                    <option value="unblock">Unblock</option>
                   </select>
                 </td>
                 <td className="p-3">
@@ -142,7 +144,8 @@ export default function UserManagementTable() {
       </div>
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">
-          Showing {startIndex + 1} to {Math.min(endIndex, filteredUsers.length)} of {filteredUsers.length} entries
+          Showing {startIndex + 1} to {Math.min(endIndex, filteredUsers.length)} of{' '}
+          {filteredUsers.length} entries
         </p>
         <div className="flex items-center space-x-2">
           <button
@@ -152,7 +155,9 @@ export default function UserManagementTable() {
           >
             Previous
           </button>
-          <span className="text-sm">Page {currentPage} of {totalPages}</span>
+          <span className="text-sm">
+            Page {currentPage} of {totalPages}
+          </span>
           <button
             className="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-50"
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}

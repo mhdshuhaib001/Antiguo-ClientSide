@@ -10,6 +10,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/Store'; 
 import { setSeller } from '../../store/slices/userSlice'; 
+import { setSellerId } from '../../store/slices/sellerSlice';
 import { useNavigate } from 'react-router-dom';
 import SellerNavigation from '../../components/Seller/SellerNavigation';
 
@@ -88,11 +89,13 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
       };
 
       const response = await createSeller(sellerData).unwrap();
+      console.log(response,'seller response')
 
-      if (response) {
+      if (response) { 
         localStorage.setItem('sellerToken', response.sellerToken);
         setHasSellerToken(true); 
         dispatch(setSeller(true));
+        dispatch(setSellerId(response.sellerId))
         navigate('/profile/seller/addproduct');
       }
 

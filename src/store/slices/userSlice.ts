@@ -15,7 +15,6 @@ const initialState: UserState = {
   role: '',
   isSeller: false,
 };
-// Define the shape of the payload for setUser
 interface SetUserPayload {
   _id: string;
   name: string;

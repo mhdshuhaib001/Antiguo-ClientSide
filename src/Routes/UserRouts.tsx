@@ -5,14 +5,14 @@ import Registration from '../pages/userPages/Registration';
 import Home from '../pages/userPages/LandingPage';
 import Profile from '../pages/userPages/Profile';
 import Seller from '../pages/seller/SellerDashBord';
-import ProductListingForm from '../pages/seller/ProductManagment';
+import ProductListingForm from '../containers/sellerFeturs/ProductListingForm';
+import EditProductForm from '../containers/sellerFeturs/EditProductForm';
+
 import UserProtectedRoute from './ProtectRout/UserVerifyRoute';
 import AuthRoute from './ProtectRout/AuthRoute';
 import ForgetPasswordPage from '../pages/userPages/PasswordForgetPage';
 import EmailSendPage from '../pages/userPages/EmailSendPage';
-
-import Password from '../pages/userPages/Password';
-import ProductListTable from '../components/Seller/ProductTable';
+import ProductManagment from '../pages/seller/ProductManagment';
 import AuctionItemForm from '../components/Seller/auction-item-form';
 
 const UserRoute: React.FC = () => {
@@ -22,20 +22,18 @@ const UserRoute: React.FC = () => {
       <Route path="/" element={<Home />} />
       <Route path="/forget-password" element={<ForgetPasswordPage />} />
       <Route path="/forget-password-request" element={<EmailSendPage />} />
-
       <Route path="/profile" element={<UserProtectedRoute element={Profile} />}>
         <Route path="password" element={<AuctionItemForm />} />
         <Route path="seller" element={<UserProtectedRoute element={Seller} />}>
           <Route
             path="product-management"
-            element={<UserProtectedRoute element={ProductListTable} />}
+            element={<UserProtectedRoute element={ProductManagment} />}
           />
-           <Route
-            path="addproduct"
-            element={<UserProtectedRoute element={ProductListingForm} />}
-          />
-         
+          <Route path="addproduct" element={<UserProtectedRoute element={ProductListingForm} />} />
+          <Route path="editproduct/:productId" element={<UserProtectedRoute element={EditProductForm} />} />
+
         </Route>
+
       </Route>
     </Routes>
   );

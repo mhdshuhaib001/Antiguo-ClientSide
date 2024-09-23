@@ -11,7 +11,7 @@ const AuthRoute: React.FC<AuthRouteProps> = ({ element: Component }) => {
 
   useEffect(() => {
     if (token) {
-      navigate('/home');
+      navigate('/');
     }
   }, [token, navigate]);
 

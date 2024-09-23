@@ -1,39 +1,57 @@
-import React, { useState, useEffect } from 'react';
 import { Clock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 
-const AuctionItem = () => {
-  const [timeLeft, setTimeLeft] = useState({ days: 78, hours: 4, minutes: 0, seconds: 39 });
-  const [currentBid, setCurrentBid] = useState(4648);
+interface AuctionItemProps {
+  product: {
+    id: string;
+    imageUrl?: string;
+    name: string;
+    currentBid: number;
+  };
+  auctionEndTime?: string;
+}
+
+const AuctionItem: React.FC<AuctionItemProps> = ({ product, auctionEndTime }) => {
+  const calculateTimeLeft = (endTime: string) => {
+    const auctionEndDateTime = new Date(endTime).getTime();
+    const now = Date.now();
+    const timeLeft = auctionEndDateTime - now;
+    if (isNaN(auctionEndDateTime)) {
+      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    }
+
+    if (timeLeft <= 0) {
+      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    }
+
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+    return { days, hours, minutes, seconds };
+  };
+
+  const [timeLeft, setTimeLeft] = useState(() =>
+    auctionEndTime
+      ? calculateTimeLeft(auctionEndTime)
+      : { days: 0, hours: 0, minutes: 0, seconds: 0 },
+  );
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        if (prevTime.seconds > 0) {
-          return { ...prevTime, seconds: prevTime.seconds - 1 };
-        } else if (prevTime.minutes > 0) {
-          return { ...prevTime, minutes: prevTime.minutes - 1, seconds: 59 };
-        } else if (prevTime.hours > 0) {
-          return { ...prevTime, hours: prevTime.hours - 1, minutes: 59, seconds: 59 };
-        } else if (prevTime.days > 0) {
-          return { ...prevTime, days: prevTime.days - 1, hours: 23, minutes: 59, seconds: 59 };
-        } else {
-          clearInterval(timer);
-          return prevTime;
-        }
-      });
-    }, 1000);
+    if (auctionEndTime) {
+      const timerInterval = setInterval(() => {
+        setTimeLeft(calculateTimeLeft(auctionEndTime));
+      }, 1000);
 
-    return () => clearInterval(timer);
-  }, []);
+      return () => clearInterval(timerInterval);
+    }
+  }, [auctionEndTime]);
 
   return (
-    <div className="w-64  rounded-lg overflow-hidden shadow-lg bg-white flex flex-col">
+    <div className="w-64 rounded-lg overflow-hidden shadow-lg bg-white flex flex-col">
       <div className="relative h-60">
-        <img
-          className="w-full h-full object-cover"
-          src="/assets/signup.jpg"
-          alt="19th century Chinese antique porcelain vase"
-        />
+        <img className="w-full h-full object-cover" src={product.imageUrl} alt={product.name} />
         <div className="absolute top-1 left-1 bg-red-600 text-white px-1.5 py-0.5 rounded-full flex items-center">
           <Clock className="w-3 h-3 mr-0.5" />
           <span className="text-xs font-bold">Live</span>
@@ -61,9 +79,9 @@ const AuctionItem = () => {
       </div>
       <div className="flex-grow flex flex-col justify-between p-2">
         <div>
-          <div className="font-bold text-sm mb-1 truncate">19th century Chinese antique porcelain vase</div>
+          <div className="font-bold text-sm mb-1 truncate">{product.name}</div>
           <p className="text-gray-700 text-xs">Current Bid at:</p>
-          <p className="text-lg font-bold">${currentBid.toLocaleString()}</p>
+          <p className="text-lg font-bold">${product.currentBid.toLocaleString()}</p>
         </div>
         <button className="bg-black hover:bg-gray-800 text-white text-sm font-bold py-1 px-2 rounded w-full mt-1">
           Bid Now

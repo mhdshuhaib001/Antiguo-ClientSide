@@ -42,7 +42,7 @@ const Registration: React.FC = () => {
     if (response.credential) {
       try {
         const googleResponse = await googleAuth({ idToken: response.credential }).unwrap();
-
+console.log(googleResponse,'google response')
         // Dispatch user info and set token
         dispatch(
           setUser({
@@ -52,25 +52,19 @@ const Registration: React.FC = () => {
             role: googleResponse.userData?.role,
           }),
         );
-        localStorage.setItem('User', googleResponse.accessToken||'');
-        navigate('/home');
+        localStorage.setItem('accessToken', googleResponse.accessToken||'');
+        navigate('/');
       } catch (error) {
         console.error('Google Auth Failed');
       }
     }
   };
 
-  // Option 1: Simple fix, removing the error parameter from onError handler
   const handleGoogleFailure = () => {
     console.error('Google Auth Failed');
   };
 
-  // Option 2: Keep the error parameter (Optional), casting to match expected type
-  /*
-  const handleGoogleFailure = (error: any) => {
-    console.error('Google Auth Failed', error);
-  };
-  */
+
 
   return (
     <div className="flex flex-col md:flex-row h-screen">

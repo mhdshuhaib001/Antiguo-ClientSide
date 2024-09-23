@@ -16,7 +16,7 @@ const SellerRoutProtector: React.FC<AuthRouteProps> = ({
 
   useEffect(() => {
     if (!sellerToken) {
-      navigate('/home');
+      navigate('/');
     }
   }, [token, sellerToken, navigate]);
 

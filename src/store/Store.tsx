@@ -2,13 +2,14 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { sellerApi } from '../services/apis/sellerApi';
 import { ApiSlice } from '../services/apis/userApi';
 import userReducer from './slices/userSlice';
+import sellerReducer from './slices/sellerSlice'; 
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { adminApi } from '../services/apis/adminApi';
 
-// Combine reducers
 const rootReducer = combineReducers({
   User: userReducer,
+  Seller: sellerReducer,
   [sellerApi.reducerPath]: sellerApi.reducer,
   [ApiSlice.reducerPath]: ApiSlice.reducer,
   [adminApi.reducerPath]: adminApi.reducer,
@@ -25,7 +26,7 @@ const persistConfig = {
   ],
 };
 
-//   persisted reducer
+// Persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 // Configure the store

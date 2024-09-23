@@ -40,12 +40,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             _id: userDetails._id,
             name: userDetails.name,
             email: userDetails.email,
-            role: 'user',
+            role: userDetails.role,
           })
         );
 
         onLogin(result);
-        navigate('/home');
+        navigate('/');
       } catch (error: any) {
         if (error?.data?.errors) {
           Object.keys(error.data.errors).forEach((key) => {

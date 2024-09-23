@@ -6,8 +6,20 @@ export const ApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:8001',
     credentials: 'include',
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+
+      headers.set('Content-Type', 'application/json');
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
+    isBlocked: builder.query<boolean, void>({
+      query: () => '/api/auth/isBlocked',
+    }),
     signup: builder.mutation<AuthResponse, AuthRequest>({
       query: (signupData) => ({
         url: '/api/auth/signup',
@@ -59,5 +71,6 @@ export const {
   useLoginMutation, 
   useGoogleAuthMutation, 
   useEmailSendMutation,
-  useForgetPasswordMutation
+  useForgetPasswordMutation,
+  useIsBlockedQuery
 } = ApiSlice;

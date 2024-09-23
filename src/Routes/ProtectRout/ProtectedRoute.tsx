@@ -1,0 +1,29 @@
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useIsBlockedQuery } from '../../services/apis/userApi';
+
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const navigate = useNavigate();
+  const { data: isBlocked, isFetching } = useIsBlockedQuery();
+  console.log(isBlocked,'this is is blcok')
+
+    if (!isFetching) {
+      if (isBlocked) {
+        localStorage.removeItem('accessToken');
+
+        navigate('/signup'); 
+      }
+    }
+
+  if (isFetching) {
+    return <div>Loading...</div>; 
+  }
+
+  return <>{children}</>;
+}
+
+export default ProtectedRoute;

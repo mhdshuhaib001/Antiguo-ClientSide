@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getToken } from '../../utils/getHelper';
 
 interface ProtectedRouteProps {
-  element: React.ComponentType;
+  element:  React.ComponentType<any>;
 }
 
 const UserProtectedRoute: React.FC<ProtectedRouteProps> = ({

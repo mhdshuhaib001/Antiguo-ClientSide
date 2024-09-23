@@ -8,7 +8,6 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
-    console.log(storedToken);
     setToken(storedToken);
   }, []);
 
