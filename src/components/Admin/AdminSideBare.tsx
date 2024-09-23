@@ -1,7 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate } from 'react-router-dom';
 
 const AdminSideBare: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+     
+    localStorage.removeItem('adminToken')
+    navigate('/admin'); 
+  };
+
   return (
     <aside className="w-64 bg-gray-800 text-white min-h-screen flex flex-col items-center p-4">
       {/* Profile Section */}
@@ -21,7 +29,7 @@ const AdminSideBare: React.FC = () => {
           <Link to="/dashboard">Dashboard</Link>
         </li>
         <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
-          <Link to="/admin/admin-dashboard/userManagment">Users</Link>
+          <Link to="/admin/admin-dashboard/userManagement">Users</Link>
         </li>
         <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
           Products
@@ -31,6 +39,16 @@ const AdminSideBare: React.FC = () => {
           Settings
         </li>
       </ul>
+
+      {/* Logout Section */}
+      <div className="mt-auto w-full text-center p-4">
+        <button
+          onClick={handleLogout}
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded"
+        >
+          Logout
+        </button>
+      </div>
     </aside>
   );
 };

@@ -30,11 +30,8 @@ export const productListingSchema = Yup.object().shape({
   images: Yup.array()
     .min(1, 'At least one image is required'),
     auctionStartDateTime: Yup.date().required('Start date is required'),
-    auctionEndDateTime: Yup.date().required('End date is required'),
-    // auctionStartDateTime: Yup.date()
-  //   .required('Auction Start Date & Time is required'),
-  // auctionEndDateTime: Yup.date()
-  //   .required('Auction End Date & Time is required')
-  //   .min(Yup.ref('auctionStartDateTime'), 'End date must be after start date'),
+    auctionEndDateTime: Yup.date()
+    .required('End date is required')
+    .min(Yup.ref('auctionStartDateTime'), 'End date must be after start date'), 
 
 });

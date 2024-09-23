@@ -12,8 +12,8 @@ const HeroSection: React.FC = () => {
       
       {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: 'url(/path/to/your/background-image.jpg)' }}
+        className="absolute inset-0 bg-cover bg-center bg co"
+        style={{ backgroundImage: 'url()' }}
       >
         
       </div>
@@ -60,9 +60,15 @@ const HeroSection: React.FC = () => {
             }}
           >
             <img
-              src=""
+              src="/assets/Hearo2.jpg"
               alt="Auction Ad 1"
               className="w-full h-full object-cover "
+              style={{
+                borderTopLeftRadius: '30px',
+                borderBottomLeftRadius: '10px',
+                borderBottomRightRadius: '30px',
+                borderTopRightRadius: '10px',
+              }}
             />
           </div>
           {/* Second Image with specific dimensions */}
@@ -76,9 +82,15 @@ const HeroSection: React.FC = () => {
             }}
           >
             <img
-              src="/path/to/your/image2.jpg"
+              src="/assets/Hearo1.jpg"
               alt="Auction Ad 2"
               className="w-full h-full object-cover"
+              style={{
+                borderTopLeftRadius: '30px',
+                borderBottomLeftRadius: '10px',
+                borderBottomRightRadius: '30px',
+                borderTopRightRadius: '10px',
+              }}
             />
           </div>
         </div>

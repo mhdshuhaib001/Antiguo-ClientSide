@@ -31,7 +31,7 @@ const auctionItems: AuctionItem[] = [
     title: 'Where Efficiency',
     description: 'and Velocity Vision Collide.',
     currentBid: 2655,
-    image: '/placeholder.svg?height=300&width=300',
+    image: '/assets/Hot1.png?height=300&width=300',
     daysLeft: 40,
     hoursLeft: 4,
     minutesLeft: 0,
@@ -92,7 +92,7 @@ export default function AuctionInterface() {
                     <p className="text-xs text-gray-200">Seconds</p>
                   </div>
                 </div>
-                <button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                <button className="w-80 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
                   Bid Now
                 </button>
               </div>

@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 const ProductListingForm: React.FC = () => {
   const sellerId = useSelector((state: RootState) => state.Seller.sellerId);
   const [auctionFormat, setAuctionFormat] = useState('');
-
+  const navigate = useNavigate();
   const [addProduct, { isLoading: isAddProductLoading }] = useAddProductMutation();
   const [previewSources, setPreviewSources] = useState<string[]>([]);
   const [errMsg, setErrMsg] = useState('');
@@ -47,28 +47,22 @@ const ProductListingForm: React.FC = () => {
   };
 
   const handleSubmit = async (values: any) => {
-    console.log('values', values);
     try {
       const startDate = new Date(values.auctionStartDateTime);
       const endDate = new Date(values.auctionEndDateTime);
-
       if (isNaN(startDate.getTime()) || isNaN(endDate.getTime()) || endDate <= startDate) {
         setErrMsg(
           'Please select valid start and end dates, ensuring that the end date is after the start date.',
         );
         return;
       }
-
       const dataToSend = { ...values, sellerId };
-      console.log('Submitting:', dataToSend);
-
-      const productData = await addProduct(dataToSend).unwrap();
-      console.log('Product Data:', productData);
-
+      await addProduct(dataToSend).unwrap();
       toast.success('Product listing submitted successfully!');
       setTimeout(() => {
-        // Navigate('profile/seller/product-management')
+        navigate('/profile/seller/product-management');
       }, 1000);
+
       setErrMsg('');
     } catch (err) {
       console.error('Failed to submit product listing:', err);
@@ -181,17 +175,18 @@ const ProductListingForm: React.FC = () => {
                     Upload images by clicking or dragging files here.
                   </p>
                 </div>
-                <div className="flex space-x-4 mt-4">
+
+                <div className="flex space-x-4 mt-4  p-4 rounded-lg">
                   {previewSources.map((preview, index) => (
-                    <div key={index} className="relative w-32 h-32">
+                    <div key={index} className="relative w-60 h-60">
                       <img
                         src={preview}
                         alt={`Image preview ${index + 1}`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover "
                       />
                       <button
                         onClick={() => handleRemoveImage(index)}
-                        className="absolute top-0 right-0 0 text-black rounded-full p-1"
+                        className="absolute top-0 right-0 text-black rounded-full p-1 bg-white shadow"
                         title="Remove image"
                       >
                         &times;
@@ -212,9 +207,10 @@ const ProductListingForm: React.FC = () => {
                       as="select"
                       name="auctionFormat"
                       className="w-full p-2 border border-gray-300 rounded-md"
-                      onChange={(e: { target: { value: React.SetStateAction<string> } }) => {
+                      value={auctionFormat}
+                      onChange={(e: { target: { value: string } }) => {
                         setAuctionFormat(e.target.value);
-                        // Optionally, you can call field.onChange here if needed
+                        setFieldValue('auctionFormat', e.target.value);
                       }}
                     >
                       <option value="">Select Auction Format</option>
@@ -248,8 +244,10 @@ const ProductListingForm: React.FC = () => {
                                   date.millisecond,
                                 );
 
-                                if (!isNaN(jsDate.getTime())) {
+                                if (!isNaN(jsDate.getTime()) && jsDate >= new Date()) {
                                   field.onChange({ target: { name: field.name, value: jsDate } });
+                                } else {
+                                  setErrMsg('Selected date must be today or in the future.');
                                 }
                               }}
                               className="w-full"
@@ -314,10 +312,14 @@ const ProductListingForm: React.FC = () => {
                 </div>
 
                 {/* Summary Area on the right */}
-                <div className="md:col-span-1 flex justify-center mt-6">
+                {/* <div className="md:col-span-1 flex justify-center mt-6">
                   <div className="w-80 h-40 p-3 border border-gray-300 rounded-md bg-gray-50 flex flex-col justify-center items-start">
                     <h3 className="text-lg font-semibold mb-2">Auction Summary</h3>
-                    {auctionFormat == 'auction' ? (
+                    <p className="mb-1">
+                      <strong>Auction Format:</strong>{' '}
+                      {auctionFormat ? auctionFormat.replace('-', ' ') : 'Not selected'}
+                    </p>
+                    {auctionFormat === 'auction' ? (
                       <>
                         <p className="mb-1">
                           <strong>Start:</strong>{' '}
@@ -331,14 +333,14 @@ const ProductListingForm: React.FC = () => {
                     ) : (
                       <p className="mb-1 text-gray-500">Buy It Now.</p>
                     )}
-
                     <p className="mb-1">
                       <strong>Reserve:</strong> <Field name="reservePrice" component="span" />
                     </p>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
+
             {/* Shipping Details */}
             <div className="border border-gray-300 p-4 bg-white rounded-md mb-8">
               <h2 className="text-lg font-semibold mb-4">Shipping Details</h2>

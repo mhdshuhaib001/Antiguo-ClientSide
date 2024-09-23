@@ -25,10 +25,8 @@ const Email: React.FC = () => {
   
     if (!error && email) {
       try {
-        // Call the API and unwrap the response
         const result: AuthResponse = await emailSend({ email }).unwrap();
   
-        // Display the success message returned from the backend
         toast.success(result.message);
   
         setTimeout(()=>{

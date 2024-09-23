@@ -11,11 +11,10 @@ import { FormDataType } from '../../interface/sellerTypes/sellerApiTypes';
 
 const LandingPage: React.FC = () => {
   const { data, error, isLoading } = useFetchAllProductsQuery();
-
   const products: FormDataType[] = data?.products || [];
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error loading products</p>;
+  // Limit to 5 products
+  const limitedProducts = products.slice(0, 5);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -23,22 +22,20 @@ const LandingPage: React.FC = () => {
       <main className="flex-grow">
         <HeroSection />
         <div className="container mx-auto px-4 space-y-12 py-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {products.length > 0 ? (
-              products.map((product) => {
-                return (
-                  <AuctionItem
-                    key={product._id ?? `product-${product.itemTitle}`}
-                    product={{
-                      id: product._id ?? '',
-                      imageUrl: product.images?.[0] ?? '/placeholder-image.jpg',
-                      name: product.itemTitle ?? 'Unnamed Product',
-                      currentBid: Number(product.reservePrice) || 0,
-                    }}
-                    auctionEndTime={product.auctionEndDateTime}
-                  />
-                );
-              })
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {limitedProducts.length > 0 ? (
+              limitedProducts.map((product) => (
+                <AuctionItem
+                  key={product._id ?? `product-${product.itemTitle}`}
+                  product={{
+                    id: product._id ?? '',
+                    imageUrl: product.images?.[0] ?? '/placeholder-image.jpg',
+                    name: product.itemTitle ?? 'Unnamed Product',
+                    currentBid: Number(product.reservePrice) || 0,
+                  }}
+                  auctionEndTime={product.auctionEndDateTime}
+                />
+              ))
             ) : (
               <p>No products available.</p>
             )}

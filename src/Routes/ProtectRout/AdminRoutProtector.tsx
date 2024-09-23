@@ -12,11 +12,10 @@ const AdminRoutProtector: React.FC<AuthRouteProps> = ({ element: Component }) =>
 
   useEffect(() => {
     if (!adminToken) {
-      navigate('/admin'); // Redirect to login if no admin token
+      navigate('/admin');
     }
   }, [adminToken, navigate]);
 
-  // Render the protected component if the token exists
   return adminToken ? <Component /> : null;
 };
 

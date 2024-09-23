@@ -53,9 +53,7 @@ export default function UserManagementTable() {
     console.log(`Action for user role: ${role} with user ID: ${userId}`);
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+ 
 
   return (
     <div className="w-full max-w-6xl mx-auto p-4 space-y-4">

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useIsBlockedQuery } from '../../services/apis/userApi';
 
@@ -19,9 +19,6 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
       }
     }
 
-  if (isFetching) {
-    return <div>Loading...</div>; 
-  }
 
   return <>{children}</>;
 }

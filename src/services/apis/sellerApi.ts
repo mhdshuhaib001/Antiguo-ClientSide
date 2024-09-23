@@ -14,7 +14,7 @@ export const sellerApi = createApi({
     baseUrl: 'http://localhost:8001',
     credentials: 'include',
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('sellerToken');
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }

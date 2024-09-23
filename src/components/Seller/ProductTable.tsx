@@ -1,8 +1,10 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
+import toast from 'react-hot-toast';
 import { useFetchProductsQuery, useDeleteProductMutation } from '../../services/apis/sellerApi';
 
 const ProductListTable: React.FC = () => {
@@ -13,13 +15,15 @@ const ProductListTable: React.FC = () => {
 
   const handleDelete = async (productId: string) => {
     try {
-      await deleteProduct(productId).unwrap();
-      refetch();
-      console.log(`Product with ID ${productId} deleted successfully`);
+        await deleteProduct(productId).unwrap();
+        refetch();
+        toast.success(`Product deleted successfully`);
     } catch (error) {
-      console.error('Failed to delete the product:', error);
+        toast.error('Failed to delete the product. Please try again.');
+        console.error('Failed to delete the product:', error);
     }
-  };
+};
+
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -27,14 +31,14 @@ const ProductListTable: React.FC = () => {
         <h1 className="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">All Product List</h1>
         <button
           onClick={() => navigate('/profile/seller/addproduct')}
-          className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition duration-300 w-full sm:w-auto"
+          className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded transition duration-300 w-full sm:w-auto"
         >
           List Item
         </button>
       </div>
 
       <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-        {productData && productData.products.length > 0 ? (
+        {productData?.products?.length ? (
           <table className="min-w-full table-auto">
             <thead>
               <tr className="bg-gray-100 text-gray-600 uppercase text-xs sm:text-sm leading-normal">
@@ -46,7 +50,7 @@ const ProductListTable: React.FC = () => {
               </tr>
             </thead>
             <tbody className="text-gray-600 text-xs sm:text-sm font-light">
-              {productData.products.map((product: any) => (
+              {productData.products.map((product) => (
                 <tr
                   key={product._id}
                   className="border-b border-gray-200 hover:bg-gray-50 transition duration-300"
@@ -62,11 +66,11 @@ const ProductListTable: React.FC = () => {
                           className="rounded-full"
                         />
                       </div>
-                      <span className="font-medium">{product.itemTitle}</span>
+                      <span className="font-medium uppercase">{product.itemTitle}</span>
                     </div>
                   </td>
                   <td className="py-3 px-2 sm:px-6 text-left">${product.reservePrice}</td>
-                  <td className="py-3 px-2 sm:px-6 text-left">{product.category}</td>
+                  <td className="py-3 px-2 sm:px-6 text-left  uppercase">{product.category}</td>
                   <td className="py-3 px-2 sm:px-6 text-left">
                     <span
                       className={`${
@@ -116,7 +120,7 @@ const ProductListTable: React.FC = () => {
           <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition duration-300">
             Previous
           </button>
-          <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-orange-500 text-sm font-medium text-white hover:bg-orange-600 transition duration-300">
+          <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-gray-600 text-sm font-medium text-white hover:bg-gray-500 transition duration-300">
             1
           </button>
           <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition duration-300">
