@@ -10,10 +10,9 @@ import { useFetchAllProductsQuery } from '../../services/apis/sellerApi';
 import { FormDataType } from '../../interface/sellerTypes/sellerApiTypes';
 
 const LandingPage: React.FC = () => {
-  const { data, error, isLoading } = useFetchAllProductsQuery();
+  const { data } = useFetchAllProductsQuery();
   const products: FormDataType[] = data?.products || [];
 
-  // Limit to 5 products
   const limitedProducts = products.slice(0, 5);
 
   return (

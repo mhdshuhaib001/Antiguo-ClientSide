@@ -37,12 +37,9 @@ const Registration: React.FC = () => {
 
   // Handle Google Authentication
   const handleGoogleSuccess = async (response: CredentialResponse) => {
-    console.log('Google Auth Success', response);
-
     if (response.credential) {
       try {
         const googleResponse = await googleAuth({ idToken: response.credential }).unwrap();
-console.log(googleResponse,'google response')
         // Dispatch user info and set token
         dispatch(
           setUser({
@@ -52,7 +49,7 @@ console.log(googleResponse,'google response')
             role: googleResponse.userData?.role,
           }),
         );
-        localStorage.setItem('accessToken', googleResponse.accessToken||'');
+        localStorage.setItem('accessToken', googleResponse.accessToken || '');
         navigate('/');
       } catch (error) {
         console.error('Google Auth Failed');
@@ -63,8 +60,6 @@ console.log(googleResponse,'google response')
   const handleGoogleFailure = () => {
     console.error('Google Auth Failed');
   };
-
-
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
