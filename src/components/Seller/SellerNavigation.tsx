@@ -26,7 +26,7 @@ const SellerNavigation: React.FC = () => {
             Ad Area
           </Link>
           <Link
-            to="/profile/seller/about-area"
+            to="/profile/seller/about"
             className="text-gray-800 text-sm font-medium py-2 px-4 hover:bg-gray-100"
           >
             About Area

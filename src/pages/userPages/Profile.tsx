@@ -5,9 +5,10 @@ import { Outlet } from 'react-router-dom';
 
 const Profile: React.FC = () => {
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen ">
       <Header />
-      <div className="flex flex-grow overflow-hidden">
+      <div className="flex flex-grow overflow-hidden bg-[#fcfaee]">
+        
         <Sidebar />
         <div className="flex-grow  bg-bl overflow-y-auto">
           <Outlet />

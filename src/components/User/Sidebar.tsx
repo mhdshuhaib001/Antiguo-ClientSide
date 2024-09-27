@@ -15,7 +15,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center ps-8 flex-col md:flex-row">
+    <div className="min-h-screen flex items-center p-4 flex-col md:flex-row">
       <aside className="w-full md:w-64 bg-gray-800 shadow-lg rounded-md">
         <div className="p-4">
           <h2 className="text-xl text-white font-bold">My Profile</h2>

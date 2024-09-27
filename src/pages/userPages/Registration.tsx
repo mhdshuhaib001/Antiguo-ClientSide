@@ -15,9 +15,25 @@ const Registration: React.FC = () => {
   const dispatch = useDispatch();
   const [googleAuth] = useGoogleAuthMutation();
 
+  const handleLogin = async (data: AuthResponse) => {
+    console.log('loginData', 'data');
+    try {
+      dispatch(
+        setUser({
+          _id: data.userData?._id,
+          email: data.userData?.email,
+          name: data.userData?.name,
+          role: data.userData?.role,
+        }),
+      );
+      const authToken = data.accessToken;
+      localStorage.setItem('accessToken', authToken!);
+      document.cookie = `accessToken=${authToken}; path=/; secure; samesite=strict; max-age=3600`;
+      navigate('/');
+    } catch (error) {}
+  };
   const handleSignup = (data: AuthResponse) => {
     console.log('Signup Data:', data);
-
     dispatch(
       setUser({
         _id: data.userData?._id,
@@ -28,11 +44,10 @@ const Registration: React.FC = () => {
     );
 
     localStorage.setItem('accessToken', data.accessToken || '');
+    const token = data.userData.accessToken || '';
+    const cookieOptions = `secure; samesite=strict;max-age=${3 * 24 * 60 * 60}`;
+    document.cookie = `accessToken=${token}; ${cookieOptions}`;
     navigate('/');
-  };
-
-  const handleLogin = (data: { email: string; password: string }) => {
-    console.log('Login Data:', data);
   };
 
   // Handle Google Authentication
@@ -50,6 +65,9 @@ const Registration: React.FC = () => {
           }),
         );
         localStorage.setItem('accessToken', googleResponse.accessToken || '');
+        const token = googleResponse.accessToken || '';
+        const cookieOptions = `secure; samesite=strict;max-age=${3 * 24 * 60 * 60}`;
+        document.cookie = `accessToken=${token}; ${cookieOptions}`;
         navigate('/');
       } catch (error) {
         console.error('Google Auth Failed');

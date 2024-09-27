@@ -83,12 +83,12 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
         return;
       }
 
-      const sellerData: SellerCreationRequest = {
+      const formData: SellerCreationRequest = {
         CompanyName: companyName,
         UserID: userId,
       };
 
-      const response = await createSeller(sellerData).unwrap();
+      const response = await createSeller(formData).unwrap();
       console.log(response,'seller response')
 
       if (response) { 
@@ -113,7 +113,7 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
   };
 
   return (
-    <div className="flex flex-col h-full w-full p-6 shadow-md overflow-auto">
+    <div className="flex flex-col h-full w-full p-6 shadow-md overflow-">
       <h1 className="text-2xl font-medium mb-3 sm:text-3xl">
         Seller Dashboard
       </h1>
