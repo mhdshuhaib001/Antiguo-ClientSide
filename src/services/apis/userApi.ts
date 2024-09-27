@@ -1,5 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { AuthRequest, AuthResponse } from '../../interface/userTypes/apiTypes';
+import { getToken } from '../../utils/getHelper'
+
 
 export const ApiSlice = createApi({
   reducerPath: 'userApi',
@@ -7,7 +9,8 @@ export const ApiSlice = createApi({
     baseUrl: 'http://localhost:8001',
     credentials: 'include',
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem('accessToken');
+      const token = getToken();
+      console.log(token,'userApiTokenchjekkjfn kgjv')
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
@@ -55,7 +58,7 @@ export const ApiSlice = createApi({
         body: emailData,
       }),
     }),
-    forgetPassword: builder.mutation<AuthResponse, {token:string, newPassword: string }>({
+    forgetPassword: builder.mutation<AuthResponse, { token: string; newPassword: string }>({
       query: (newPasswordData) => ({
         url: '/api/auth/forget-password',
         method: 'POST',
@@ -65,12 +68,12 @@ export const ApiSlice = createApi({
   }),
 });
 
-export const { 
-  useSignupMutation, 
-  useSendOtpMutation, 
-  useLoginMutation, 
-  useGoogleAuthMutation, 
+export const {
+  useSignupMutation,
+  useSendOtpMutation,
+  useLoginMutation,
+  useGoogleAuthMutation,
   useEmailSendMutation,
   useForgetPasswordMutation,
-  useIsBlockedQuery
+  useIsBlockedQuery,
 } = ApiSlice;

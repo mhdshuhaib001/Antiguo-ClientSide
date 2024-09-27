@@ -97,7 +97,6 @@ const SignupForm: React.FC<{
     if (isOtpStep) {
       try {
         const result = await signup(values).unwrap();
-        console.log(result, 'result the main of this ');
         onSignup(result as AuthResponse);
         navigate('/');
         setFormError(null);

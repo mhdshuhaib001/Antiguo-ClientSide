@@ -16,7 +16,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loginValidationScema } = useLoginValidation();
-
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -30,22 +29,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       };
 
       try {
-        const result: any = await login(user).unwrap();
-        const authToken = result.accessToken;
-        localStorage.setItem('accessToken', authToken!);
-
-        const userDetails = result.userData;
-        dispatch(
-          setUser({
-            _id: userDetails._id,
-            name: userDetails.name,
-            email: userDetails.email,
-            role: userDetails.role,
-          })
-        );
-
+        const result: AuthResponse = await login(user).unwrap();
         onLogin(result);
-        navigate('/');
       } catch (error: any) {
         if (error?.data?.errors) {
           Object.keys(error.data.errors).forEach((key) => {

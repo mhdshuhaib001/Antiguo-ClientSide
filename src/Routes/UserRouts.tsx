@@ -14,6 +14,8 @@ import ForgetPasswordPage from '../pages/userPages/PasswordForgetPage';
 import EmailSendPage from '../pages/userPages/EmailSendPage';
 import ProductManagment from '../pages/seller/ProductManagment';
 import AuctionItemForm from '../components/Seller/auction-item-form';
+import UserDashBoard from '../components/User/UserDshboard';
+import SellerAboutPage from '../components/Seller/SellerAbout'
 
 const UserRoute: React.FC = () => {
   return (
@@ -23,17 +25,15 @@ const UserRoute: React.FC = () => {
       <Route path="/forget-password" element={<ForgetPasswordPage />} />
       <Route path="/forget-password-request" element={<EmailSendPage />} />
       <Route path="/profile" element={<UserProtectedRoute element={Profile} />}>
+        <Route path="dashboard" element={<UserDashBoard />} />
         <Route path="password" element={<AuctionItemForm />} />
         <Route path="seller" element={<UserProtectedRoute element={Seller} />}>
-          <Route
-            path="product-management"
-            element={<UserProtectedRoute element={ProductManagment} />}
-          />
+          <Route path="product-management" element={<UserProtectedRoute element={ProductManagment} />} />
           <Route path="addproduct" element={<UserProtectedRoute element={ProductListingForm} />} />
           <Route path="editproduct/:productId" element={<UserProtectedRoute element={EditProductForm} />} />
+          <Route path="about" element={<SellerAboutPage/>} />
 
         </Route>
-
       </Route>
     </Routes>
   );

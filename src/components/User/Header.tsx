@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import {User}  from 'lucide-react'
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [token, setToken] = useState<string | null>(null);
@@ -12,7 +12,7 @@ const Header: React.FC = () => {
   }, []);
 
   return (
-    <header className="bg-white shadow-md py-2">
+    <header className="bg-[#fcfaee] border border-b border-[#7c4b24] shadow-md py-2">
       <div className="container mx-auto flex justify-between items-center px-6">
         {/* Logo */}
         <div onClick={()=>navigate('/')}
@@ -57,15 +57,16 @@ const Header: React.FC = () => {
           {/* Profile Button */}
           {token ? (
             <button
-              className="bg-gray-900 text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4"
+              className="flex items-center bg-[#975f26] text-[#f7efc1]  hover:text-[#e5cc6f] py-1 px-4 rounded-md hover:bg-[#663f21] focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4"
               onClick={() => {
-                navigate('/profile');
+                navigate('/profile/dashboard');
               }}
             >
+              <User size={20} className='mr-2'/>
               Profile
             </button>
           ) : (
-            <button onClick={()=>{navigate('/signup')}} className="bg-gray-900 text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4">
+            <button onClick={()=>{navigate('/signup')}} className="bg-[#975f26] text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4">
               Register
             </button>
           )}

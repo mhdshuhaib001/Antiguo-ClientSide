@@ -83,7 +83,7 @@ const AuctionItem: React.FC<AuctionItemProps> = ({ product, auctionEndTime }) =>
           <p className="text-gray-700 text-xs">Current Bid at:</p>
           <p className="text-lg font-bold">${product.currentBid.toLocaleString()}</p>
         </div>
-        <button className="bg-black hover:bg-gray-800 text-white text-sm font-bold py-1 px-2 rounded w-full mt-1">
+        <button className="bg-[#3a200e] hover:bg-[#663f21] text-white text-sm font-bold py-1 px-2 rounded w-full mt-1">
           Bid Now
         </button>
       </div>

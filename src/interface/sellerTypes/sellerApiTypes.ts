@@ -1,20 +1,23 @@
-import { AuthRequest } from '../userTypes/apiTypes';
 
 export interface SellerCreationRequest {
   UserID?: string;
-  CompanyName: string;
+  CompanyName?: string;
   contactInfo?: string;
   about?: string;
+  image?:string
 }
 
 export interface SellerResponse {
-  sellerId:string;
+  sellerId: string;
   sellerToken: string;
   id: string;
   UserId?: string;
-  CompanyName: string;
-  contactInfo?: string;
+  companyName: string;
+  email?: string; 
+  phone?: string; 
+  address?: string; 
   about?: string; 
+  image?: string; 
   createdAt: string;
   updatedAt?: string;
 }
@@ -54,4 +57,11 @@ export interface Product {
   currentBid: number;
 }
 
-// export type ProductsResponse = Product[];
+export interface SellerInfo {
+  companyName: string;
+  email: string;
+  phone: string;
+  address: string;
+  about: string;
+  image: string;
+}

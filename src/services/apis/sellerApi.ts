@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   FormDataType,
-  SellerCreationRequest,
   SellerResponse,
   AddProductResponse,
   ProductsResponse,
@@ -14,24 +13,29 @@ export const sellerApi = createApi({
     baseUrl: 'http://localhost:8001',
     credentials: 'include',
     prepareHeaders: (headers) => {
-      // const token = localStorage.getItem('sellerToken');
-      const token = localStorage.getItem('user');
-
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
+      const seller = localStorage.getItem('sellerToken');
+      const user = localStorage.getItem('accessToken');
+    console.log(seller,'00000000000000000000',user,'ppppppppppppp')
+      if (seller) {
+        headers.set('SellerAuthorization', `Bearer ${seller}`);
       }
-
+    
+      if (user) {
+        headers.set('UserAuthorization', `Bearer ${user}`); 
+      }
+    
       headers.set('Content-Type', 'application/json');
       return headers;
     },
+    
   }),
   endpoints: (builder) => ({
     // Mutation to create a new seller
-    createSeller: builder.mutation<SellerResponse, SellerCreationRequest>({
-      query: (sellerData) => ({
+    createSeller: builder.mutation<SellerResponse, FormData>({
+      query: (formData) => ({
         url: '/api/seller/createseller',
         method: 'POST',
-        body: sellerData,
+        body: formData,
       }),
     }),
     // Mutation to add a new product
@@ -81,6 +85,7 @@ export const sellerApi = createApi({
         body: formData,
       }),
     }),
+    // sellerAbout: builder.mutation<s
   }),
 });
 

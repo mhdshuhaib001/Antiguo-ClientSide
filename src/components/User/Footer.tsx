@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
   return (
     <footer>
       <div
-        className="bg-gray-800 text-white py-8"
+        className="bg-[#58361d] text-white py-8"
         style={{ borderTopLeftRadius: '40px', borderTopRightRadius: '40px' }}
       >
         <div className="container mx-auto px-4 md:px-8 lg:px-12">
