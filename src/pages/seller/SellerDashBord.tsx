@@ -83,12 +83,12 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
         return;
       }
 
-      const formData: SellerCreationRequest = {
+      const sellerBrand: SellerCreationRequest = {
         CompanyName: companyName,
         UserID: userId,
       };
 
-      const response = await createSeller(formData).unwrap();
+      const response = await createSeller(sellerBrand).unwrap();
       console.log(response,'seller response')
 
       if (response) { 
