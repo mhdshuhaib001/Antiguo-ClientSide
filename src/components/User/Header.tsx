@@ -16,7 +16,7 @@ const Header: React.FC = () => {
       <div className="container mx-auto flex justify-between items-center px-6">
         {/* Logo */}
         <div onClick={()=>navigate('/')}
-         className="text-xl font-bold text-gray-800">AuctionGems</div>
+         className="text-xl font-bold text-gray-800 cursor-pointer">AuctionGems</div>
 
         {/* Navigation */}
         <nav className="hidden md:flex space-x-4 items-center">

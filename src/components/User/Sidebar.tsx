@@ -10,7 +10,8 @@ const Sidebar: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(userLogOut());
-    localStorage.removeItem('accessToken');
+    localStorage.clear();
+    
     navigate('/');
   };
 

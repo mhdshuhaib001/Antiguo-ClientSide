@@ -28,11 +28,13 @@ export interface AuthRequest {
 }
 
 export interface AuthResponse {
+  localStorage: any;
   message:string;
   userData: any;
   _id: string;
   user: any;
   accessToken?: string|undefined;
+  sellerToken?: string|undefined;
   password: string;
   email: string;
 }

@@ -16,8 +16,8 @@ const Registration: React.FC = () => {
   const [googleAuth] = useGoogleAuthMutation();
 
   const handleLogin = async (data: AuthResponse) => {
-    console.log('loginData', 'data');
     try {
+      // Dispatch user data to the Redux store
       dispatch(
         setUser({
           _id: data.userData?._id,
@@ -26,12 +26,29 @@ const Registration: React.FC = () => {
           role: data.userData?.role,
         }),
       );
+
+      console.log(data, 'login response');
+
+      // Extract tokens
       const authToken = data.accessToken;
-      localStorage.setItem('accessToken', authToken!);
-      document.cookie = `accessToken=${authToken}; path=/; secure; samesite=strict; max-age=3600`;
+      const sellerToken = data.sellerToken;
+
+      // Store tokens in localStorage if they are defined
+      if (authToken) {
+        localStorage.setItem('accessToken', authToken);
+        document.cookie = `accessToken=${authToken}; path=/; secure; samesite=strict; max-age=3600`;
+      }
+
+      if (sellerToken) {
+        localStorage.setItem('sellerToken', sellerToken);
+      }
+
       navigate('/');
-    } catch (error) {}
+    } catch (error) {
+      console.error('Login error:', error);
+    }
   };
+
   const handleSignup = (data: AuthResponse) => {
     console.log('Signup Data:', data);
     dispatch(
