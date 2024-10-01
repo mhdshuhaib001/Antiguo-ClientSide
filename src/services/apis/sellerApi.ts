@@ -97,5 +97,5 @@ export const {
   useGetProductQuery,
   useDeleteProductMutation,
   useUpdateProductMutation,
-  useFetchSellerQuery, // Add this line
+  useFetchSellerQuery,
 } = sellerApi;

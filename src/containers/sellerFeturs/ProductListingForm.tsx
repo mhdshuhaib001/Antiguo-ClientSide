@@ -167,7 +167,7 @@ const ProductListingForm: React.FC = () => {
                         type="file"
                         className="hidden"
                         multiple
-                        onChange={(e) => handleFileInputChange(e, setFieldValue)}
+                        onChange={(e) => handleFileInputChange(e, setFieldValue)  }
                       />
                     </label>
                   </div>

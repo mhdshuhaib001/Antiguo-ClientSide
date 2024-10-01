@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { AdminLoginRequest, AdminLoginResponse } from '../../interface/adminTypes/adminApiTypes';
-import { User } from '../../interface/userTypes/apiTypes';
+import { AdminLoginRequest, AdminLoginResponse ,AddCategoryRequest, FetchCategoriesResponse} from '../../interface/adminTypes/adminApiTypes';
 
 export const adminApi = createApi({
   reducerPath: 'adminApi',
@@ -29,8 +28,27 @@ export const adminApi = createApi({
         body: { userId },
       }),
     }),
+    addCategory: builder.mutation<AddCategoryRequest, FormData>({
+      query: (formData) => ({
+        url: `/api/admin/categories`,
+        method: 'POST',
+        body: formData,
+      
+      }),
+    }),
+    fetchCategory:builder.query<FetchCategoriesResponse,void>({
+      query:()=>({
+        url:'api/admin/categories',
+        method: 'GET'
+      })
+    })
   }),
 });
 
-export const { useAdminLoginMutation, useFetchAllUsersQuery, useUpdateUserStatusMutation } =
-  adminApi;
+export const {
+  useAdminLoginMutation,
+  useFetchAllUsersQuery,
+  useUpdateUserStatusMutation,
+  useAddCategoryMutation,
+  useFetchCategoryQuery,
+} = adminApi;

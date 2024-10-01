@@ -4,9 +4,13 @@ import { Outlet } from 'react-router-dom';
 
 const AdminLayout: React.FC = () => {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-gray-800 ">
       <AdminSideBare />
-      <div className="flex-grow bg-gray-100 overflow-y-auto p-4">
+      <div
+        className="flex-grow bg-white overflow-y-auto p-4 m-3w rounded-md"
+        style={{ borderTopLeftRadius: '1.5rem', borderBottomLeftRadius: '1.5rem' }}
+      >
+        {' '}
         <Outlet />
       </div>
     </div>

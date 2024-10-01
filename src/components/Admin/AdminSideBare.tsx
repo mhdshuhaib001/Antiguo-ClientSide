@@ -1,13 +1,12 @@
 import React from 'react';
-import {Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const AdminSideBare: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-     
-    localStorage.removeItem('adminToken')
-    navigate('/admin'); 
+    localStorage.removeItem('adminToken');
+    navigate('/admin');
   };
 
   return (
@@ -29,15 +28,13 @@ const AdminSideBare: React.FC = () => {
           <Link to="/dashboard">Dashboard</Link>
         </li>
         <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
-          <Link to="/admin/admin-dashboard/userManagement">Users</Link>
+          <Link to="/admin/admin-dashboard/user-management">Users Managment</Link>
         </li>
         <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
-          Products
+          <Link to="/admin/admin-dashboard/category-management"> Category Managment</Link>
         </li>
         <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">Orders</li>
-        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
-          Settings
-        </li>
+        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">Settings</li>
       </ul>
 
       {/* Logout Section */}
