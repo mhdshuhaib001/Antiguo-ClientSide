@@ -41,7 +41,16 @@ export const adminApi = createApi({
         url:'api/admin/categories',
         method: 'GET'
       })
-    })
+    }),
+    updateCategory: builder.mutation<FetchCategoriesResponse, {id:string ; formData:FormData}>({
+      query: ({ id, formData }) => ({
+        url: `/api/admin/categories/${id}`,
+        method: 'PUT',
+        body: formData,
+      }),
+      
+    }),
+    
   }),
 });
 
@@ -51,4 +60,5 @@ export const {
   useUpdateUserStatusMutation,
   useAddCategoryMutation,
   useFetchCategoryQuery,
+  useUpdateCategoryMutation
 } = adminApi;

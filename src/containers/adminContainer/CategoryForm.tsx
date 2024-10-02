@@ -1,22 +1,38 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { categoryValidationSchema } from '../../validations/categoryValidation';
+import { Category, UploadCategory } from '../../interface/adminTypes/adminApiTypes';
 
 type CategoryFormProps = {
-  onSave: (data: { name: string; image: File | null; icon: File | null }) => void;
+  onSave: (data: UploadCategory) => void;
+  initialData?: Category | null;
+  isEditMode: boolean;
 };
 
-const CategoryForm: React.FC<CategoryFormProps> = ({ onSave }) => {
+const CategoryForm: React.FC<CategoryFormProps> = ({ onSave, initialData, isEditMode }) => {
   const formik = useFormik({
     initialValues: {
-      name: '',
-      image: null as File | null,
-      icon: null as File | null,
+      name: isEditMode && initialData ? initialData.name : '',
+      image: null, // Start with null; will be handled later
+      icon: null, // Start with null; will be handled later
     },
-    validationSchema: categoryValidationSchema,
+    validationSchema: categoryValidationSchema(isEditMode),
     onSubmit: (values) => {
-      console.log('Form Submitted', values);
-      onSave(values);
+      // Prepare the final value to submit
+      const finalValue: UploadCategory = {
+        name: values.name,
+        image: values.image || (isEditMode && initialData ? initialData.imageUrl : null), // Use existing URL if no new image is provided
+        icon: values.icon || (isEditMode && initialData ? initialData.iconUrl : null), // Use existing URL if no new icon is provided
+      };
+
+      // Check if image is provided
+      if (!finalValue.image) {
+        console.error('Image is required'); // Log error
+        return; // Prevent submission if no image is available
+      }
+      // No need to check icon since it's working fine
+
+      onSave(finalValue);
     },
   });
 
@@ -37,7 +53,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSave }) => {
         <label className="block text-sm font-medium text-gray-700">Category Name</label>
         <input
           type="text"
-          name="name" 
+          name="name"
           value={formik.values.name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -52,6 +68,16 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSave }) => {
       {/* Category Image Input */}
       <div>
         <label className="block text-sm font-medium text-gray-700">Category Image</label>
+
+        {isEditMode && initialData?.imageUrl && !formik.values.image && (
+          <div className="mt-2">
+            <img
+              src={initialData.imageUrl}
+              alt="Category preview"
+              className="w-24 h-24 object-cover rounded-md"
+            />
+          </div>
+        )}
         {formik.values.image && (
           <div className="mt-2">
             <img
@@ -69,13 +95,19 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSave }) => {
           className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
         />
         {formik.touched.image && formik.errors.image ? (
-          <div className="text-red-600 text-sm">{formik.errors.image}</div>
+          <div className="text-red-600 text-sm">{formik.errors.image as string}</div>
         ) : null}
       </div>
 
       {/* SVG Icon Input */}
       <div>
         <label className="block text-sm font-medium text-gray-700">Category Icon (SVG)</label>
+
+        {isEditMode && initialData?.iconUrl && !formik.values.icon && (
+          <div className="mt-2">
+            <img src={initialData.iconUrl} alt="Category Icon" className="w-12 h-12" />
+          </div>
+        )}
         {formik.values.icon && (
           <div className="mt-2">
             <img
@@ -93,7 +125,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSave }) => {
           className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
         />
         {formik.touched.icon && formik.errors.icon ? (
-          <div className="text-red-600 text-sm">{formik.errors.icon}</div>
+          <div className="text-red-600 text-sm">{formik.errors.icon as string}</div>
         ) : null}
       </div>
 
@@ -103,7 +135,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSave }) => {
           type="submit"
           className="w-full inline-flex justify-center py-2 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Save
+          {isEditMode ? 'Update' : 'Add'} Category
         </button>
       </div>
     </form>

@@ -8,23 +8,23 @@ export interface AdminLoginResponse {
   adminToken: string;
 }
 
-// interface Admin {
-//     _id: string;
-//     email: string;
-//     name: string;
-//     role: 'admin'; // Role should be 'admin' for admin users
-//     // Add other relevant admin fields here
-// }
-
-// adminApiTypes.ts
-
 export interface Category {
-  icon: string | undefined;
-  image: string | undefined;
+  _id: string;
   id: string; 
-  name: string;
-  imageUrl: string; 
+  name: string; 
+  imageUrl: string;
   iconUrl: string; 
+}
+
+export interface UploadCategory {
+  name: string;
+  image:string | File | null; 
+  icon: string | File | null; 
+}
+
+export interface FetchCategoriesResponse {
+  success: boolean;
+  categories: Category[];
 }
 
 export interface AddCategoryRequest {
@@ -33,7 +33,3 @@ export interface AddCategoryRequest {
   icon: File; 
 }
 
-export interface FetchCategoriesResponse {
-  success: boolean;
-  categories: Category[];
-}

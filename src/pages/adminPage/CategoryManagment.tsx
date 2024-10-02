@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import CategoryModal from '../../components/Admin/CategoryModal';
-import { useAddCategoryMutation,useFetchCategoryQuery } from '../../services/apis/adminApi';
+import {
+  useAddCategoryMutation,
+  useFetchCategoryQuery,
+  useUpdateCategoryMutation,
+} from '../../services/apis/adminApi';
 import toast from 'react-hot-toast';
-type Category = {
-  id: string;
-  name: string;
-  image: string;
-  icon: string;
-};
-
+import { Category, UploadCategory } from '../../interface/adminTypes/adminApiTypes'; // Updated import
 
 const AdminCategoryTable: React.FC = () => {
-  const { data, error, isLoading } = useFetchCategoryQuery(); // Fetch categories
+  const { data, error, isLoading } = useFetchCategoryQuery();
   const categories = data?.categories || [];
   const [addCategory] = useAddCategoryMutation();
+  const [updateCategory] = useUpdateCategoryMutation();
+
+  const [currentCategory, setCurrentCategory] = useState<Category | null>(null); // For editing
+  const [isEditMode, setIsEditMode] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPages = 5;
   const totalPages = Math.ceil(categories?.length / itemsPages);
@@ -24,12 +27,11 @@ const AdminCategoryTable: React.FC = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPages;
   const currentItems = categories.slice(indexOfFirstItem, indexOfLastItem);
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-  const handleCategorySubmit = async (data: {
-    name: string;
-    image: File | null;
-    icon: File | null;
-  }) => {
+  const handleCategorySubmit = async (data: UploadCategory) => {
+    console.log(data);
     const formData = new FormData();
+
+  
     formData.append('name', data.name);
     if (data.image) {
       formData.append('image', data.image);
@@ -39,8 +41,12 @@ const AdminCategoryTable: React.FC = () => {
     }
 
     try {
-      const response = await addCategory(formData).unwrap();
-      console.log(response,'jkfsgbkvsjdbfjgbvjhfgjhgbfjhjk');
+      console.log(formData, 'form data');
+      const response =
+        isEditMode && currentCategory
+          ? await updateCategory({ id: currentCategory._id, formData }).unwrap()
+          : await addCategory(formData).unwrap();
+      console.log(response, 'jkfsgbkvsjdbfjgbvjhfgjhgbfjhjk');
       if (response) {
         toast.success('Category added successfully!');
         setIsModalOpen(false);
@@ -51,13 +57,23 @@ const AdminCategoryTable: React.FC = () => {
       console.error('Error adding category:', error);
     }
   };
+  const handleAddCategoryClick = () => {
+    setIsEditMode(false); // Set to add mode
+    setCurrentCategory(null); // No category data for adding
+    setIsModalOpen(true);
+  };
 
+  const handleEditCategoryClick = (category: Category) => {
+    setIsEditMode(true); // Set to edit mode
+    setCurrentCategory(category); // Pass the category to the modal for editing
+    setIsModalOpen(true);
+  };
   return (
     <div className="container mx-auto py-10 px-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Admin Category</h2>
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => handleAddCategoryClick()}
           className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-3 rounded"
         >
           Add Category
@@ -94,26 +110,25 @@ const AdminCategoryTable: React.FC = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <img
-                    src={category.image}
+                    src={category.imageUrl}
                     alt={category.name}
                     width={60}
                     height={60}
                     className="rounded-md"
-                  />
+                  />{' '}
+                  {/* Use imageUrl */}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-6 h-6 text-gray-500"
-                  >
-                    <path d={category.icon} />
-                  </svg>
+                  <img src={category.iconUrl} className="w-9 h-9" />
                 </td>
 
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button className="text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
+                  <button
+                    onClick={() => handleEditCategoryClick(category)}
+                    className="text-indigo-600 hover:text-indigo-900 mr-2"
+                  >
+                    Edit
+                  </button>
                   <button className="text-red-600 hover:text-red-900">Delete</button>
                 </td>
               </tr>
@@ -160,6 +175,8 @@ const AdminCategoryTable: React.FC = () => {
         isOpen={isModalOpen}
         onClose={handleModalClose}
         onSave={handleCategorySubmit}
+        category={currentCategory}
+        isEditMode={isEditMode}
       />
     </div>
   );
