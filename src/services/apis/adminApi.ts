@@ -36,9 +36,9 @@ export const adminApi = createApi({
       
       }),
     }),
-    fetchCategory:builder.query<FetchCategoriesResponse,void>({
-      query:()=>({
-        url:'api/admin/categories',
+    fetchCategory:builder.query<FetchCategoriesResponse,{page:number,limit:number}>({
+      query:({ page, limit })=>({
+        url:`api/admin/categories?page=${page}$limit=${limit}`,
         method: 'GET'
       })
     }),
