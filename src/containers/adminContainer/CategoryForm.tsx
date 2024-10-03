@@ -7,32 +7,34 @@ type CategoryFormProps = {
   onSave: (data: UploadCategory) => void;
   initialData?: Category | null;
   isEditMode: boolean;
+  loading: boolean;
 };
 
-const CategoryForm: React.FC<CategoryFormProps> = ({ onSave, initialData, isEditMode }) => {
+const CategoryForm: React.FC<CategoryFormProps> = ({
+  onSave,
+  initialData,
+  isEditMode,
+  loading,
+}) => {
   const formik = useFormik({
     initialValues: {
       name: isEditMode && initialData ? initialData.name : '',
-      image: null, // Start with null; will be handled later
-      icon: null, // Start with null; will be handled later
+      image: null,
+      icon: null,
     },
     validationSchema: categoryValidationSchema(isEditMode),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       // Prepare the final value to submit
       const finalValue: UploadCategory = {
         name: values.name,
-        image: values.image || (isEditMode && initialData ? initialData.imageUrl : null), // Use existing URL if no new image is provided
-        icon: values.icon || (isEditMode && initialData ? initialData.iconUrl : null), // Use existing URL if no new icon is provided
+        image: values.image || (isEditMode && initialData ? initialData.imageUrl : null),
+        icon: values.icon || (isEditMode && initialData ? initialData.iconUrl : null),
       };
-
-      // Check if image is provided
-      if (!finalValue.image) {
-        console.error('Image is required'); // Log error
-        return; // Prevent submission if no image is available
+      try {
+        await onSave(finalValue);
+      } catch (error) {
+        console.error('Error saving category:', error);
       }
-      // No need to check icon since it's working fine
-
-      onSave(finalValue);
     },
   });
 
@@ -133,9 +135,16 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSave, initialData, isEdit
       <div>
         <button
           type="submit"
-          className="w-full inline-flex justify-center py-2 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          disabled={loading}
+          className={`w-full inline-flex justify-center py-2 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md ${
+            loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
+          } text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
         >
-          {isEditMode ? 'Update' : 'Add'} Category
+          {loading ? (
+            <span>Loading...</span>
+          ) : (
+            <span>{isEditMode ? 'Update' : 'Add'} Category</span>
+          )}
         </button>
       </div>
     </form>

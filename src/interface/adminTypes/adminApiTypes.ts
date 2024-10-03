@@ -25,6 +25,7 @@ export interface UploadCategory {
 export interface FetchCategoriesResponse {
   success: boolean;
   categories: Category[];
+  totalPages:number
 }
 
 export interface AddCategoryRequest {

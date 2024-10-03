@@ -9,13 +9,10 @@ interface CategoryModalProps {
   onSave: (data: UploadCategory) => void;
   category?: Category | null;
   isEditMode: boolean;
+  loading: boolean
 }
 
-const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, onSave, category, isEditMode }) => {
-  const handleCategorySubmit = (data: UploadCategory) => {
-    onSave(data);
-    onClose();
-  };
+const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, onSave, category, isEditMode,  loading }) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} backdrop="blur" size="lg">
@@ -27,9 +24,11 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, onSave, 
         </ModalHeader>
         <ModalBody className="p-7">
           <CategoryForm
-            onSave={handleCategorySubmit}
+          
+            onSave={onSave}
             initialData={category}
             isEditMode={isEditMode}
+            loading={loading}
           />
         </ModalBody>
       </ModalContent>
