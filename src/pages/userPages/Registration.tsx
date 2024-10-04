@@ -7,6 +7,7 @@ import { AuthResponse } from '../../interface/userTypes/apiTypes';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../store/slices/userSlice';
 import { useGoogleAuthMutation } from '../../services/apis/userApi';
+import { setSellerId } from '../../store/slices/sellerSlice';
 
 const Registration: React.FC = () => {
   const [showLogin, setShowLogin] = useState<boolean>(false);
@@ -26,7 +27,8 @@ const Registration: React.FC = () => {
           role: data.userData?.role,
         }),
       );
-
+      const sellerId = data.sellerId
+ dispatch(setSellerId(sellerId))
       console.log(data, 'login response');
 
       // Extract tokens
