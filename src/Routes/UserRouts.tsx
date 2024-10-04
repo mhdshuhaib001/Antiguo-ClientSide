@@ -16,6 +16,7 @@ import ProductManagment from '../pages/seller/ProductManagment';
 import AuctionItemForm from '../components/Seller/auction-item-form';
 import UserDashBoard from '../components/User/UserDshboard';
 import SellerAboutPage from '../components/Seller/SellerAbout'
+import ProductPage from '../pages/userPages/ProductDetailPage';
 
 const UserRoute: React.FC = () => {
   return (
@@ -24,6 +25,9 @@ const UserRoute: React.FC = () => {
       <Route path="/" element={<Home />} />
       <Route path="/forget-password" element={<ForgetPasswordPage />} />
       <Route path="/forget-password-request" element={<EmailSendPage />} />
+      <Route path='/product-details' element={<ProductPage/>}/>
+        {/* Profile Routees */}
+
       <Route path="/profile" element={<UserProtectedRoute element={Profile} />}>
         <Route path="dashboard" element={<UserDashBoard />} />
         <Route path="password" element={<AuctionItemForm />} />

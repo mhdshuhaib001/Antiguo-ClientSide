@@ -51,8 +51,7 @@ const ProductSlider: React.FC<ProductSliderProps> = ({ products }) => {
                   name: product.itemTitle ?? 'No Name',
                   currentBid: Number(product.reservePrice) || 0,
                 }}
-                auctionEndTime={product.auctionEndDateTime}
-              />
+                auctionEndTime={product.auctionEndDateTime} status={product.auctionFormat}              />
             </SwiperSlide>
           ))
         ) : (

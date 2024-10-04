@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import { useLoginValidation } from '../../hooks/useLoginValidation';
 import { useLoginMutation } from '../../services/apis/userApi';
 import { AuthRequest, AuthResponse } from '../../interface/userTypes/apiTypes';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../store/slices/userSlice';
 
 interface LoginFormProps {
   onLogin: (data: AuthResponse) => void;
@@ -14,7 +13,6 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [login] = useLoginMutation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { loginValidationScema } = useLoginValidation();
   const formik = useFormik({
     initialValues: {
@@ -30,6 +28,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
       try {
         const result: AuthResponse = await login(user).unwrap();
+        console.log(result,';kjfbgkjvdfjkbgvjdfbhbvg')
         onLogin(result);
       } catch (error: any) {
         if (error?.data?.errors) {

@@ -9,15 +9,12 @@ const getCroppedImg = (imageSrc: string, pixelCrop: CroppedAreaPixels): Promise<
             const ctx = canvas.getContext('2d');
 
             if (!ctx) {
-                reject(new Error('Failed to get canvas context'));
-                return;
+                return reject(new Error('Failed to get canvas context'));
             }
 
-            // Set canvas dimensions to the cropped area
             canvas.width = pixelCrop.width;
             canvas.height = pixelCrop.height;
 
-            // Draw the cropped image on the canvas
             ctx.drawImage(
                 image,
                 pixelCrop.x,
@@ -30,21 +27,19 @@ const getCroppedImg = (imageSrc: string, pixelCrop: CroppedAreaPixels): Promise<
                 pixelCrop.height
             );
 
-            // Convert canvas to blob
             canvas.toBlob((blob) => {
                 if (!blob) {
-                    reject(new Error('Failed to create a blob'));
-                    return;
+                    return reject(new Error('Failed to create blob from canvas'));
                 }
-                // Create a file URL
-                const fileUrl = URL.createObjectURL(blob);
-                resolve(fileUrl); 
+                const croppedImageUrl = URL.createObjectURL(blob);
+                resolve(croppedImageUrl);
             }, 'image/jpeg');
         };
+
         image.onerror = (error) => {
-            reject(new Error('Image loading error: ' + error));
+            reject(new Error(`Failed to load image: ${error}`));
         };
     });
 };
 
-  export default getCroppedImg
+export default getCroppedImg;

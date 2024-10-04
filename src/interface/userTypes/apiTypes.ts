@@ -28,6 +28,7 @@ export interface AuthRequest {
 }
 
 export interface AuthResponse {
+ sellerId:string;
   localStorage: any;
   message:string;
   userData: any;

@@ -6,9 +6,10 @@ import { Upload } from 'lucide-react';
 import { productListingSchema } from '../../hooks/ProductValidation';
 import { Field, Formik, Form, ErrorMessage, FieldProps } from 'formik';
 import toast from 'react-hot-toast';
-import { DatePicker } from '@nextui-org/react';
+import { DatePicker, image } from '@nextui-org/react';
 import { now, getLocalTimeZone } from '@internationalized/date';
 import { useNavigate } from 'react-router-dom';
+import ImageEditModal from '../../components/Seller/EditImageComponent';
 const ProductListingForm: React.FC = () => {
   const sellerId = useSelector((state: RootState) => state.Seller.sellerId);
   const [auctionFormat, setAuctionFormat] = useState('');
@@ -16,6 +17,10 @@ const ProductListingForm: React.FC = () => {
   const [addProduct, { isLoading: isAddProductLoading }] = useAddProductMutation();
   const [previewSources, setPreviewSources] = useState<string[]>([]);
   const [errMsg, setErrMsg] = useState('');
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [croppedImage, setCroppedImage] = useState<string | null>(null);
 
   const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>, setFieldValue: any) => {
     const files = e.target.files;
@@ -42,20 +47,51 @@ const ProductListingForm: React.FC = () => {
         });
     }
   };
+
+
+
   const handleRemoveImage = (index: number) => {
     setPreviewSources((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleImageClick = (src: string) => {
+    setSelectedImage(src);
+    setModalOpen(true);
+  };
+
+  const handleCropImage = (cropped: string | null) => {
+    if (cropped) {
+      console.log(cropped,'suiiiiiiiiiiiiiiiiiii')
+      setCroppedImage(cropped);
+      setPreviewSources((prev) =>
+        prev.map((image) => (image === selectedImage ? cropped : image))
+      );
+    }
+    setModalOpen(false);
+  };
+  
+
   const handleSubmit = async (values: any) => {
     try {
-      const startDate = new Date(values.auctionStartDateTime);
-      const endDate = new Date(values.auctionEndDateTime);
-      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime()) || endDate <= startDate) {
-        setErrMsg(
-          'Please select valid start and end dates, ensuring that the end date is after the start date.',
-        );
+      // Only validate auction dates if the auction format is 'auction'
+      if (values.auctionFormat === 'auction') {
+        const startDate = new Date(values.auctionStartDateTime);
+        const endDate = new Date(values.auctionEndDateTime);
+
+        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime()) || endDate <= startDate) {
+          setErrMsg(
+            'Please select valid start and end dates, ensuring that the end date is after the start date.',
+          );
+          return;
+        }
+      }
+
+      // Validate reserve price if it is required
+      if (!values.reservePrice) {
+        setErrMsg('Reserve price is required.');
         return;
       }
+
       const dataToSend = { ...values, sellerId };
       await addProduct(dataToSend).unwrap();
       toast.success('Product listing submitted successfully!');
@@ -96,8 +132,9 @@ const ProductListingForm: React.FC = () => {
             {/* Item Details */}
             <div className="border border-gray-300 p-4 bg-white rounded-md mb-8">
               <h2 className="text-lg font-semibold mb-4">Item Details</h2>
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-2/3">
+
+              <div className="flex flex-col md:flex-row items-start gap-4 mb-4">
+                <div className="w-full md:w-2/3">
                   <label className="block text-gray-700 text-sm mb-2">Item Title:</label>
                   <Field name="itemTitle">
                     {({ field }: { field: any }) => (
@@ -110,7 +147,8 @@ const ProductListingForm: React.FC = () => {
                   </Field>
                   <ErrorMessage name="itemTitle" component="div" className="text-red-500" />
                 </div>
-                <div className="w-1/3">
+
+                <div className="w-full md:w-1/3">
                   <label className="block text-gray-700 text-sm mb-2">Category:</label>
                   <Field
                     as="select"
@@ -125,6 +163,7 @@ const ProductListingForm: React.FC = () => {
                   <ErrorMessage name="category" component="div" className="text-red-500" />
                 </div>
               </div>
+
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm mb-2">Description:</label>
                 <Field
@@ -135,6 +174,7 @@ const ProductListingForm: React.FC = () => {
                 />
                 <ErrorMessage name="description" component="div" className="text-red-500" />
               </div>
+
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm mb-2">Condition:</label>
                 <Field
@@ -145,10 +185,12 @@ const ProductListingForm: React.FC = () => {
                 />
                 <ErrorMessage name="condition" component="div" className="text-red-500" />
               </div>
-              <div className="mb-4 flex">
-                <div className="w-60 mr-4">
+
+              <div className="mb-4 flex flex-col md:flex-row">
+                {/* Upload box and preview side by side */}
+                <div className="w-full md:w-1/2 mr-4">
                   <label className="block text-gray-700 text-sm mb-2">Images:</label>
-                  <div className="flex items-center justify-center w-full">
+                  <div className="flex items-center justify-start w-full">
                     <label
                       htmlFor="dropzone-file"
                       className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
@@ -167,7 +209,7 @@ const ProductListingForm: React.FC = () => {
                         type="file"
                         className="hidden"
                         multiple
-                        onChange={(e) => handleFileInputChange(e, setFieldValue)  }
+                        onChange={(e) => handleFileInputChange(e, setFieldValue)}
                       />
                     </label>
                   </div>
@@ -176,16 +218,24 @@ const ProductListingForm: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="flex space-x-4 mt-4  p-4 rounded-lg">
+                {/* Preview section next to upload */}
+                <div className="w-full md:w-1/2 flex flex-wrap gap-4 mt-4 md:mt-0">
                   {previewSources.map((preview, index) => (
-                    <div key={index} className="relative w-60 h-60">
+                    <div
+                      key={index}
+                      className="relative w-44 h-44 cursor-pointer"
+                      onClick={() => handleImageClick(preview)}
+                    >
                       <img
                         src={preview}
                         alt={`Image preview ${index + 1}`}
-                        className="w-full h-full object-cover "
+                        className="w-full h-full object-cover rounded-md"
                       />
                       <button
-                        onClick={() => handleRemoveImage(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemoveImage(index);
+                        }}
                         className="absolute top-0 right-0 text-black rounded-full p-1 bg-white shadow"
                         title="Remove image"
                       >
@@ -207,16 +257,22 @@ const ProductListingForm: React.FC = () => {
                       as="select"
                       name="auctionFormat"
                       className="w-full p-2 border border-gray-300 rounded-md"
-                      value={auctionFormat}
-                      onChange={(e: { target: { value: string } }) => {
-                        setAuctionFormat(e.target.value);
-                        setFieldValue('auctionFormat', e.target.value);
+                      value={auctionFormat || ''}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                        const selectedValue = e.target.value as 'auction' | 'buy-it-now';
+                        setAuctionFormat(selectedValue);
+                        setFieldValue('auctionFormat', selectedValue);
+                        if (selectedValue === 'buy-it-now') {
+                          setFieldValue('auctionStartDateTime', null);
+                          setFieldValue('auctionEndDateTime', null);
+                        }
                       }}
                     >
                       <option value="">Select Auction Format</option>
                       <option value="auction">Auction</option>
                       <option value="buy-it-now">Buy It Now</option>
                     </Field>
+
                     <ErrorMessage name="auctionFormat" component="div" className="text-red-500" />
                   </div>
 
@@ -439,6 +495,15 @@ const ProductListingForm: React.FC = () => {
           </Form>
         )}
       </Formik>
+      <ImageEditModal
+        imageSrc={selectedImage}
+        isOpen={isModalOpen}
+        onClose={() => {
+          setSelectedImage(null);
+          setModalOpen(false);
+        }}
+        onCropped={handleCropImage}
+      />
     </div>
   );
 };
