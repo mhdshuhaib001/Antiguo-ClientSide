@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { AuthRequest, AuthResponse } from '../../interface/userTypes/apiTypes';
 import { getToken } from '../../utils/getHelper'
-
+import { Address } from '../../interface/userTypes/apiTypes'
 
 export const ApiSlice = createApi({
   reducerPath: 'userApi',
@@ -65,6 +65,16 @@ export const ApiSlice = createApi({
         body: newPasswordData,
       }),
     }),
+    addAddress: builder.mutation<AuthResponse, { address:Address}>({
+      query: (addressData) => ({
+        url: '/api/user/address',
+        method: 'POST',
+        body: addressData,
+      }),
+    }),
+    getAddress: builder.query<Address[], void>({
+      query: (userId) => `/api/user/address/${userId}`,
+    }),
   }),
 });
 
@@ -76,4 +86,6 @@ export const {
   useEmailSendMutation,
   useForgetPasswordMutation,
   useIsBlockedQuery,
+  useAddAddressMutation,
+  useGetAddressQuery
 } = ApiSlice;

@@ -4,6 +4,7 @@ export interface Post {
   content: string;
 }
 
+
 export interface User {
   isActive?: string ;
   userData: any;
@@ -45,4 +46,20 @@ export interface ErrorType{
     status:string,
     messsage:string
   }
+}
+
+
+
+export interface Address {
+  _id?: string
+  fullName: string
+  phoneNumber: string
+  streetAddress: string
+  city: string
+  state: string
+  postalCode: string
+  country: string
+  userId: string
+  createdAt?: Date
+  updatedAt?: Date
 }

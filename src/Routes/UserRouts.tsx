@@ -7,7 +7,6 @@ import Profile from '../pages/userPages/Profile';
 import Seller from '../pages/seller/SellerDashBord';
 import ProductListingForm from '../containers/sellerFeturs/ProductListingForm';
 import EditProductForm from '../containers/sellerFeturs/EditProductForm';
-
 import UserProtectedRoute from './ProtectRout/UserVerifyRoute';
 import AuthRoute from './ProtectRout/AuthRoute';
 import ForgetPasswordPage from '../pages/userPages/PasswordForgetPage';
@@ -15,8 +14,10 @@ import EmailSendPage from '../pages/userPages/EmailSendPage';
 import ProductManagment from '../pages/seller/ProductManagment';
 import AuctionItemForm from '../components/Seller/auction-item-form';
 import UserDashBoard from '../components/User/UserDshboard';
-import SellerAboutPage from '../components/Seller/SellerAbout'
-import ProductPage from '../pages/userPages/ProductDetailPage';
+import SellerAboutPage from '../components/Seller/SellerAbout';
+import ProductPage from '../pages/ProductDetailPage';
+import AddressPage from '../pages/userPages/addressPage';
+import CheckoutPage from '../pages/chekOutPage';
 
 const UserRoute: React.FC = () => {
   return (
@@ -25,18 +26,27 @@ const UserRoute: React.FC = () => {
       <Route path="/" element={<Home />} />
       <Route path="/forget-password" element={<ForgetPasswordPage />} />
       <Route path="/forget-password-request" element={<EmailSendPage />} />
-      <Route path='/product-details' element={<ProductPage/>}/>
-        {/* Profile Routees */}
+      <Route path="/product-details/:id" element={<ProductPage />} />
+      <Route path="/checkout/:id" element={<CheckoutPage />} />
+      {/* Profile Routees */}
 
       <Route path="/profile" element={<UserProtectedRoute element={Profile} />}>
         <Route path="dashboard" element={<UserDashBoard />} />
         <Route path="password" element={<AuctionItemForm />} />
+        <Route path="address" element={<AddressPage />} />
+    
         <Route path="seller" element={<UserProtectedRoute element={Seller} />}>
-          <Route path="product-management" element={<UserProtectedRoute element={ProductManagment} />} />
-          <Route path="addproduct" element={<UserProtectedRoute element={ProductListingForm} />} />
-          <Route path="editproduct/:productId" element={<UserProtectedRoute element={EditProductForm} />} />
-          <Route path="about" element={<SellerAboutPage/>} />
 
+          <Route
+            path="product-management"
+            element={<UserProtectedRoute element={ProductManagment} />}
+          />
+          <Route path="addproduct" element={<UserProtectedRoute element={ProductListingForm} />} />
+          <Route
+            path="editproduct/:productId"
+            element={<UserProtectedRoute element={EditProductForm} />}
+          />
+          <Route path="about" element={<SellerAboutPage />} />
         </Route>
       </Route>
     </Routes>

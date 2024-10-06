@@ -82,7 +82,7 @@ const UserDashBoard: React.FC = () => {
 
       {/* Table */}
       <div className=" m-3 grid grid-cols-1 sm:grid-cols-3 gap-4 p-6 sm:p-8 bg-[#f1f1df] border-50 border-b border-amber-200">
-        {state.map((state, index) => (
+        {state.map((state) => (
           <div className="bg-white p-4 rounded-lg shadow-sm text-center border border-amber-100 hover:border-amber-300 transition-colors duration-300">
             <h2 className="text-3xl font-bold text-amber-600">{state.title}</h2>
             <p className="text-gray-600 font-semibold text-lg">{state.value}</p>
@@ -104,7 +104,7 @@ const UserDashBoard: React.FC = () => {
             <tbody>
               {biddingSummary
                 .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-                .map((item, index) => (
+                .map((item, _index) => (
                   <tr
                     key={item.id}
                     className="bg-white border-b border-amber-100 hover:bg-amber-50 transition-colors duration-300"

@@ -9,7 +9,6 @@ interface ProtectedRouteProps {
 function ProtectedRoute({ children }: ProtectedRouteProps) {
   const navigate = useNavigate();
   const { data: isBlocked, isFetching } = useIsBlockedQuery();
-  console.log(isBlocked,'this is is blcok')
 
     if (!isFetching) {
       if (isBlocked) {

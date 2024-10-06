@@ -10,7 +10,11 @@ module.exports = {
     extend: {
       fontFamily: {
         lalezar: ['Lalezar', 'sans-serif'],
+        serif: ['Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
       },
+      colors:{
+        'custom-bg':'#fcfaee'
+      }
     },
   },
   darkMode: "class",

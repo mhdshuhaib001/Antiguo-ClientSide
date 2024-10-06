@@ -14,7 +14,6 @@ const UserProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const token = getToken();
 
   useEffect(() => {
-    console.log('Token check during route protection:', token);
     if (!token) {
       navigate('/signup');
     }

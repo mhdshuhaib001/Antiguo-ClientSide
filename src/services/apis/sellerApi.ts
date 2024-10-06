@@ -62,7 +62,7 @@ export const sellerApi = createApi({
     }),
     getProduct: builder.query<any, string>({
       query: (productId) => ({
-        url: `/api/seller/getProduct/${productId}`,
+        url: `/api/products/getProduct/${productId}`,
         method: 'GET',
       }),
     }),
@@ -79,7 +79,6 @@ export const sellerApi = createApi({
         body: formData,
       }),
     }),
-    // New query to fetch seller data
     fetchSeller: builder.query<SellerResponse, string>({
       query: (sellerId) => ({
         url: `/api/seller/fetchSeller/${sellerId}`,

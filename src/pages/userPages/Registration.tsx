@@ -27,8 +27,8 @@ const Registration: React.FC = () => {
           role: data.userData?.role,
         }),
       );
-      const sellerId = data.sellerId
- dispatch(setSellerId(sellerId))
+      const sellerId = data.sellerId;
+      dispatch(setSellerId(sellerId));
       console.log(data, 'login response');
 
       // Extract tokens
@@ -213,5 +213,6 @@ const Registration: React.FC = () => {
     </div>
   );
 };
+
 
 export default Registration;
