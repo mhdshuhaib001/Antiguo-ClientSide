@@ -30,7 +30,6 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
   
   const [createSeller] = useCreateSellerMutation();
   
-  // State to track if the seller token is present
   const [hasSellerToken, setHasSellerToken] = useState<boolean>(false);
 
   useEffect(() => {
@@ -84,8 +83,8 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
       }
 
       const sellerBrand: SellerCreationRequest = {
-        CompanyName: companyName,
-        UserID: userId,
+        companyName: companyName,
+        userId: userId,
       };
 
       const response = await createSeller(sellerBrand).unwrap();

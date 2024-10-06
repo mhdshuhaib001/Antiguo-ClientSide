@@ -1,7 +1,7 @@
 
 export interface SellerCreationRequest {
-  UserID?: string;
-  CompanyName?: string;
+  userId?: string;
+  companyName?: string;
   contactInfo?: string;
   about?: string;
   image?:string

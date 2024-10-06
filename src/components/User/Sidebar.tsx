@@ -37,11 +37,11 @@ const Sidebar: React.FC = () => {
             Sell
           </Link>
           <Link
-            to="/profile/password"
+            to="/profile/address"
             className="text-white hover:bg-gray-700 hover:text-gray-200 p-2 rounded transition duration-200 flex items-center"
           >
             <Key size={20} className="mr-2" />
-            Password
+            Address
           </Link>
           <a
             href="#my-auctions"

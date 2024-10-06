@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import useSignupValidation from '../../hooks/useSignupValidation';
-
 import { useSignupMutation, useSendOtpMutation } from '../../services/apis/userApi';
 import { AuthResponse } from '../../interface/userTypes/apiTypes';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import OtpForm from './OtpForm';
+
 
 const SignupForm: React.FC<{
   onSignup: (data: AuthResponse) => void;

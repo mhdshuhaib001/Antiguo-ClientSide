@@ -1,5 +1,6 @@
 import { Clock } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface AuctionItemProps {
   product: {
@@ -13,14 +14,12 @@ interface AuctionItemProps {
 }
 
 const AuctionItem: React.FC<AuctionItemProps> = ({ product, auctionEndTime, status }) => {
+  const Navigate = useNavigate()
   const calculateTimeLeft = (endTime: string) => {
     const auctionEndDateTime = new Date(endTime).getTime();
     const now = Date.now();
     const timeLeft = auctionEndDateTime - now;
 
-    console.log("Auction end datetime (ms):", auctionEndDateTime);
-  console.log("Current time (ms):", now);
-  console.log("Time left in milliseconds:", timeLeft);
   
     if (isNaN(auctionEndDateTime)) {
       console.error("Invalid auctionEndTime format");
@@ -45,10 +44,8 @@ const AuctionItem: React.FC<AuctionItemProps> = ({ product, auctionEndTime, stat
 
   useEffect(() => {
     if (auctionEndTime) {
-      console.log("Auction End Time:", auctionEndTime);
       const timerInterval = setInterval(() => {
         const newTimeLeft = calculateTimeLeft(auctionEndTime);
-        console.log("New Time Left:", newTimeLeft);
         setTimeLeft(newTimeLeft);
       }, 1000);
   
@@ -56,7 +53,9 @@ const AuctionItem: React.FC<AuctionItemProps> = ({ product, auctionEndTime, stat
     }
   }, [auctionEndTime]);
   
-console.log(timeLeft.days,'kjvndfgndvfbhvrdfbgvruydvfgeyrubideeeeeeeeeeee')
+const handleBidClick =  ()=>{
+  Navigate(`/product-details/${product.id}`);
+}
   return (
     <div className="w-64 rounded-lg overflow-hidden shadow-lg bg-white flex flex-col">
       <div className="relative h-60">
@@ -92,7 +91,7 @@ console.log(timeLeft.days,'kjvndfgndvfbhvrdfbgvruydvfgeyrubideeeeeeeeeeee')
           <p className="text-gray-700 text-xs">Current Bid at:</p>
           <p className="text-lg font-bold">${product.currentBid.toLocaleString()}</p>
         </div>
-        <button
+        <button onClick={handleBidClick}
           className={`${
             status === 'auction' ? 'bg-[#3a200e] hover:bg-[#663f21]' : 'bg-[#2a44b8] hover:bg-[#663f21]'
           } text-white text-sm font-bold py-1 px-2 rounded w-full mt-1`}

@@ -3,8 +3,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/free-mode';
-import { FreeMode, Pagination, Autoplay } from 'swiper/modules'; // Import Autoplay module
-import AuctionItem from './ProductCard'; 
+import { FreeMode, Pagination, Autoplay } from 'swiper/modules'; 
+import AuctionItem from './AuctionItemComponent'; 
 import { FormDataType } from '../../interface/sellerTypes/sellerApiTypes';
 
 interface ProductSliderProps {
