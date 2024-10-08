@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useFetchCategoriesQuery } from '../../services/apis/userApi'
 
 const categories = [
   { id: 1, name: 'Porcelain', items: 45533, image: '/placeholder.svg?height=120&width=160', icon: '🏺' },
@@ -11,7 +12,9 @@ const categories = [
 
 export default function CategorySection() {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-
+  const { data: categories, isLoading } = useFetchCategoriesQuery()
+  console.log(categories,'categories==========================')
+  
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
       const scrollAmount = direction === 'left' ? -200 : 200
@@ -43,17 +46,18 @@ export default function CategorySection() {
           ref={scrollContainerRef}
           className="flex space-x-4 overflow-x-hidden scroll-smooth"
         >
-          {categories.map((category) => (
-            <div key={category.id} className="flex-none w-40 bg-white rounded-lg overflow-hidden shadow-md transition-transform hover:scale-105">
-              <img src={category.image} alt={category.name} className="w-full h-24 object-cover" />
-              <div className="p-3">
-                <div className="w-8 h-8 bg-[#f5f3e6] rounded-full flex items-center justify-center mb-2">
-                  <span className="text-xl">{category.icon}</span>
-                </div>
-                <h3 className="font-bold text-sm text-gray-800 mb-1">{category.name}</h3>
-                <p className="text-xs text-gray-600">{category.items.toLocaleString()} Item</p>
-              </div>
+          {categories?.map((category) => (
+          <div key={category.id} className="flex-none w-40 bg-white rounded-lg overflow-hidden shadow-md transition-transform hover:scale-105">
+          <img src={category.imageUrl} alt={category.name} className="w-full h-34 object-cover" />
+          <div className="p-3">
+            <div className="w-8 h-8 bg-[#f5f3e6] rounded-full flex items-center justify-center mb-2">
+              <img src={category.iconUrl} alt={`${category.name} icon`} className="w-6 h-6" />
             </div>
+            <h3 className="font-bold text-sm text-gray-800 mb-1">{category.name}</h3>
+            {/* <p className="text-xs text-gray-600">{category.items.toLocaleString()} Item</p> */}
+          </div>
+        </div>
+        
           ))}
         </div>
       </div>

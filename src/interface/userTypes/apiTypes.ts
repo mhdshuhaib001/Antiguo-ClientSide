@@ -35,6 +35,8 @@ export interface AuthResponse {
   userData: any;
   _id: string;
   user: any;
+  name?:string;
+  profileImage?:string;
   accessToken?: string|undefined;
   sellerToken?: string|undefined;
   password: string;
@@ -51,7 +53,7 @@ export interface ErrorType{
 
 
 export interface Address {
-  _id?: string
+  _id: string
   fullName: string
   phoneNumber: string
   streetAddress: string
@@ -59,7 +61,7 @@ export interface Address {
   state: string
   postalCode: string
   country: string
-  userId: string
+  userId?: string
   createdAt?: Date
   updatedAt?: Date
 }

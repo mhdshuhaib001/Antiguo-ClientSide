@@ -13,6 +13,7 @@ import ProductSlider from '../../components/User/ActiveSlider';
 
 const LandingPage: React.FC = () => {
   const { data } = useFetchAllProductsQuery();
+  console.log(data,'data  ')
   const products: FormDataType[] = data?.products || [];
 
   return (

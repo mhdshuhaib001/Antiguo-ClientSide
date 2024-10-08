@@ -42,14 +42,14 @@ const Sidebar: React.FC = () => {
           >
             <Key size={20} className="mr-2" />
             Address
-          </Link>
-          <a
-            href="#my-auctions"
+          </Link> 
+          <Link
+            to="/profile/orders"
             className="text-white hover:bg-gray-700 hover:text-gray-200 p-2 rounded transition duration-200 flex items-center"
           >
             <Gavel size={20} className="mr-2" />
             My Auctions
-          </a>
+          </Link>
           <a
             href="#payments"
             className="text-white hover:bg-gray-700 hover:text-gray-200 p-2 rounded transition duration-200 flex items-center"

@@ -19,7 +19,7 @@ const AuctionItem: React.FC<AuctionItemProps> = ({ product, auctionEndTime, stat
     const auctionEndDateTime = new Date(endTime).getTime();
     const now = Date.now();
     const timeLeft = auctionEndDateTime - now;
-
+console.log(product,'product  ')
   
     if (isNaN(auctionEndDateTime)) {
       console.error("Invalid auctionEndTime format");
@@ -64,6 +64,7 @@ const handleBidClick =  ()=>{
           <Clock className="w-3 h-3 mr-0.5" />
           <span className="text-xs font-bold">Live</span>
         </div>
+        {status === 'auction' && (
         <div className="absolute bottom-1 left-1 right-1 bg-white bg-opacity-70 rounded-sm text-black p-1">
           <div className="flex justify-between items-center text-xs">
             <div className="text-center">
@@ -84,6 +85,7 @@ const handleBidClick =  ()=>{
             </div>
           </div>
         </div>
+        )}
       </div>
       <div className="flex-grow flex flex-col justify-between p-2">
         <div>

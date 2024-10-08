@@ -15,6 +15,7 @@ const initialState: UserState = {
   email: '',
   role: '',
   isSeller: false,
+  user: undefined
 };
 interface SetUserPayload {
   _id: string;

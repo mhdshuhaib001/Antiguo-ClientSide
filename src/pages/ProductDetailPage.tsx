@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/User/Header';
-import { useParams,useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useGetProductByIdQuery } from '../services/apis/productApi';
 
 type ProductImage = {
@@ -15,7 +15,7 @@ type Product = {
   auctionEndDateTime: string;
   description: string;
   images?: string[];
-  auctionFormat:string
+  auctionFormat: string;
 };
 
 export default function ProductPage() {
@@ -26,8 +26,9 @@ export default function ProductPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { id } = useParams<{ id: string }>();
-const navigate = useNavigate()
+  const navigate = useNavigate();
   const { data, error: apiError, isLoading: apiLoading } = useGetProductByIdQuery(id);
+
   useEffect(() => {
     if (data) {
       setProductData(data.productData);
@@ -40,7 +41,7 @@ const navigate = useNavigate()
   }, [data, apiError]);
 
   useEffect(() => {
-    if (productData&&productData.auctionFormat !=='buy-it-now') {
+    if (productData && productData.auctionFormat !== 'buy-it-now') {
       const auctionEndDate = new Date(productData.auctionEndDateTime || Date.now());
       setTimeLeft(auctionEndDate.getTime() - Date.now());
 
@@ -63,22 +64,23 @@ const navigate = useNavigate()
   const minutesLeft = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
   const secondsLeft = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-
   const handleBuyNow = (): void => {
-    navigate(`/checkout/${id}`)
-  }
+    navigate(`/checkout/${id}`);
+  };
+
   return (
     <>
       <Header />
       <div className="container mx-auto px-4 py-8 bg-backgroundColor">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Image Gallery */}
           <div className="space-y-4">
             {mainImage && (
-              <div className="w-90 aspect-w-1 aspect-h-1">
+              <div className="relative " style={{height:'500px'}}>
                 <img
                   src={mainImage.src}
                   alt={mainImage.alt}
-                  className="rounded-lg object-cover w-full h-full"
+                  className="rounded-lg object-cover  h-full transition-transform duration-300 transform hover:scale-105"
                 />
               </div>
             )}
@@ -89,12 +91,12 @@ const navigate = useNavigate()
                   <button
                     key={index}
                     onClick={() => setMainImage({ src: image, alt: `Thumbnail ${index + 1}` })}
-                    className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded-lg transition-transform duration-300 transform hover:scale-105"
+                    className="relative overflow-hidden rounded-lg transition-transform duration-300 transform hover:scale-105"
                   >
                     <img
                       src={image}
                       alt={`Thumbnail ${index + 1}`}
-                      className="rounded-lg object-cover w-40 h-40"
+                      className="rounded-lg object-cover w-full h-full"
                     />
                   </button>
                 ))
@@ -122,44 +124,45 @@ const navigate = useNavigate()
             <div className="text-3xl font-bold">
               ${productData?.reservePrice.toFixed(2) || 'Price'}
             </div>
-            <div className="bg-white p-4 rounded-lg">
+            {productData?.auctionFormat !== 'buy-it-now' && (
+            <div className="bg-white p-4 rounded-lg shadow">
               <div className="text-lg font-semibold mb-2">
-                {productData?.auctionFormat==='auction'}
                 Ending On:{' '}
                 {productData?.auctionEndDateTime
                   ? new Date(productData.auctionEndDateTime).toLocaleString()
                   : 'N/A'}
               </div>
               <div className="grid grid-cols-4 gap-2 text-center">
-                <div className="bg-white p-2 rounded">
+                <div className="bg-white p-2 rounded shadow">
                   <div className="text-2xl font-bold">{daysLeft}</div>
                   <div className="text-sm text-gray-500">Days</div>
                 </div>
-                <div className="bg-white p-2 rounded">
+                <div className="bg-white p-2 rounded shadow">
                   <div className="text-2xl font-bold">{hoursLeft}</div>
                   <div className="text-sm text-gray-500">Hours</div>
                 </div>
-                <div className="bg-white p-2 rounded">
+                <div className="bg-white p-2 rounded shadow">
                   <div className="text-2xl font-bold">{minutesLeft}</div>
                   <div className="text-sm text-gray-500">Minutes</div>
-                </div>
-                <div className="bg-white p-2 rounded">
+                </div>  
+                <div className="bg-white p-2 rounded shadow">
                   <div className="text-2xl font-bold">{secondsLeft}</div>
                   <div className="text-sm text-gray-500">Seconds</div>
                 </div>
               </div>
             </div>
+            )}
             <div className="space-y-2">
-              {productData?.auctionFormat==='buy-it-now'?(
-              <button onClick={handleBuyNow} className="w-full bg-[#975f26] text-white py-2 rounded-lg hover:bg-[#d4a575] transition duration-300">
+              {productData?.auctionFormat === 'buy-it-now' ? (
+                <button onClick={handleBuyNow} className="w-full bg-[#975f26] text-white py-2 rounded-lg hover:bg-[#d4a575] transition duration-300">
                   Buy It Now
-                  </button>
-              ):(<button className="w-full bg-[#975f26] text-white py-2 rounded-lg hover:bg-[#d4a575] transition duration-300">
-                Enter To Auction
-              </button>)}
-              <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300">
-                Add To Cart
-              </button>
+                </button>
+              ) : (
+                <button className="w-full bg-[#975f26] text-white py-2 rounded-lg hover:bg-[#d4a575] transition duration-300">
+                  Enter To Auction
+                </button>
+              )}
+            
             </div>
             <div className="flex justify-between items-center border-t border-b py-2">
               <span>Guaranteed Safe Checkout</span>

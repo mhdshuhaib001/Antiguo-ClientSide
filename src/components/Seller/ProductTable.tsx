@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Pencil, Trash2 } from 'lucide-react';
@@ -15,32 +14,32 @@ const ProductListTable: React.FC = () => {
 
   const handleDelete = async (productId: string) => {
     try {
-        await deleteProduct(productId).unwrap();
-        refetch();
-        toast.success(`Product deleted successfully`);
+      await deleteProduct(productId).unwrap();
+      refetch();
+      toast.success(`Product deleted successfully`);
     } catch (error) {
-        toast.error('Failed to delete the product. Please try again.');
-        console.error('Failed to delete the product:', error);
+      toast.error('Failed to delete the product. Please try again.');
+      console.error('Failed to delete the product:', error);
     }
-};
+  };
 
-  return (
-    <div className="container mx-auto px-4 py-8">
+  return ( 
+    <div className="container font-serif mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">All Product List</h1>
+        <h1 className="text-2xl font-bold text-amber-900 mb-4 sm:mb-0">All Product List</h1>
         <button
           onClick={() => navigate('/profile/seller/addproduct')}
-          className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded transition duration-300 w-full sm:w-auto"
+          className="bg-amber-300 hover:bg-amber-400 text-white font-bold py-2 px-4 rounded transition duration-300 w-full sm:w-auto"
         >
           List Item
         </button>
       </div>
 
-      <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+      <div className="overflow-x-auto  bg-white shadow-md rounded-lg">
         {productData?.products?.length ? (
           <table className="min-w-full table-auto">
             <thead>
-              <tr className="bg-gray-100 text-gray-600 uppercase text-xs sm:text-sm leading-normal">
+              <tr className="bg-amber-100 text-amber-900 uppercase text-xs sm:text-sm leading-normal">
                 <th className="py-3 px-2 sm:px-6 text-left">Product Name & Size</th>
                 <th className="py-3 px-2 sm:px-6 text-left">Bid Price</th>
                 <th className="py-3 px-2 sm:px-6 text-left">Category</th>
@@ -48,11 +47,11 @@ const ProductListTable: React.FC = () => {
                 <th className="py-3 px-2 sm:px-6 text-left">Action</th>
               </tr>
             </thead>
-            <tbody className="text-gray-600 text-xs sm:text-sm font-light">
+            <tbody className="text-amber-900 text-xs sm:text-sm font-light">
               {productData.products.map((product) => (
                 <tr
                   key={product._id}
-                  className="border-b border-gray-200 hover:bg-gray-50 transition duration-300"
+                  className="border-b border-amber-200 hover:bg-amber-50 transition duration-300"
                 >
                   <td className="py-3 px-2 sm:px-6 text-left whitespace-nowrap">
                     <div className="flex items-center">
@@ -69,7 +68,7 @@ const ProductListTable: React.FC = () => {
                     </div>
                   </td>
                   <td className="py-3 px-2 sm:px-6 text-left">${product.reservePrice}</td>
-                  <td className="py-3 px-2 sm:px-6 text-left  uppercase">{product.category}</td>
+                  <td className="py-3 px-2 sm:px-6 text-left uppercase">{product.category}</td>
                   <td className="py-3 px-2 sm:px-6 text-left">
                     <span
                       className={`${
@@ -85,7 +84,7 @@ const ProductListTable: React.FC = () => {
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => navigate(`/profile/seller/editproduct/${product._id}`)}
-                        className="transform hover:text-purple-500 hover:scale-110 transition duration-300"
+                        className="transform hover:text-amber-600 hover:scale-110 transition duration-300"
                         aria-label="Edit"
                       >
                         <Pencil size={16} />
@@ -93,7 +92,7 @@ const ProductListTable: React.FC = () => {
 
                       <button
                         onClick={() => handleDelete(product._id ?? '')}
-                        className="transform hover:text-purple-500 hover:scale-110 transition duration-300"
+                        className="transform hover:text-amber-600 hover:scale-110 transition duration-300"
                         aria-label="Delete"
                       >
                         <Trash2 size={16} />
@@ -105,7 +104,7 @@ const ProductListTable: React.FC = () => {
             </tbody>
           </table>
         ) : (
-          <div className="text-center py-8 text-gray-600">
+          <div className="text-center py-8 text-amber-900">
             <p>No products found. Please add some products.</p>
           </div>
         )}
@@ -116,19 +115,19 @@ const ProductListTable: React.FC = () => {
           className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
           aria-label="Pagination"
         >
-          <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition duration-300">
+          <button className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-amber-200 bg-white text-sm font-medium text-amber-900 hover:bg-amber-50 transition duration-300">
             Previous
           </button>
-          <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-gray-600 text-sm font-medium text-white hover:bg-gray-500 transition duration-300">
+          <button className="relative inline-flex items-center px-4 py-2 border border-amber-200 bg-amber-500 text-sm font-medium text-white hover:bg-amber-400 transition duration-300">
             1
           </button>
-          <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition duration-300">
+          <button className="relative inline-flex items-center px-4 py-2 border border-amber-200 bg-white text-sm font-medium text-amber-900 hover:bg-amber-50 transition duration-300">
             2
           </button>
-          <button className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition duration-300">
+          <button className="relative inline-flex items-center px-4 py-2 border border-amber-200 bg-white text-sm font-medium text-amber-900 hover:bg-amber-50 transition duration-300">
             3
           </button>
-          <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition duration-300">
+          <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-amber-200 bg-white text-sm font-medium text-amber-900 hover:bg-amber-50 transition duration-300">
             Next
           </button>
         </nav>
