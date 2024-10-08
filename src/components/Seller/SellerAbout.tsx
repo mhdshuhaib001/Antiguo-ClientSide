@@ -1,274 +1,86 @@
-// import React from 'react';
-// import { useState, useRef, ChangeEvent } from 'react';
-// import { Edit2, Save, Camera } from 'lucide-react';
-// import { Image } from '@nextui-org/react';
-// import { useUpdatescellerprofileMutation ,useFetchSellerQuery} from '../../services/apis/sellerApi';
-// import { SellerInfo } from '../../interface/sellerTypes/sellerApiTypes';
-// import { RootState } from '../../store/Store';
-// import { useSelector } from 'react-redux';
-// import { Formik, Form, Field, ErrorMessage } from 'formik';
-// import { sellerValidationSchema } from '../../validations/sellerValidations'; 
-// export default function SellerAboutPage() {
-//   const sellerId = useSelector((state: RootState) => state.Seller.sellerId);
-
-//   const [updateProfile] = useUpdatescellerprofileMutation();
-//   const [isEditing, setIsEditing] = useState<boolean>(false);
-//   const [sellerInfo, setSellerInfo] = useState<SellerInfo>({
-//     companyName: '',
-//     email: '',
-//     phone: '',
-//     address: '',
-//     about: '',
-//     image: '',
-//   });
-
-//   const fileInputRef = useRef<HTMLInputElement>(null);
-
-//   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-//     const file = e.target.files?.[0];
-//     if (file) {
-//       const reader = new FileReader();
-//       reader.onloadend = () => {
-//         setSellerInfo((prev) => ({ ...prev, image: reader.result as string }));
-//       };
-//       reader.readAsDataURL(file);
-//     }
-//   };
-
-//   const saveChanges = async (values: SellerInfo) => {
-//     const formData = new FormData();
-//     formData.append('_id', sellerId);
-//     formData.append('companyName', values.companyName);
-//     formData.append('email', values.email);
-//     formData.append('phone', values.phone);
-//     formData.append('address', values.address);
-//     formData.append('about', values.about);
-
-//     const file = fileInputRef.current?.files?.[0];
-//     if (file) {
-//       formData.append('image', file);
-//     }
-
-//     try {
-//       const response = await updateProfile(formData).unwrap();
-//       console.log('Profile updated successfully:', response);
-//       setIsEditing(false); // Turn off editing after successful save
-//     } catch (error) {
-//       console.error('Error updating seller:', error);
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-[#fcfaee] py-4 px-4 sm:px-6 lg:px-8">
-//       <div className="mx-auto bg-[#f5f0d0] shadow-lg rounded-lg overflow-hidden">
-//         <div className="px-6 py-4 bg-[#f5f0d0] border-b border-[#c2b370] flex justify-between items-center">
-//           <h1 className="text-2xl font-bold text-[#5c4f2c]">About the Seller</h1>
-//           <button
-//             onClick={() => setIsEditing(!isEditing)}
-//             className="px-4 py-2 bg-[#8c7851] text-white rounded hover:bg-[#6e5f41] transition duration-300 flex items-center"
-//           >
-//             {isEditing ? (
-//               <Save className="w-4 h-4 mr-2" />
-//             ) : (
-//               <Edit2 className="w-4 h-4 mr-2" />
-//             )}
-//             {isEditing ? 'Save' : 'Edit'}
-//           </button>
-//         </div>
-
-//         <Formik
-//           initialValues={sellerInfo}
-//           validationSchema={sellerValidationSchema}
-//           onSubmit={saveChanges}
-//           enableReinitialize
-//         >
-//           {({ setFieldValue }) => (
-//             <Form className="p-6 space-y-6">
-//               <div className="flex items-center space-x-6">
-//                 <div className="relative w-32 h-32">
-//                   <Image
-//                     src={sellerInfo.image || '/placeholder.svg'}
-//                     alt="Seller"
-//                     className="rounded-full"
-//                   />
-//                   {isEditing && (
-//                     <button
-//                       type="button"
-//                       onClick={() => fileInputRef.current?.click()}
-//                       className="absolute bottom-0 right-0 p-2 bg-[#8c7851] text-white rounded-full hover:bg-[#6e5f41] transition duration-300"
-//                     >
-//                       <Camera className="w-5 h-5" />
-//                     </button>
-//                   )}
-//                   <input
-//                     type="file"
-//                     ref={fileInputRef}
-//                     onChange={(e) => {
-//                       handleImageChange(e);
-//                       const file = e.target.files?.[0];
-//                       if (file) {
-//                         setFieldValue('image', file);
-//                       }
-//                     }}
-//                     accept="image/*"
-//                     className="hidden"
-//                   />
-//                 </div>
-//                 <div>
-//                   <h2 className="text-xl font-semibold text-[#5c4f2c]">
-//                     {sellerInfo.companyName || 'Company Name'}
-//                   </h2>
-//                   <p className="text-[#3a3422]">{sellerInfo.email || 'Email Address'}</p>
-//                 </div>
-//               </div>
-
-//               <div>
-//                 <label className="block text-sm font-medium text-[#5c4f2c] mb-1">Company Name</label>
-//                 <Field
-//                   name="companyName"
-//                   as="input"
-//                   className="w-full px-3 py-2 border border-[#c2b370] rounded-md focus:outline-none focus:ring-2 focus:ring-[#8c7851]"
-//                   disabled={!isEditing}
-//                 />
-//                 <ErrorMessage name="companyName" component="div" className="text-red-600" />
-//               </div>
-
-//               <div>
-//                 <label className="block text-sm font-medium text-[#5c4f2c] mb-1">Email</label>
-//                 <p className="text-[#3a3422]">{sellerInfo.email || 'Not Provided'}</p>
-//               </div>
-
-//               <div>
-//                 <label className="block text-sm font-medium text-[#5c4f2c] mb-1">Phone</label>
-//                 <Field
-//                   name="phone"
-//                   as="input"
-//                   className="w-full px-3 py-2 border border-[#c2b370] rounded-md focus:outline-none focus:ring-2 focus:ring-[#8c7851]"
-//                   disabled={!isEditing}
-//                 />
-//                 <ErrorMessage name="phone" component="div" className="text-red-600" />
-//               </div>
-
-//               <div>
-//                 <label className="block text-sm font-medium text-[#5c4f2c] mb-1">Address</label>
-//                 <Field
-//                   name="address"
-//                   as="input"
-//                   className="w-full px-3 py-2 border border-[#c2b370] rounded-md focus:outline-none focus:ring-2 focus:ring-[#8c7851]"
-//                   disabled={!isEditing}
-//                 />
-//                 <ErrorMessage name="address" component="div" className="text-red-600" />
-//               </div>
-
-//               <div>
-//                 <label className="block text-sm font-medium text-[#5c4f2c] mb-1">About</label>
-//                 <Field
-//                   name="about"
-//                   as="textarea"
-//                   rows={4}
-//                   className="w-full p-4 border border-[#c2b370] bg-[#fcfaee] rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8c7851]"
-//                   disabled={!isEditing}
-//                 />
-//                 <ErrorMessage name="about" component="div" className="text-red-600" />
-//               </div>
-
-//               {isEditing && (
-//                 <button
-//                   type="submit"
-//                   className="px-4 py-2 bg-[#8c7851] text-white rounded hover:bg-[#6e5f41] transition duration-300"
-//                 >
-//                   Save Changes
-//                 </button>
-//               )}
-//             </Form>
-//           )}
-//         </Formik>
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import React, { useState, useRef, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import { Edit2, Save, Camera } from 'lucide-react';
 import { Image } from '@nextui-org/react';
-import { useUpdatescellerprofileMutation, useFetchSellerQuery } from '../../services/apis/sellerApi';
+import {
+  useUpdatescellerprofileMutation,
+  useFetchSellerQuery,
+} from '../../services/apis/sellerApi';
 import { SellerInfo } from '../../interface/sellerTypes/sellerApiTypes';
 import { RootState } from '../../store/Store';
 import { useSelector } from 'react-redux';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { sellerValidationSchema } from '../../validations/sellerValidations'; 
+import { Formik, Form, Field, ErrorMessage, FormikValues } from 'formik';
+import { sellerValidationSchema } from '../../validations/sellerValidations';
+import toast from 'react-hot-toast';
 
 export default function SellerAboutPage() {
   const sellerId = useSelector((state: RootState) => state.Seller.sellerId);
   const { data: sellerData, error, isLoading } = useFetchSellerQuery(sellerId);
-console.log(sellerData,'seller data on the fronern d')
-  const [updateProfile] = useUpdatescellerprofileMutation();
+  console.log(sellerData,'sejfvndf')
+  const [updateProfile, { isLoading: isUpdating }] = useUpdatescellerprofileMutation();
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [sellerInfo, setSellerInfo] = useState<SellerInfo>({
+    companyName: '',
+    email: '',
+    phone: '',
+    address: '',
+    about: '',
+    image: '',
+  });
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>, setFieldValue: (field: string, value: any) => void) => {
+  useEffect(() => {
+    if (sellerData) {
+      setSellerInfo({
+        companyName: sellerData.companyName || '',
+        email: sellerData.email || '',
+        phone: sellerData.phone || '',
+        address: sellerData.address || '',
+        about: sellerData.about || '',
+        image: sellerData.image || '',
+      });
+    }
+  }, [sellerData]);
+
+  const handleImageChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    setFieldValue: (field: string, value: any) => void,
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // Set the image URL in Formik when an image is selected
-        setFieldValue('image', reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      console.log('Selected file:', file);
+      setImageFile(file);
+      setFieldValue('image', file);
+      const imageUrl = URL.createObjectURL(file);
+      console.log('Generated image URL:', imageUrl);
+      setSellerInfo((prev) => ({ ...prev, image: imageUrl }));
     }
   };
 
-  const toggleEdit = () => {
-    setIsEditing(!isEditing);
-  };
-
-  const saveChanges = async (values: SellerInfo) => {
+  const handleFormSubmit = async (values: FormikValues) => {
     const formData = new FormData();
     formData.append('_id', sellerId);
-    formData.append('companyName', values.companyName);
-    formData.append('email', values.email);
-    formData.append('phone', values.phone);
-    formData.append('address', values.address);
-    formData.append('about', values.about);
 
-    const file = fileInputRef.current?.files?.[0];
-    if (file) {
-      formData.append('image', file);
+    Object.entries(values).forEach(([key, value]) => {
+      if (key !== 'image') {
+        formData.append(key, value as string);
+      }
+    });
+
+    if (imageFile) {
+      formData.append('image', imageFile);
     }
 
     try {
-      await updateProfile(formData).unwrap();
-      setIsEditing(false);  // Disable editing after save
+      const response = await updateProfile(formData).unwrap();
+      console.log('Profile updated successfully:', response);
+      setIsEditing(false);
+      toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating seller:', error);
+      toast.error('Error updating profile. Please try again.');
     }
   };
 
-  // Check for loading or error states
   if (isLoading) return <div>Loading seller data...</div>;
   if (error) return <div>Error fetching seller data: {(error as any).message}</div>;
 
@@ -278,68 +90,62 @@ console.log(sellerData,'seller data on the fronern d')
         <div className="px-6 py-4 bg-[#f5f0d0] border-b border-[#c2b370] flex justify-between items-center">
           <h1 className="text-2xl font-bold text-[#5c4f2c]">About the Seller</h1>
           <button
-            onClick={toggleEdit}
+            onClick={() => setIsEditing(!isEditing)}
             className="px-4 py-2 bg-[#8c7851] text-white rounded hover:bg-[#6e5f41] transition duration-300 flex items-center"
           >
-            {isEditing ? (
-              <Save className="w-4 h-4 mr-2" />
-            ) : (
-              <Edit2 className="w-4 h-4 mr-2" />
-            )}
+            {isEditing ? <Save className="w-4 h-4 mr-2" /> : <Edit2 className="w-4 h-4 mr-2" />}
             {isEditing ? 'Save' : 'Edit'}
           </button>
         </div>
 
         <Formik
-          initialValues={{
-            companyName: sellerData?.companyName || '',
-            email: sellerData?.email || '',
-            phone: sellerData?.phone || '',
-            address: sellerData?.address || '',
-            about: sellerData?.about || '',
-            image: sellerData?.image || '',
-          }}
+          initialValues={sellerInfo}
           validationSchema={sellerValidationSchema}
-          onSubmit={saveChanges}
+          onSubmit={handleFormSubmit}
           enableReinitialize
         >
           {({ setFieldValue }) => (
             <Form className="p-6 space-y-6">
-              <div className="flex items-center space-x-6">
-                <div className="relative w-32 h-32">
-                  <Image
-                    src={sellerData?.image || '/placeholder.svg'}
-                    alt="Seller"
-                    className="rounded-full"
-                  />
-                  {isEditing && (
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      className="absolute bottom-0 right-0 p-2 bg-[#8c7851] text-white rounded-full hover:bg-[#6e5f41] transition duration-300"
-                    >
-                      <Camera className="w-5 h-5" />
-                    </button>
-                  )}
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={(e) => handleImageChange(e, setFieldValue)}
-                    accept="image/*"
-                    className="hidden"
-                  />
-                </div>
-                <div>
-                  <h2 className="text-xl font-semibold text-[#5c4f2c]">
-                    {sellerData?.companyName || 'Company Name'}
-                  </h2>
-                  <p className="text-[#3a3422]">{sellerData?.email || 'Email Address'}</p>
-                </div>
-              </div>
+            <div className="flex items-center space-x-6">
+  <div className="relative w-32 h-32 overflow-hidden rounded-full border border-[#c2b370]">
+    <img
+      src={sellerInfo.image || '/placeholder.svg'}
+      alt="Seller"
+      className="w-full h-full object-cover rounded-full"
+    />
+    {isEditing && (
+      <button
+        type="button"
+        onClick={() => document.getElementById('file-input')?.click()}
+        className="absolute bottom-0 right-0 p-2 bg-[#8c7851] text-white rounded-full hover:bg-[#6e5f41] transition duration-300"
+        style={{ transform: 'translate(50%, 50%)', zIndex: 10 }}
+      >
+        <Camera className="w-6 h-6" /> 
+      </button>
+    )}
+    <input
+      type="file"
+      id="file-input"
+      onChange={(e) => handleImageChange(e, setFieldValue)}
+      accept="image/*"
+      className="hidden"
+    />
+  </div>
 
-              {/* Form fields with conditionally disabled inputs */}
+  <div>
+    <h2 className="text-xl font-semibold text-[#5c4f2c]">
+      {sellerInfo.companyName || 'Company Name'}
+    </h2>
+    <p className="text-[#3a3422]">{sellerInfo.email || 'Email Address'}</p>
+  </div>
+</div>
+
+
+              {/* Form Fields */}
               <div>
-                <label className="block text-sm font-medium text-[#5c4f2c] mb-1">Company Name</label>
+                <label className="block text-sm font-medium text-[#5c4f2c] mb-1">
+                  Company Name
+                </label>
                 <Field
                   name="companyName"
                   as="input"
@@ -351,7 +157,7 @@ console.log(sellerData,'seller data on the fronern d')
 
               <div>
                 <label className="block text-sm font-medium text-[#5c4f2c] mb-1">Email</label>
-                <p className="text-[#3a3422]">{sellerData?.email || 'Not Provided'}</p>
+                <p className="text-[#3a3422]">{sellerInfo.email || 'Not Provided'}</p>
               </div>
 
               <div>
@@ -387,6 +193,18 @@ console.log(sellerData,'seller data on the fronern d')
                 />
                 <ErrorMessage name="about" component="div" className="text-red-600" />
               </div>
+
+              {/* Submit Button */}
+              {isEditing && (
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-[#8c7851] text-white rounded hover:bg-[#6e5f41] transition duration-300"
+                  disabled={isUpdating}
+                  onClick={handleFormSubmit}
+                >
+                  {isUpdating ? 'Saving...' : 'Save Changes'}
+                </button>
+              )}
             </Form>
           )}
         </Formik>

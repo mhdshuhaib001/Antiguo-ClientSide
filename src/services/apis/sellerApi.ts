@@ -6,6 +6,7 @@ import {
   AddProductResponse,
   ProductsResponse,
 } from '../../interface/sellerTypes/sellerApiTypes';
+import { OrderResponse } from '../../interface/orderTypes/orderType';
 
 // Define the seller API using RTK Query
 export const sellerApi = createApi({
@@ -85,6 +86,19 @@ export const sellerApi = createApi({
         method: 'GET',
       }),
     }),
+    fetchOrders: builder.query<OrderResponse, string>({
+      query: (sellerId) => ({
+        url: `/api/seller/orders/${sellerId}`,
+        method: 'GET',
+      }),
+    }),     
+    updateOrderStatus: builder.mutation<void, { orderId: string; status: string }>({
+      query: ({ orderId, status }) => ({
+        url: `/api/seller/order/${orderId}`,
+        method: 'PUT',
+        body: { status },
+      }),
+    }),
   }),
 });
 
@@ -98,4 +112,6 @@ export const {
   useDeleteProductMutation,
   useUpdateProductMutation,
   useFetchSellerQuery,
+  useFetchOrdersQuery,
+  useUpdateOrderStatusMutation,
 } = sellerApi;

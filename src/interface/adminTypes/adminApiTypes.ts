@@ -9,6 +9,7 @@ export interface AdminLoginResponse {
 }
 
 export interface Category {
+  items: any;
   _id: string;
   id: string; 
   name: string; 

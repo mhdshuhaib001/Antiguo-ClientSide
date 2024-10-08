@@ -32,10 +32,10 @@ const SellerNavigation: React.FC = () => {
             About Area
           </Link>
           <Link
-            to="/profile/seller/order-area"
+            to="/profile/seller/order-management"
             className="text-gray-800 text-sm font-medium py-2 px-4 hover:bg-gray-100"
           >
-            Order Area
+            Order Management
           </Link>
         </div>
       </div>

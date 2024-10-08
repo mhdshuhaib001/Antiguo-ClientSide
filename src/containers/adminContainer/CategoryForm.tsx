@@ -24,7 +24,6 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     },
     validationSchema: categoryValidationSchema(isEditMode),
     onSubmit: async (values) => {
-      // Prepare the final value to submit
       const finalValue: UploadCategory = {
         name: values.name,
         image: values.image || (isEditMode && initialData ? initialData.imageUrl : null),

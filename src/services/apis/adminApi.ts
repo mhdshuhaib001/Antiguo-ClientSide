@@ -33,7 +33,6 @@ export const adminApi = createApi({
         url: `/api/admin/categories`,
         method: 'POST',
         body: formData,
-      
       }),
     }),
     fetchCategory:builder.query<FetchCategoriesResponse,{page:number,limit:number}>({
@@ -48,11 +47,18 @@ export const adminApi = createApi({
         method: 'PUT',
         body: formData,
       }),
-      
     }),
-    
+
+    deleteCategory: builder.mutation<void, string>({
+      query: (categoryId) => ({
+        url: `/api/admin/categories/${categoryId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
-});
+    
+  })
+
 
 export const {
   useAdminLoginMutation,
@@ -60,5 +66,6 @@ export const {
   useUpdateUserStatusMutation,
   useAddCategoryMutation,
   useFetchCategoryQuery,
-  useUpdateCategoryMutation
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation
 } = adminApi;
