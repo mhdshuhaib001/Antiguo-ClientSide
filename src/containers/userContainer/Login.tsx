@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { useLoginValidation } from '../../hooks/useLoginValidation';
+import { LoginValidation } from '../../validations/loginValidation';
 import { useLoginMutation } from '../../services/apis/userApi';
 import { AuthRequest, AuthResponse } from '../../interface/userTypes/apiTypes';
 import { useNavigate } from 'react-router-dom';
@@ -13,13 +13,15 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [login] = useLoginMutation();
   const navigate = useNavigate();
-  const { loginValidationScema } = useLoginValidation();
+  const { loginValidationScema } = LoginValidation();
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
     validationSchema: loginValidationScema,
+    validateOnBlur: false,
+    validateOnChange: false,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       const user: AuthRequest = {
         email: values.email,
@@ -28,7 +30,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
       try {
         const result: AuthResponse = await login(user).unwrap();
-        console.log(result,';kjfbgkjvdfjkbgvjdfbhbvg')
         onLogin(result);
       } catch (error: any) {
         if (error?.data?.errors) {
@@ -49,10 +50,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="email"
-        >
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
           Email
         </label>
         <input
@@ -71,10 +69,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       </div>
 
       <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="password"
-        >
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
           Password
         </label>
         <input
@@ -88,15 +83,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
           placeholder="Your password"
         />
         {formik.touched.password && formik.errors.password ? (
-          <p className="text-red-500 text-xs italic">
-            {formik.errors.password}
-          </p>
+          <p className="text-red-500 text-xs italic">{formik.errors.password}</p>
         ) : null}
       </div>
 
       <div className="mb-4 text-right">
         <a
-          onClick={()=> navigate('/forget-password-request')}
+          onClick={() => navigate('/forget-password-request')}
           className="text-black-500 hover:text-blue-700 text-sm"
         >
           Forgot Password?

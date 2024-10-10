@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-const useSignupValidation = (isOtpStep: boolean) => {
+const SignupValidation = (isOtpStep: boolean) => {
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(3, 'Name must be at least 3 characters')
@@ -12,10 +12,6 @@ const useSignupValidation = (isOtpStep: boolean) => {
     password: Yup.string()
       .min(8, 'Password must be at least 8 characters')
       .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-      .matches(
-        /[!@#$%^&*(),.?":{}|<>]/,
-        'Password must contain at least one special character'
-      )
       .required('Password is required'),
     otp: Yup.string().test('otp-required', 'OTP is required', function (value) {
       return !isOtpStep || (!!value && value.length > 0);
@@ -25,4 +21,4 @@ const useSignupValidation = (isOtpStep: boolean) => {
   return { validationSchema };
 };
 
-export default useSignupValidation;
+export default SignupValidation;

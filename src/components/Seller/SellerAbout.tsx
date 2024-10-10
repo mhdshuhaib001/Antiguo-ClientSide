@@ -15,7 +15,7 @@ import toast from 'react-hot-toast';
 export default function SellerAboutPage() {
   const sellerId = useSelector((state: RootState) => state.Seller.sellerId);
   const { data: sellerData, error, isLoading } = useFetchSellerQuery(sellerId);
-  console.log(sellerData,'sejfvndf')
+  console.log(sellerData?.companyName,'sejfvndf')
   const [updateProfile, { isLoading: isUpdating }] = useUpdatescellerprofileMutation();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [sellerInfo, setSellerInfo] = useState<SellerInfo>({

@@ -26,12 +26,12 @@ import OrderDetails from '../pages/userPages/orderDetailsPage';
 const UserRoute: React.FC = () => {
   return (
     <Routes>
-      <Route path="/signup" element={<AuthRoute element={Registration} />} />
+      <Route path="/registration" element={<AuthRoute element={Registration} />} />
       <Route path="/" element={<Home />} />
       <Route path="/forget-password" element={<ForgetPasswordPage />} />
       <Route path="/forget-password-request" element={<EmailSendPage />} />
       <Route path="/product-details/:id" element={<ProductPage />} />
-      <Route path="/checkout/:id" element={<CheckoutPage />} />
+      <Route path="/checkout/:id" element={<CheckoutPage />} /> 
       <Route path="/success" element={<Success />} />
       <Route path="/orders/:id" element={<OrderDetails />} />
       {/* Profile Routees */}
