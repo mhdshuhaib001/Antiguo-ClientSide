@@ -66,7 +66,7 @@ const Header: React.FC = () => {
               Profile
             </button>
           ) : (
-            <button onClick={()=>{navigate('/signup')}} className="bg-[#975f26] text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4">
+            <button onClick={()=>{navigate('/registration')}} className="bg-[#975f26] text-white py-1 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50 transition duration-300 ml-4">
               Register
             </button>
           )}

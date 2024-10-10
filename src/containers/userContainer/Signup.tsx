@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import useSignupValidation from '../../hooks/useSignupValidation';
+import SignupValidation from '../../validations/signupValidation';
 import { useSignupMutation, useSendOtpMutation } from '../../services/apis/userApi';
 import { AuthResponse } from '../../interface/userTypes/apiTypes';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import OtpForm from './OtpForm';
 
-
 const SignupForm: React.FC<{
   onSignup: (data: AuthResponse) => void;
   isOtpStep: boolean;
   setIsOtpStep: (step: boolean) => void;
 }> = ({ onSignup, setIsOtpStep, isOtpStep }) => {
-  const { validationSchema } = useSignupValidation(isOtpStep);
+  const { validationSchema } = SignupValidation(isOtpStep);
   const [signup, { isLoading: isSignupLoading }] = useSignupMutation();
   const [sendOtp, { isLoading: isOtpLoading }] = useSendOtpMutation();
+  const [showPassword,setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const [passwordStrength, setPasswordStrength] = useState({
@@ -57,7 +57,7 @@ const SignupForm: React.FC<{
       hasUppercase: /[A-Z]/.test(password),
       hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
       isLongEnough: password.length >= 8,
-    });
+    }); 
     setShowPasswordStrength(password.length > 0);
   };
 
@@ -118,6 +118,8 @@ const SignupForm: React.FC<{
         otp: '',
         isOtpStep: false,
       }}
+      validateOnBlur={false}
+      validateOnChange={false}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
@@ -158,7 +160,7 @@ const SignupForm: React.FC<{
                   Password
                 </label>
                 <Field
-                  type="password"
+                  type={showPassword ? 'text':'password'}
                   id="password"
                   name="password"
                   placeholder="Your password"
@@ -168,6 +170,8 @@ const SignupForm: React.FC<{
                   }}
                   className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.password && touched.password ? 'border-red-500' : ''}`}
                 />
+
+                <button onClick={()=>setShowPassword(!showPassword)} className='absolute right-2 top-3 text-gray-600'>{showPassword ? 'Hide':'Show'}</button>
                 <ErrorMessage
                   name="password"
                   component="p"

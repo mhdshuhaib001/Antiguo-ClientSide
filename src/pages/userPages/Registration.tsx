@@ -201,11 +201,14 @@ const Registration: React.FC = () => {
               )}
 
               {/* Google Sign-In Button */}
+              <div className='flex justify-center items-center'>
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={handleGoogleFailure}
                 useOneTap
               />
+              </div>
+        
             </>
           )}
         </div>

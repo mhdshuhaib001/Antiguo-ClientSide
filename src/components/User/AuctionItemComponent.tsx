@@ -93,13 +93,15 @@ const handleBidClick =  ()=>{
           <p className="text-gray-700 text-xs">Current Bid at:</p>
           <p className="text-lg font-bold">${product.currentBid.toLocaleString()}</p>
         </div>
-        <button onClick={handleBidClick}
-          className={`${
-            status === 'auction' ? 'bg-[#3a200e] hover:bg-[#663f21]' : 'bg-[#2a44b8] hover:bg-[#663f21]'
-          } text-white text-sm font-bold py-1 px-2 rounded w-full mt-1`}
-        >
-          {status === 'auction' ? 'Bid Now' : 'Buy Now'}
-        </button>
+        <button
+  onClick={handleBidClick}
+  className={`${
+    status === 'auction' ? 'bg-amber-300 hover:bg-amber-200' : 'bg-amber-200 hover:bg-amber-300'
+  } text-amber-900 font-bold py-1 px-2 rounded w-full mt-1 border border-amber-200`}
+>
+  {status === 'auction' ? 'Bid Now' : 'Buy Now'}
+</button>
+
       </div>
     </div>
   );
