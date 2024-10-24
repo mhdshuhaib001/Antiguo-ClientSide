@@ -16,7 +16,6 @@ export const sellerApi = createApi({
     credentials: 'include',
     prepareHeaders: (headers) => {
       const seller = localStorage.getItem('sellerToken');
-      console.log(seller,'this is th')
       const user = localStorage.getItem('accessToken');
       if (seller) {
         headers.set('SellerAuthorization', `Bearer ${seller}`);
@@ -35,13 +34,21 @@ export const sellerApi = createApi({
         body: sellerBrand,
       }),
     }),
-    updatescellerprofile: builder.mutation<SellerResponse, FormData>({
+    updateSellerProfile: builder.mutation<SellerResponse, FormData>({
       query: (formData) => ({
         url: '/api/seller/updateseller',
         method: 'PUT',
         body: formData,
       }),
     }),
+    fetchSellerById: builder.query<SellerResponse, string>({
+      query: (sellerId) => ({
+        url: `/api/seller/${sellerId}`,
+        method: 'GET',
+      }),
+    }),
+    
+
     addProduct: builder.mutation<AddProductResponse, FormDataType>({
       query: (formData) => ({
         url: '/api/seller/createproduct',
@@ -80,12 +87,6 @@ export const sellerApi = createApi({
         body: formData,
       }),
     }),
-    fetchSeller: builder.query<SellerResponse, string>({
-      query: (sellerId) => ({
-        url: `/api/seller/fetchSeller/${sellerId}`,
-        method: 'GET',
-      }),
-    }),
     fetchOrders: builder.query<OrderResponse, string>({
       query: (sellerId) => ({
         url: `/api/seller/orders/${sellerId}`,
@@ -99,19 +100,27 @@ export const sellerApi = createApi({
         body: { status },
       }),
     }),
+    fetchAllSeller: builder.query<any, void>({
+      query: () => ({
+        url: '/api/seller/get-seller',
+        method: 'GET',
+      }),
+    }),
   }),
+
 });
 
 export const {
+  useFetchSellerByIdQuery,
   useCreateSellerMutation,
-  useUpdatescellerprofileMutation,
+  useUpdateSellerProfileMutation,
   useAddProductMutation,
   useFetchProductsQuery,
   useFetchAllProductsQuery,
   useGetProductQuery,
   useDeleteProductMutation,
   useUpdateProductMutation,
-  useFetchSellerQuery,
   useFetchOrdersQuery,
   useUpdateOrderStatusMutation,
+  useFetchAllSellerQuery
 } = sellerApi;

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 import { useGetProductQuery, useUpdateProductMutation } from '../../services/apis/sellerApi';
 import { Upload } from 'lucide-react';
-import { productListingSchema } from '../../hooks/ProductValidation';
+import { productListingSchema } from '../../utils/hooks/ProductValidation';
 import { Field, Formik, Form, ErrorMessage } from 'formik';
 import toast from 'react-hot-toast';
 import { DatePicker } from '@nextui-org/react';

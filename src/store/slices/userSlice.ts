@@ -7,6 +7,7 @@ interface UserState {
   email: string;
   isSeller: boolean;
   role: string;
+  profileImage?: string | null;
 }
 
 const initialState: UserState = {
@@ -22,6 +23,8 @@ interface SetUserPayload {
   name: string;
   email: string;
   role: string;
+  profileImage?: string | null;
+  
 }
 
 const userSlice = createSlice({
@@ -33,6 +36,7 @@ const userSlice = createSlice({
       state.name = action.payload.name;
       state.email = action.payload.email;
       state.role = action.payload.role;
+      state.profileImage = action.payload.profileImage ?? null
     },
     setSeller: (state, action: PayloadAction<boolean>) => {
       state.isSeller = action.payload;
@@ -42,6 +46,7 @@ const userSlice = createSlice({
       state.name = '';
       state.email = '';
       state.role = '';
+      state.profileImage = null; 
     },
   },
 });

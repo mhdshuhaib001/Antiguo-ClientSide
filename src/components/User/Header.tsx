@@ -10,7 +10,7 @@ const Header: React.FC = () => {
     const storedToken = localStorage.getItem('accessToken');
     setToken(storedToken);
   }, []);
-
+ 
   return (
     <header className="bg-[#fcfaee] border border-b border-[#7c4b24] shadow-md py-2">
       <div className="container mx-auto flex justify-between items-center px-6">
@@ -35,7 +35,7 @@ const Header: React.FC = () => {
 
           {/* Chat Icon */}
           <a
-            href="#chat"
+            onClick={()=>navigate('/chat')}
             className="text-gray-600 hover:text-gray-900 flex items-center"
           >
             <svg

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useUpdateProfileMutation, useFetchProfileQuery } from '../../services/apis/userApi';
+import { useUpdateProfileMutation, useFetchUserByIdQuery } from '../../services/apis/userApi';
 import {
   Modal,
   ModalContent,
@@ -71,7 +71,7 @@ const UserDashBoard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const userId = useSelector((state: RootState) => state.User._id);
-  const { data: userData, error, isLoading: profileLoading } = useFetchProfileQuery(userId);
+  const { data: userData, error, isLoading: profileLoading } = useFetchUserByIdQuery(userId);
   const totalPages = Math.ceil(biddingSummary.length / itemsPerPage);
   const [updateProfile, { isLoading: updateLoading }] = useUpdateProfileMutation();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -103,8 +103,10 @@ const UserDashBoard: React.FC = () => {
   
     try {
       const response = await updateProfile(formData).unwrap();
+      console.log(response,'this is the resoinse')
       if (response) {
         setImagePreview(URL.createObjectURL(values.profileImage));
+        
         onClose();
         toast.success('Profile updated successfully!');
       }

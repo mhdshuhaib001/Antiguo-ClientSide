@@ -11,7 +11,6 @@ export const ApiSlice = createApi({
     credentials: 'include',
     prepareHeaders: (headers ) => {
       const token = getToken();
-      console.log(token, 'userApiTokenCheck');
 
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
@@ -96,12 +95,20 @@ export const ApiSlice = createApi({
         body: formData,
       }),
     }),
-    fetchProfile: builder.query<AuthResponse, string>({
+    fetchUserById: builder.query<AuthResponse, string>({
       query: (userId) => `/api/user/user/${userId}`,
     }),
     fetchCategories: builder.query<Category[], void>({
       query: () => '/api/user/categories',
     }),
+    subscribeNotification: builder.mutation<void, { auctionId: string; userId: string; fcmToken: string |null}>({
+      query: (notificationData) => ({
+        url: '/api/user/subscribe-notification',
+        method: 'POST',
+        body: notificationData,
+      }),
+    }),
+
 
   }),
 });
@@ -117,9 +124,9 @@ export const {
   useAddAddressMutation,
   useGetAddressQuery,
   useUpdateProfileMutation,
-  useFetchProfileQuery,
+  useFetchUserByIdQuery,
   useUpdateAddressMutation,
   useDeleteAddressMutation,
   useFetchCategoriesQuery,
-  
+  useSubscribeNotificationMutation,
 } = ApiSlice;

@@ -8,6 +8,8 @@ import storage from 'redux-persist/lib/storage';
 import { adminApi } from '../services/apis/adminApi';
 import { productApi} from '../services/apis/productApi';
 import { orderApi } from '../services/apis/orderApi';
+import { chatApi } from '../services/apis/chatApi';
+import {auctionApi} from '../services/apis/auctionApi'
 const rootReducer = combineReducers({
   User: userReducer,
   Seller: sellerReducer,
@@ -15,7 +17,9 @@ const rootReducer = combineReducers({
   [ApiSlice.reducerPath]: ApiSlice.reducer,
   [adminApi.reducerPath]: adminApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
-  [orderApi.reducerPath]: orderApi.reducer
+  [orderApi.reducerPath]: orderApi.reducer,
+  [chatApi.reducerPath]: chatApi.reducer,
+  [auctionApi.reducerPath]: auctionApi.reducer,
 });
 
 // Persist configuration
@@ -27,7 +31,9 @@ const persistConfig = {
     ApiSlice.reducerPath,
     adminApi.reducerPath,
     productApi.reducerPath,
-    orderApi.reducerPath
+    orderApi.reducerPath,
+    chatApi.reducerPath,
+    auctionApi.reducerPath
   ],
 };
 
@@ -46,6 +52,8 @@ const store = configureStore({
       .concat(adminApi.middleware)
       .concat(productApi.middleware)
       .concat(orderApi.middleware)
+      .concat(chatApi.middleware)
+      .concat(auctionApi.middleware)
     });
 
 export const persistor = persistStore(store);

@@ -33,6 +33,7 @@ interface OrderResponse {
 export default function OrderManagementTable() {
   const userId = useSelector((state: RootState) => state.Seller.sellerId);
   const { data: responseData, isLoading, isError, error } = useFetchOrdersQuery(userId);
+  console.log(responseData,'haiii this is the response data ')
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
@@ -95,33 +96,102 @@ export default function OrderManagementTable() {
       <h1 className="text-3xl font-serif text-amber-900 mb-6 text-center">Order Management</h1>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse mb-4">
-          <thead>
-            <tr className="bg-amber-100">
-           
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-                Order ID
-              </th>
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-                Buyer ID
-              </th>
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-                Product ID
-              </th>
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-                Order Date
-              </th>
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-                Status
-              </th>
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-                Shipping Address
-              </th>
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+        <thead>
+    <tr className="bg-amber-100">
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
+            #
+        </th>
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
+            Order ID
+        </th>
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
+            Buyer ID
+        </th>
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
+            Product ID
+        </th>
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
+            Order Date
+        </th>
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
+            Status
+        </th>
+        {/* <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
+            Shipping Address
+        </th> */}
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
+            Actions
+        </th>
+    </tr>
+</thead>
+<tbody>
+    {currentOrders.map((order, index) => (
+        <tr key={order.id} className="bg-white hover:bg-amber-50 transition-colors">
+            <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                {indexOfFirstOrder + index + 1} {/* Order Number */}
+            </td>
+            <td className="p-3 font-serif text-amber-900 border border-amber-200">
+    #{order.id.slice(0, 4)}****{order.id.slice(-4)}
+</td>
+
+            <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                {order.buyerId}
+            </td>
+            <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                {order.productId}
+            </td>
+            <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                {order.orderDate}
+            </td>
+            <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                <span
+                    className={`px-2 py-1 rounded ${
+                        order.orderStatus === 'pending'
+                            ? 'bg-amber-200 text-amber-800'
+                            : order.orderStatus === 'completed'
+                            ? 'bg-amber-300 text-amber-900'
+                            : 'bg-amber-400 text-amber-900'
+                    }`}
+                >
+                    {order.orderStatus}
+                </span>
+            </td>
+            {/* <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                {order.shippingAddress ? (
+                    <div>
+                        <div>{order.shippingAddress.fullName}</div>
+                        <div>
+                            {order.shippingAddress.streetAddress}, {order.shippingAddress.city},{' '}
+                            {order.shippingAddress.state}, {order.shippingAddress.postalCode},{' '}
+                            {order.shippingAddress.country}
+                        </div>
+                        <div>Phone: {order.shippingAddress.phoneNumber}</div>
+                    </div>
+                ) : (
+                    <div>No Address Provided</div>
+                )}
+            </td> */}
+            <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                <select
+                    value={order.orderStatus}
+                    onChange={(e) =>
+                        handleStatusChange(
+                            order.id,
+                            e.target.value as 'pending' | 'completed' | 'canceled',
+                        )
+                    }
+                    className="bg-amber-50 border border-amber-200 rounded px-2 py-1 text-amber-900"
+                >
+                    <option value="pending">pending</option>
+                    <option value="completed">completed</option>
+                    <option value="canceled">canceled</option>
+                </select>
+            </td>
+        </tr>
+    ))}
+</tbody>
+
+          {/* <tbody>
             
             {currentOrders.map((order) => (
               <tr key={order.id} className="bg-white hover:bg-amber-50 transition-colors">
@@ -185,7 +255,7 @@ export default function OrderManagementTable() {
                 </td>
               </tr>
             ))}
-          </tbody>
+          </tbody> */}
         </table>
       </div>
       <div className="flex justify-center mt-4">
