@@ -1,5 +1,7 @@
+import { Seller } from "../sellerTypes/sellerApiTypes";
 
 export interface Product {
+  sellerData:Seller;
     productData: any;
     _id?: string;
     itemTitle: string;
@@ -14,8 +16,8 @@ export interface Product {
     shippingCost: string;
     handlingTime: string;
     returnPolicy: string;
-    auction_start_time?: Date; 
-    auctionEndDateTime?: string;  
+    auctionStartDateTime?: Date; 
+    auctionEndDateTime?: Date;  
   }
   
   

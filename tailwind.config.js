@@ -13,7 +13,7 @@ module.exports = {
         serif: ['Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
       },
       colors:{
-        'custom-bg':'#fcfaee'
+        'main-bg':'#fcfaee'
       }
     },
   },

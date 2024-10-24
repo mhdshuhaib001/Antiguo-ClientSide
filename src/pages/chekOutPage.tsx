@@ -33,6 +33,7 @@ const CheckoutPage: React.FC = () => {
   const stripe = useStripe();
   const elements = useElements();
   const { id } = useParams<{ id: string }>();
+  console.log(id,'this is the ad of the things ')
   const userId = useSelector((state: RootState) => state.User._id);
 
   const [createCheckoutSession] = useCreateCheckoutSessionMutation();
@@ -248,135 +249,7 @@ const CheckoutPage: React.FC = () => {
                           ))}
                         </div>
                       ) : (
-                        // <div className="space-y-4">
-                        //   <div className="grid grid-cols-2 gap-4">
-                        //     <div>
-                        //       <label
-                        //         htmlFor="firstName"
-                        //         className="block text-sm font-medium text-gray-700"
-                        //       >
-                        //         First Name
-                        //       </label>
-                        //       <input
-                        //         type="text"
-                        //         id="firstName"
-                        //         name="firstName"
-                        //         value={formData.firstName}
-                        //         onChange={handleInputChange}
-                        //         required
-                        //         className="mt-1 block w-full border-amber-200 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 bg-white"
-                        //       />
-                        //     </div>
-                        //     <div>
-                        //       <label
-                        //         htmlFor="lastName"
-                        //         className="block text-sm font-medium text-gray-700"
-                        //       >
-                        //         Last Name
-                        //       </label>
-                        //       <input
-                        //         type="text"
-                        //         id="lastName"
-                        //         name="lastName"
-                        //         value={formData.lastName}
-                        //         onChange={handleInputChange}
-                        //         required
-                        //         className="mt-1 block w-full border-amber-200 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 bg-white"
-                        //       />
-                        //     </div>
-                        //   </div>
-                        //   <div>
-                        //     <label
-                        //       htmlFor="email"
-                        //       className="block text-sm font-medium text-gray-700"
-                        //     >
-                        //       Email
-                        //     </label>
-                        //     <input
-                        //       type="email"
-                        //       id="email"
-                        //       name="email"
-                        //       value={formData.email}
-                        //       onChange={handleInputChange}
-                        //       required
-                        //       className="mt-1 block w-full border-amber-200 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 bg-white"
-                        //     />
-                        //   </div>
-                        //   <div>
-                        //     <label
-                        //       htmlFor="address"
-                        //       className="block text-sm font-medium text-gray-700"
-                        //     >
-                        //       Address
-                        //     </label>
-                        //     <input
-                        //       type="text"
-                        //       id="address"
-                        //       name="address"
-                        //       value={formData.address}
-                        //       onChange={handleInputChange}
-                        //       required
-                        //       className="mt-1 block w-full border-amber-200 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 bg-white"
-                        //     />
-                        //   </div>
-                        //   <div className="grid grid-cols-2 gap-4">
-                        //     <div>
-                        //       <label
-                        //         htmlFor="city"
-                        //         className="block text-sm font-medium text-gray-700"
-                        //       >
-                        //         City
-                        //       </label>
-                        //       <input
-                        //         type="text"
-                        //         id="city"
-                        //         name="city"
-                        //         value={formData.city}
-                        //         onChange={handleInputChange}
-                        //         required
-                        //         className="mt-1 block w-full border-amber-200 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 bg-white"
-                        //       />
-                        //     </div>
-                        //     <div>
-                        //       <label
-                        //         htmlFor="zipCode"
-                        //         className="block text-sm font-medium text-gray-700"
-                        //       >
-                        //         ZIP Code
-                        //       </label>
-                        //       <input
-                        //         type="text"
-                        //         id="zipCode"
-                        //         name="zipCode"
-                        //         value={formData.zipCode}
-                        //         onChange={handleInputChange}
-                        //         required
-                        //         className="mt-1 block w-full border-amber-200 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 bg-white"
-                        //       />
-                        //     </div>
-                        //   </div>
-                        //   <div>
-                        //     <label
-                        //       htmlFor="country"
-                        //       className="block text-sm font-medium text-gray-700"
-                        //     >
-                        //       Country
-                        //     </label>
-                        //     <select
-                        //       id="country"
-                        //       name="country"
-                        //       value={formData.country}
-                        //       onChange={handleInputChange}
-                        //       required
-                        //       className="mt-1 block w-full border-amber-200 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 bg-white"
-                        //     >
-                        //       <option value="">Select a country</option>
-                        //       <option value="us">United States</option>
-                        //       <option value="ca">Canada</option>
-                        //       <option value="uk">United Kingdom</option>
-                        //     </select>
-                        //   </div>
-                        // </div>
+                
                         <div>
                           <button onClick={() => navigate('/profile/address')}>Add Address</button>
                         </div>
@@ -413,8 +286,8 @@ const CheckoutPage: React.FC = () => {
                         <div className="border-t border-amber-300 my-2 pt-2"></div>
                         <div className="flex justify-between text-gray-800">
                           <span>Subtotal</span>
-                          <span>$ {productData.reservePrice}</span>
-                        </div>
+                          <span>$ {productData.sold ? productData.finalBidAmount : productData.reservePrice}</span>
+                          </div>
                         <div className="flex justify-between text-gray-800">
                           <span>Shipping</span>
                           <span>$ {productData.shippingCost}</span>
@@ -423,8 +296,8 @@ const CheckoutPage: React.FC = () => {
                         <div className="border-t border-amber-300 my-2 pt-2"></div>
                         <div className="flex justify-between font-semibold text-gray-900">
                           <span>Total</span>
-                          <span>$ {productData.reservePrice + productData.shippingCost}</span>
-                        </div>
+                          $ {(productData.sold ? productData.finalBidAmount : productData.reservePrice) + productData.shippingCost}
+                          </div>
                       </div>
                     </div>
                   </div>

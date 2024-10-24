@@ -7,20 +7,25 @@ export interface SellerCreationRequest {
   image?:string
 }
 
-export interface SellerResponse {
-  sellerId: string;
-  sellerToken: string;
-  id: string;
-  UserId?: string;
+export interface Seller {
+  _id: string;
+  sellerId?:string
+  userId: string;
   companyName: string;
-  email?: string; 
-  phone?: string; 
-  address?: string; 
-  about?: string; 
-  image?: string; 
-  createdAt: string;
-  updatedAt?: string;
+  profile:string;
+  isBlocked: boolean;
+  about?: string;
+  address?: string;
+  phone?: string;
+  email?: string;
 }
+
+export interface SellerResponse {
+  status: number;
+  message: string;
+  seller: Seller;
+}
+
 
 export interface FormDataType {
   _id?: string;

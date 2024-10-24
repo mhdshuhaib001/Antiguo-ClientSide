@@ -25,6 +25,8 @@ const Registration: React.FC = () => {
           email: data.userData?.email,
           name: data.userData?.name,
           role: data.userData?.role,
+          profileImage: data.userData?.profileImage || null
+
         }),
       );
       const sellerId = data.sellerId;

@@ -22,7 +22,7 @@ const ProductListTable: React.FC = () => {
       console.error('Failed to delete the product:', error);
     }
   };
-
+console.log(productData,'productData==========')
   return ( 
     <div className="container font-serif mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">

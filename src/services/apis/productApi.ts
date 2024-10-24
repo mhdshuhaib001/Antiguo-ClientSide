@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+  import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Product } from '../../interface/productTypes/productType';
 import { getToken } from '../../utils/getHelper';
 
@@ -21,10 +21,7 @@ export const productApi = createApi({
     //   query: () => '/api/products',
     // }),
     getProductById: builder.query<Product, any>({
-      query: (id) => {
-        console.log(`Making API call to /api/products/${id}`);
-        return `/api/products/${id}`;
-      },
+      query: (id) => ({ url: `/api/products/${id}` }),
     }),
     
     

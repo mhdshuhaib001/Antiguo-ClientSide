@@ -13,7 +13,6 @@ const categories = [
 export default function CategorySection() {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const { data: categories, isLoading } = useFetchCategoriesQuery()
-  console.log(categories,'categories==========================')
   
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
