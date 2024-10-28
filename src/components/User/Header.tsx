@@ -20,7 +20,7 @@ const Header: React.FC = () => {
 
         {/* Navigation */}
         <nav className="hidden md:flex space-x-4 items-center">
-          <a href="#auction" className="text-gray-600 hover:text-gray-900">
+          <a onClick={()=>navigate('/auction-items')} className="text-gray-600 hover:text-gray-900">
             Auction
           </a>
           <a href="#live-auction" className="text-gray-600 hover:text-gray-900">

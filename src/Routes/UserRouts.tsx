@@ -22,10 +22,9 @@ import Success from '../pages/commenPages/succsess';
 import OrderManagementTable from '../pages/seller/orderManagmentPage';
 import OrdersPage from '../pages/userPages/ordersPage';
 import OrderDetails from '../pages/userPages/orderDetailsPage';
-import AuctionItems from '../pages/userPages/AuctionItems';
 import AuctionPage from '../pages/userPages/auctionPage';
 import ChatPage from '../pages/userPages/ChatPage';
-import ChatBot from '../components/commen/ChatBot'
+import AuctionItems from '../pages/userPages/acutionItems';
 const UserRoute: React.FC = () => {
   return (
     <Routes>
@@ -40,7 +39,6 @@ const UserRoute: React.FC = () => {
       <Route path="/auction-items" element={<AuctionItems />} />
       <Route path="/auction-page/:id" element={<AuctionPage />} />
       <Route path="/chat" element={<ChatPage />} />
-      {/* <Route path='/chatBoat' element={<ChatBot/>}/> */}
       {/* Profile Routees */}
       <Route path="/profile" element={<UserProtectedRoute element={Profile} />}>
         <Route path="dashboard" element={<UserDashBoard />} />
@@ -53,8 +51,8 @@ const UserRoute: React.FC = () => {
             path="product-management"
             element={<UserProtectedRoute element={ProductManagment} />}
           />
-          <Route path="addproduct" element={<UserProtectedRoute element={ProductListingForm} />} />
-          <Route
+<Route path="addproduct/:productId?" element={<UserProtectedRoute element={ProductListingForm} />} />
+<Route
             path="editproduct/:productId"
             element={<UserProtectedRoute element={EditProductForm} />}
           />

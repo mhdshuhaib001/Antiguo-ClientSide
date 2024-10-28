@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 import { useAddProductMutation } from '../../services/apis/sellerApi';
@@ -6,56 +6,164 @@ import { Upload } from 'lucide-react';
 import { productListingSchema } from '../../utils/hooks/ProductValidation';
 import { Field, Formik, Form, ErrorMessage, FieldProps } from 'formik';
 import toast from 'react-hot-toast';
-import { DatePicker, image } from '@nextui-org/react';
-import { now, getLocalTimeZone } from '@internationalized/date';
-import { useNavigate } from 'react-router-dom';
+import { DatePicker, DateValue } from '@nextui-org/react';
+import {
+  parseDate,
+  CalendarDate,
+  CalendarDateTime,
+  ZonedDateTime,
+  getLocalTimeZone,
+} from '@internationalized/date';
+import { useNavigate, useParams } from 'react-router-dom';
 import ImageEditModal from '../../components/Seller/EditImageComponent';
-import { useFetchCategoriesQuery } from '../../services/apis/userApi'
-const ProductListingForm: React.FC = () => {
+import { useFetchCategoriesQuery } from '../../services/apis/userApi';
+import { useGetProductQuery, useGetProductByIdQuery } from '../../services/apis/productApi';
+import { Product, ProductImage } from '../../interface/productTypes/productType';
+import { Seller } from '../../interface/sellerTypes/sellerApiTypes';
+interface FormValues {
+  itemTitle: string;
+  category: string;
+  description: string;
+  condition: string;
+  auctionFormat: string;
+  reservePrice: string;
+  shippingType: string;
+  shippingCost: string;
+  handlingTime: string;
+  returnPolicy: string;
+  auctionStartDateTime: any;
+  auctionEndDateTime: any;
+  images: File[];
+}
 
+const ProductListingForm: React.FC = () => {
+  const { productId } = useParams<{ productId?: string }>();
+
+  console.log(productId, 'ithe vanaa mathi ');
+  const { data: productDetails, isLoading: isProductLoading } = useGetProductQuery(productId, {
+    skip: !productId,
+  });
+  console.log(productDetails, 'this is the  productDetails');
   const { data: categories, isLoading: isCategoriesLoading } = useFetchCategoriesQuery();
-  console.log(categories,'categories==========')
   const sellerId = useSelector((state: RootState) => state.Seller.sellerId);
   const [auctionFormat, setAuctionFormat] = useState('');
   const navigate = useNavigate();
   const [addProduct, { isLoading: isAddProductLoading }] = useAddProductMutation();
-  const [previewSources, setPreviewSources] = useState<string[]>([]);
+  const [previewSource, setPreviewSource] = useState<string[]>([]);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
   const [errMsg, setErrMsg] = useState('');
-
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const [initialValues, setInitialValue] = useState<any>();
+  const compareDates = (date1: CalendarDateTime, date2: CalendarDateTime): number => {
+    if (date1.year !== date2.year) return date1.year - date2.year;
+    if (date1.month !== date2.month) return date1.month - date2.month;
+    if (date1.day !== date2.day) return date1.day - date2.day;
+    if (date1.hour !== date2.hour) return date1.hour - date2.hour;
+    if (date1.minute !== date2.minute) return date1.minute - date2.minute;
+    return date1.second - date2.second;
+  };
 
-  const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>, setFieldValue: any) => {
-    const files = e.target.files;
-    if (files) {
-      const fileArray = Array.from(files);
-
-      // Generate base64 strings and previews
-      const previewPromises = fileArray.map((file) => {
-        return new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
+  const handleStartDateChange = (
+    date: CalendarDate | CalendarDateTime | ZonedDateTime | null,
+    field: FieldProps['field'],
+  ) => {
+    if (date) {
+      field.onChange({
+        target: {
+          name: field.name,
+          value:
+            date instanceof CalendarDateTime
+              ? date
+              : new CalendarDateTime(date.year, date.month, date.day, 0, 0, 0),
+        },
       });
-
-      Promise.all(previewPromises)
-        .then((previews) => {
-          setPreviewSources(previews);
-          setFieldValue('images', previews);
-        })
-        .catch(() => {
-          setErrMsg('Failed to read file(s).');
-        });
     }
   };
 
+  const handleEndDateChange = (
+    date: CalendarDate | CalendarDateTime | ZonedDateTime | null,
+    field: FieldProps['field'],
+  ) => {
+    if (date) {
+      field.onChange({
+        target: {
+          name: field.name,
+          value:
+            date instanceof CalendarDateTime
+              ? date
+              : new CalendarDateTime(date.year, date.month, date.day, 0, 0, 0),
+        },
+      });
+    }
+  };
 
+  // Function to convert ISO date string to CalendarDateTime
+  const convertToCalendarDateTime = (dateString: string): CalendarDateTime => {
+    const date = new Date(dateString); // Parse the ISO 8601 date string
+    return new CalendarDateTime(
+      date.getUTCFullYear(), // Get year
+      date.getUTCMonth() + 1, // Get month (0-based, so add 1)
+      date.getUTCDate(), // Get day
+      date.getUTCHours(), // Get hours
+      date.getUTCMinutes(), // Get minutes
+      date.getUTCSeconds(), // Get seconds
+    );
+  };
 
+  useEffect(() => {
+    if (!productDetails) {
+      return; // Exit early if productDetails is not available
+    }
+  
+    // Extract image URLs from productDetails
+    const imageUrls: string[] = productDetails.images
+      .filter((image): image is string => typeof image === 'string'); 
+  
+    // Set previewSource with the filtered URLs
+    setPreviewSource(imageUrls);
+  
+    // Set initial form values
+    const initialData: FormValues = {
+      itemTitle: productDetails.itemTitle || '',
+      category: productDetails.categoryId?._id || productDetails.category || '',
+      description: productDetails.description || '',
+      condition: productDetails.condition || '',
+      auctionFormat: productDetails.auctionFormat || '',
+      reservePrice: productDetails.reservePrice || '',
+      shippingType: productDetails.shippingType || '',
+      shippingCost: productDetails.shippingCost || '',
+      handlingTime: productDetails.handlingTime || '',
+      returnPolicy: productDetails.returnPolicy || '',
+      auctionStartDateTime: convertToCalendarDateTime(productDetails.auctionStartDateTime),
+      auctionEndDateTime: convertToCalendarDateTime(productDetails.auctionEndDateTime),
+      images: [], // Initialize images as needed
+    };
+  
+    // Set the initial values for Formik
+    setInitialValue(initialData);
+  }, [productDetails]);
+  
+  const handleFileInputChange = (e: ChangeEvent<HTMLInputElement>, setFieldValue: any) => {
+    const files = e.target.files; // Get the FileList
+    if (files) {
+      // Convert FileList to an array of File objects
+      const newFilesArray: File[] = Array.from(files);
+  
+      // Create object URLs for the new files
+      const newUrls: string[] = newFilesArray.map(file => URL.createObjectURL(file));
+  
+      // Update previewSource by concatenating the new URLs with existing ones
+      setPreviewSource((prev) => [...prev, ...newUrls]);
+  
+      // Update the images field in Formik by concatenating new files with existing ones
+      setFieldValue('images', (prev: File[]) => [...prev, ...newFilesArray]);
+    }
+  };
+  
   const handleRemoveImage = (index: number) => {
-    setPreviewSources((prev) => prev.filter((_, i) => i !== index));
+    setPreviewSource((prev: any) => prev.filter((_: any, i: number) => i !== index));
   };
 
   const handleImageClick = (src: string) => {
@@ -65,45 +173,51 @@ const ProductListingForm: React.FC = () => {
 
   const handleCropImage = (cropped: string | null) => {
     if (cropped) {
-      console.log(cropped,'suiiiiiiiiiiiiiiiiiii')
       setCroppedImage(cropped);
-      setPreviewSources((prev) =>
-        prev.map((image) => (image === selectedImage ? cropped : image))
+      setPreviewSource((prev: any) =>
+        prev.map((image: string | null) => (image === selectedImage ? cropped : image)),
       );
     }
     setModalOpen(false);
   };
-  
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: FormValues) => {
     try {
-      // Only validate auction dates if the auction format is 'auction'
       if (values.auctionFormat === 'auction') {
-        const startDate = new Date(values.auctionStartDateTime);
-        const endDate = new Date(values.auctionEndDateTime);
-
-        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime()) || endDate <= startDate) {
-          setErrMsg(
-            'Please select valid start and end dates, ensuring that the end date is after the start date.',
-          );
+        if (!values.auctionStartDateTime || !values.auctionEndDateTime) {
+          toast.error('Please select both start and end dates.');
+          return;
+        }
+        if (compareDates(values.auctionEndDateTime, values.auctionStartDateTime) <= 0) {
+          toast.error('End date must be after start date.');
           return;
         }
       }
 
-      // Validate reserve price if it is required
-      if (!values.reservePrice) {
-        setErrMsg('Reserve price is required.');
-        return;
+      const formData = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+        if (key === 'image' && value) {
+          formData.append('image', value); // Append the single image file
+        } else if (key === 'auctionStartDateTime' || key === 'auctionEndDateTime') {
+          if (value) {
+            const dateTimeString = `${value.year}-${String(value.month).padStart(2, '0')}-${String(value.day).padStart(2, '0')}T${String(value.hour).padStart(2, '0')}:${String(value.minute).padStart(2, '0')}:${String(value.second).padStart(2, '0')}`;
+            formData.append(key, dateTimeString);
+          }
+        } else {
+          formData.append(key, value);
+        }
+      });
+      formData.append('sellerId', sellerId);
+      if (productId) {
+        toast.success('Product updated successfully!');
+      } else {
+        await addProduct(formData).unwrap();
+        toast.success('Product listing submitted successfully!');
       }
 
-      const dataToSend = { ...values, sellerId };
-      await addProduct(dataToSend).unwrap();
-      toast.success('Product listing submitted successfully!');
       setTimeout(() => {
         navigate('/profile/seller/product-management');
       }, 1000);
-
-      setErrMsg('');
     } catch (err) {
       console.error('Failed to submit product listing:', err);
       toast.error('Failed to submit product listing.');
@@ -113,25 +227,12 @@ const ProductListingForm: React.FC = () => {
   return (
     <div className="mt-10 p-5 shadow-md bg-white m-0">
       <Formik
-        initialValues={{
-          itemTitle: '',
-          category: '',
-          description: '',
-          condition: '',
-          auctionFormat: '',
-          reservePrice: '',
-          shippingType: '',
-          shippingCost: '',
-          handlingTime: '',
-          returnPolicy: '',
-          auctionStartDateTime: null,
-          auctionEndDateTime: null,
-          images: '',
-        }}
+        initialValues={initialValues}
         validationSchema={productListingSchema}
         onSubmit={handleSubmit}
+        enableReinitialize={true}
       >
-        {({ setFieldValue }) => (
+        {({ setFieldValue, values, errors }) => (
           <Form>
             {/* Item Details */}
             <div className="border border-gray-300 p-4 bg-white rounded-md mb-8">
@@ -160,8 +261,10 @@ const ProductListingForm: React.FC = () => {
                     className="w-full p-2 border border-gray-300 rounded-md"
                   >
                     <option value="">Select a Category</option>
-                    {categories?.map(category=>(
-                      <option key={category._id} value={category._id}>{category.name}</option>
+                    {categories?.map((category) => (
+                      <option key={category._id} value={category._id}>
+                        {category.name}
+                      </option>
                     ))}
                   </Field>
                   <ErrorMessage name="category" component="div" className="text-red-500" />
@@ -212,6 +315,7 @@ const ProductListingForm: React.FC = () => {
                         id="dropzone-file"
                         type="file"
                         className="hidden"
+                        name="images"
                         multiple
                         onChange={(e) => handleFileInputChange(e, setFieldValue)}
                       />
@@ -224,29 +328,38 @@ const ProductListingForm: React.FC = () => {
 
                 {/* Preview section next to upload */}
                 <div className="w-full md:w-1/2 flex flex-wrap gap-4 mt-4 md:mt-0">
-                  {previewSources.map((preview, index) => (
-                    <div
-                      key={index}
-                      className="relative w-44 h-44 cursor-pointer"
-                      onClick={() => handleImageClick(preview)}
-                    >
-                      <img
-                        src={preview}
-                        alt={`Image preview ${index + 1}`}
-                        className="w-full h-full object-cover rounded-md"
-                      />
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemoveImage(index);
-                        }}
-                        className="absolute top-0 right-0 text-black rounded-full p-1 bg-white shadow"
-                        title="Remove image"
-                      >
-                        &times;
-                      </button>
-                    </div>
-                  ))}
+                  {previewSource.length > 0 ? (
+                    previewSource.map(
+                      (
+                        preview: string,
+                        index: number, // No need for React.Key, use number
+                      ) => (
+                        <div
+                          key={index}
+                          className="relative w-44 h-44 cursor-pointer"
+                          onClick={() => handleImageClick(preview)}
+                        >
+                          <img
+                            src={preview}
+                            alt={`Image preview ${index + 1}`} // index is a number
+                            className="w-full h-full object-cover rounded-md"
+                          />
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveImage(index);
+                            }}
+                            className="absolute top-0 right-0 text-black rounded-full p-1 bg-white shadow"
+                            title="Remove image"
+                          >
+                            &times;
+                          </button>
+                        </div>
+                      ),
+                    )
+                  ) : (
+                    <p>No images available for preview.</p> // Fallback message
+                  )}
                 </div>
               </div>
             </div>
@@ -281,36 +394,18 @@ const ProductListingForm: React.FC = () => {
                   </div>
 
                   {auctionFormat === 'auction' && (
-                    <div className="mb-4 flex space-x-4">
-                      <div className="flex-1">
-                        <label id="date-label" className="block text-gray-700 text-sm mb-2">
+                    <div className="mb-4 space-y-4">
+                      <div>
+                        <label className="block text-gray-700 text-sm mb-2">
                           Auction Start Date & Time:
                         </label>
                         <Field name="auctionStartDateTime">
                           {({ field }: FieldProps) => (
                             <DatePicker
-                              aria-labelledby="date-label"
-                              variant="bordered"
-                              hideTimeZone
-                              defaultValue={now(getLocalTimeZone())}
-                              onChange={(date) => {
-                                const jsDate = new Date(
-                                  date.year,
-                                  date.month - 1,
-                                  date.day,
-                                  date.hour,
-                                  date.minute,
-                                  date.second,
-                                  date.millisecond,
-                                );
-
-                                if (!isNaN(jsDate.getTime()) && jsDate >= new Date()) {
-                                  field.onChange({ target: { name: field.name, value: jsDate } });
-                                } else {
-                                  setErrMsg('Selected date must be today or in the future.');
-                                }
-                              }}
                               className="w-full"
+                              value={field.value}
+                              onChange={(date) => handleStartDateChange(date, field)}
+                              isRequired
                             />
                           )}
                         </Field>
@@ -321,33 +416,17 @@ const ProductListingForm: React.FC = () => {
                         />
                       </div>
 
-                      <div className="flex-1">
-                        <label id="endDate-label" className="block text-gray-700 text-sm mb-2">
+                      <div>
+                        <label className="block text-gray-700 text-sm mb-2">
                           Auction End Date & Time:
                         </label>
                         <Field name="auctionEndDateTime">
                           {({ field }: FieldProps) => (
                             <DatePicker
-                              aria-labelledby="endDate-label"
-                              variant="bordered"
-                              hideTimeZone
-                              defaultValue={now(getLocalTimeZone())}
-                              onChange={(date) => {
-                                const jsDate = new Date(
-                                  date.year,
-                                  date.month - 1,
-                                  date.day,
-                                  date.hour,
-                                  date.minute,
-                                  date.second,
-                                  date.millisecond,
-                                );
-
-                                if (!isNaN(jsDate.getTime())) {
-                                  field.onChange({ target: { name: field.name, value: jsDate } });
-                                }
-                              }}
                               className="w-full"
+                              value={field.value}
+                              onChange={(date) => handleEndDateChange(date, field)}
+                              isRequired
                             />
                           )}
                         </Field>
@@ -359,7 +438,6 @@ const ProductListingForm: React.FC = () => {
                       </div>
                     </div>
                   )}
-
                   <div className="mb-4">
                     <label className="block text-gray-700 text-sm mb-2">Reserve Price:</label>
                     <Field
@@ -513,7 +591,3 @@ const ProductListingForm: React.FC = () => {
 };
 
 export default ProductListingForm;
-
-
-
-

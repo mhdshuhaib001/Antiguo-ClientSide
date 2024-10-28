@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useSelector } from 'react-redux';
@@ -12,6 +12,9 @@ const ProductListTable: React.FC = () => {
   const [deleteProduct] = useDeleteProductMutation();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   const handleDelete = async (productId: string) => {
     try {
       await deleteProduct(productId).unwrap();
@@ -22,8 +25,7 @@ const ProductListTable: React.FC = () => {
       console.error('Failed to delete the product:', error);
     }
   };
-console.log(productData,'productData==========')
-  return ( 
+  return (
     <div className="container font-serif mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-amber-900 mb-4 sm:mb-0">All Product List</h1>
@@ -65,7 +67,7 @@ console.log(productData,'productData==========')
                         />
                       </div>
                       <span className="font-medium uppercase">{product.itemTitle}</span>
-                    </div>
+                    </div>  
                   </td>
                   <td className="py-3 px-2 sm:px-6 text-left">${product.reservePrice}</td>
                   <td className="py-3 px-2 sm:px-6 text-left uppercase">{product.category}</td>
@@ -83,7 +85,7 @@ console.log(productData,'productData==========')
                   <td className="py-3 px-2 sm:px-6 text-left">
                     <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => navigate(`/profile/seller/editproduct/${product._id}`)}
+                        onClick={() => navigate(`/profile/seller/addproduct/${product._id}`)}
                         className="transform hover:text-amber-600 hover:scale-110 transition duration-300"
                         aria-label="Edit"
                       >

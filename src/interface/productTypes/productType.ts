@@ -1,23 +1,25 @@
-import { Seller } from "../sellerTypes/sellerApiTypes";
+import { CalendarDateTime } from '@internationalized/date'; 
+import { Seller } from '../sellerTypes/sellerApiTypes';
+
+export type ProductImage = string | File;
 
 export interface Product {
-  sellerData:Seller;
-    productData: any;
-    _id?: string;
-    itemTitle: string;
-    category: string;
-    description: string;
-    condition: string;
-    images: string[]; 
-    auctionFormat: string;
-    auctionDuration: string;
-    reservePrice: string;
-    shippingType: string;
-    shippingCost: string;
-    handlingTime: string;
-    returnPolicy: string;
-    auctionStartDateTime?: Date; 
-    auctionEndDateTime?: Date;  
-  }
-  
-  
+  categoryId: any;
+  sellerData: Seller;
+  productData: any;
+  _id?: string;
+  itemTitle: string;
+  category: string;
+  description: string;
+  condition: string;
+  images: ProductImage[];
+  auctionFormat: string;
+  // auctionDuration: string;
+  reservePrice: string;
+  shippingType: string;
+  shippingCost: string;
+  handlingTime: string;
+  returnPolicy: string;
+  auctionStartDateTime?: any | null; 
+  auctionEndDateTime?: any | null; 
+}
