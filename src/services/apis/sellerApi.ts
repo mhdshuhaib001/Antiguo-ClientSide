@@ -49,7 +49,7 @@ export const sellerApi = createApi({
     }),
     
 
-    addProduct: builder.mutation<AddProductResponse, FormDataType>({
+    addProduct: builder.mutation<any, FormData>({
       query: (formData) => ({
         url: '/api/seller/createproduct',
         method: 'POST',

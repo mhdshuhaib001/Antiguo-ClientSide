@@ -33,7 +33,7 @@ export interface FormDataType {
   category: string;
   description: string;
   condition: string;
-  images: string[]; 
+  images: File[] | string[];
   auctionFormat: string;
   auctionDuration: string;
   reservePrice: string;
@@ -41,10 +41,9 @@ export interface FormDataType {
   shippingCost: string;
   handlingTime: string;
   returnPolicy: string;
-  auction_start_time?: Date; 
-  auctionEndDateTime?: string;  
+  auction_start_time?: Date;
+  auctionEndDateTime?: string;
 }
-
 
 
 export interface AddProductResponse {
