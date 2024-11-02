@@ -8,13 +8,20 @@ export const auctionApi = createApi({
       query: (id) => `api/auction/biddes/${id}`,
     }),
     placeBid: builder.mutation({
-      query: ({ auctionId, bidderId, currentBid, bidAmount,time ,sellerId}) => ({
+      query: ({ auctionId, bidderId, currentBid, bidAmount, time, sellerId }) => ({
         url: '/api/auction',
         method: 'POST',
-        body: { auctionId, bidderId, currentBid, bidAmount,time ,sellerId},
+        body: { auctionId, bidderId, currentBid, bidAmount, time, sellerId },
       }),
     }),
-  }), 
+    checkAuctionWinner: builder.mutation({
+      query: (auctionId) => ({
+        url: `/api/auction/${auctionId}/winner`,
+        method: 'POST',
+      }),
+    }),
+  }),
 });
 
-export const { useGetAuctionByIdQuery, usePlaceBidMutation } = auctionApi;
+export const { useGetAuctionByIdQuery, usePlaceBidMutation, useCheckAuctionWinnerMutation } =
+  auctionApi;

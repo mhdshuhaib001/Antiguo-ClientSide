@@ -33,11 +33,11 @@ export const useSocket = () => {
 
         // Listen for typing events
         newSocket.on('typing', (data) => {
-            setTypingUsers((prev) => ({ ...prev, [data.userId]: true })); // Set typing user
+            setTypingUsers((prev) => ({ ...prev, [data.userId]: true })); 
         });
 
         newSocket.on('stop typing', (data) => {
-            setTypingUsers((prev) => ({ ...prev, [data.userId]: false })); // Clear typing user
+            setTypingUsers((prev) => ({ ...prev, [data.userId]: false }));
         });
 
         setSocket(newSocket);

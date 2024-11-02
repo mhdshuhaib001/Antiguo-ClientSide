@@ -18,7 +18,6 @@ const Registration: React.FC = () => {
 
   const handleLogin = async (data: AuthResponse) => {
     try {
-      // Dispatch user data to the Redux store
       dispatch(
         setUser({
           _id: data.userData?._id,
@@ -33,7 +32,6 @@ const Registration: React.FC = () => {
       dispatch(setSellerId(sellerId));
       console.log(data, 'login response');
 
-      // Extract tokens
       const authToken = data.accessToken;
       const sellerToken = data.sellerToken;
 
@@ -42,7 +40,11 @@ const Registration: React.FC = () => {
         localStorage.setItem('accessToken', authToken);
         document.cookie = `accessToken=${authToken}; path=/; secure; samesite=strict; max-age=3600`;
       }
-
+      console.log(data.refreshToken,'refreshToken checking ')
+      if (data.refreshToken) {
+        localStorage.setItem('refreshToken', data.refreshToken);
+      }
+      
       if (sellerToken) {
         localStorage.setItem('sellerToken', sellerToken);
       }
@@ -76,7 +78,6 @@ const Registration: React.FC = () => {
     if (response.credential) {
       try {
         const googleResponse = await googleAuth({ idToken: response.credential }).unwrap();
-        // Dispatch user info and set token
         dispatch(
           setUser({
             _id: googleResponse.userData?._id,

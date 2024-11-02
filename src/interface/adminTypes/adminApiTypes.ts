@@ -35,3 +35,33 @@ export interface AddCategoryRequest {
   icon: File; 
 }
 
+export interface AddReportRequest {
+  sellerId:string|undefined
+  reason: string;
+  details: string;
+  reportedBy: string;  
+}
+
+export interface AddReportResponse {
+  success: boolean;
+  message: string;
+  report?: any;  
+}
+
+interface Report {
+  id: string; 
+  sellerId: string; 
+  sellerName: string;
+  reportedBy: { _id: string; name: string };
+  reason: string;
+  details: string;
+  status: 'pending' | 'resolved' | 'dismissed';
+  createdAt: string;
+}
+
+
+
+export interface FetchReportsResponse {
+  map(arg0: (report: any) => { id: any; sellerId: any; sellerName: any; reportedBy: any; reason: any; details: any; status: "pending" | "resolved" | "dismissed"; createdAt: any; }): Report[];
+  reports: Report[]; 
+}

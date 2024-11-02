@@ -3,6 +3,7 @@ import Header from '../../components/User/Header';
 import Footer from '../../components/User/Footer';
 import { useParams } from 'react-router-dom';
 import { useFetchOrderByIdQuery } from '../../services/apis/orderApi';
+import SellerProfileCard from '../../components/Seller/SellerProfileCard';
 interface OrderItem {
   id: string;
   productName: string;
@@ -29,6 +30,7 @@ interface OrderItem {
 
 const EnhancedOrderItemDetails: React.FC = () => {
   const [isImageEnlarged, setIsImageEnlarged] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const { id } = useParams();
   console.log(id);
   const { data: orderData, isLoading: isLoadingOrder } = useFetchOrderByIdQuery(id ?? '');
@@ -49,16 +51,18 @@ const EnhancedOrderItemDetails: React.FC = () => {
               ? 'Shipped'
               : 'Delivered',
         seller: {
+          id: orderData.sellerId,
           name: orderData.companyName || 'Unknown Seller',
-          rating: 4.5,
-          avatar: '/placeholder.svg?height=50&width=50',
+          avatar: orderData.profileName,
         },
         shippingAddress: {
-          street: '123 Nostalgia Lane',
-          city: 'Antiqueville',
-          state: 'History',
-          zipCode: '12345',
-          country: 'United States',
+          fullName: orderData.shippingAddress.fullName,
+          phoneNumber: orderData.shippingAddress.phoneNumber,
+          streetAddress: orderData.shippingAddress.streetAddress,
+          city: orderData.shippingAddress.city,
+          state: orderData.shippingAddress.state,
+          postalCode: orderData.shippingAddress.postalCode,
+          country: orderData.shippingAddress.country,
         },
         estimatedDelivery: '2024-10-15',
         trackingNumber: '1Z999AA1234567890',
@@ -71,17 +75,19 @@ const EnhancedOrderItemDetails: React.FC = () => {
         productImage: [],
         bidAmount: 0,
         orderDate: 'Loading...',
-        status: 'Pending', // Set to a valid status type
+        status: 'Pending',
         seller: {
           name: 'Loading...',
           rating: 0,
           avatar: '/placeholder.svg?height=50&width=50',
         },
         shippingAddress: {
-          street: 'Loading...',
+          fullName: 'Loading...',
+          phoneNumber: 'Loading...',
+          streetAddress: 'Loading...',
           city: 'Loading...',
           state: 'Loading...',
-          zipCode: 'Loading...',
+          postalCode: 'Loading...',
           country: 'Loading...',
         },
       };
@@ -127,9 +133,11 @@ const EnhancedOrderItemDetails: React.FC = () => {
       <Header />
       <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 py-12 px-4 sm:px-6 lg:px-8">
         <div className=" bg-white shadow-2xl rounded-lg overflow-hidden">
-          <div className="px-4 py-5 sm:px-6 flex justify-center items-center  bg-amber-200 border-b border-amber-300">
+          <div className="px-4 py-5 gap-2 sm:px-6 flex justify-center items-center  bg-amber-200 border-b border-amber-300">
             <h1 className="text-3xl font-bold text-amber-900">Order Details</h1>
-            <p className="mt-1 max-w-2xl text-sm text-amber-700">Order ID: {orderItem.id}</p>
+            <p className="mt-2 max-w-2xl text-sm text-amber-700">
+              Order ID: {orderItem.id.toString().slice(-5)}
+            </p>
           </div>
           <div className="md:flex">
             <div className="md:w-1/2 p-7 ">
@@ -145,7 +153,17 @@ const EnhancedOrderItemDetails: React.FC = () => {
               <h2 className="text-2xl font-semibold text-amber-900 mb-4">
                 {orderItem.productName}
               </h2>
-              <p className="text-amber-800 mb-4">{orderItem.description}</p>
+              <p className="text-gray-700">
+                {isExpanded
+                  ? orderItem.description
+                  : `${orderItem.description.substring(0, 100)}...`}
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="text-amber-700 hover:underline ml-2"
+                >
+                  {isExpanded ? 'Show Less' : 'Load More'}
+                </button>
+              </p>{' '}
               <div className="flex items-center justify-between mb-4">
                 <span className="text-lg font-bold text-amber-900">Bid Amount:</span>
                 <span className="text-2xl font-bold text-green-600">
@@ -175,19 +193,12 @@ const EnhancedOrderItemDetails: React.FC = () => {
           <div className="border-t border-amber-200 px-6 py-4">
             <h3 className="text-xl font-semibold text-amber-900 mb-3">Seller Information</h3>
             <div className="flex items-center">
-              <img
-                src={orderItem.seller.avatar}
-                alt={orderItem.seller.name}
-                className="w-12 h-12 rounded-full mr-4"
-              />
-              <div>
-                <p className="font-medium text-amber-900">{orderItem.seller.name}</p>
-                <div className="flex items-center mt-1">
-                  {renderStarRating(orderItem.seller.rating)}
-                  <span className="ml-2 text-sm text-amber-700">
-                    {orderItem.seller.rating.toFixed(1)}
-                  </span>
-                </div>
+              <div className="w-full">
+                <SellerProfileCard
+                  id={orderItem.seller.id}
+                  sellerName={orderItem.seller.name}
+                  profileImage={orderItem.seller.avatar}
+                />
               </div>
             </div>
           </div>
@@ -195,20 +206,18 @@ const EnhancedOrderItemDetails: React.FC = () => {
             <h3 className="text-xl font-semibold text-amber-900 mb-3">Shipping Details</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="font-medium text-amber-900">Shipping Address:</p>
-                <p className="text-amber-800">{orderItem.shippingAddress.street}</p>
+                <p className="font-medium text-amber-900">Recipient:</p>
+                <p className="text-amber-800">{orderItem.shippingAddress.fullName}</p>
+                <p className="font-medium text-amber-900 mt-2">Phone Number:</p>
+                <p className="text-amber-800">{orderItem.shippingAddress.phoneNumber}</p>
+                <p className="font-medium text-amber-900 mt-2">Address:</p>
+                <p className="text-amber-800">{orderItem.shippingAddress.streetAddress}</p>
                 <p className="text-amber-800">
                   {orderItem.shippingAddress.city}, {orderItem.shippingAddress.state}{' '}
-                  {orderItem.shippingAddress.zipCode}
+                  {orderItem.shippingAddress.postalCode}
                 </p>
                 <p className="text-amber-800">{orderItem.shippingAddress.country}</p>
               </div>
-              {/* <div>
-              <p className="font-medium text-amber-900">Estimated Delivery:</p>
-              <p className="text-amber-800">{orderItem.estimatedDelivery}</p>
-              <p className="font-medium text-amber-900 mt-2">Tracking Number:</p>
-              <p className="text-amber-800">{orderItem.trackingNumber}</p>
-            </div> */}
             </div>
           </div>
         </div>

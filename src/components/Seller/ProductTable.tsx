@@ -1,20 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 import toast from 'react-hot-toast';
 import { useFetchProductsQuery, useDeleteProductMutation } from '../../services/apis/sellerApi';
+import ProductDetailsModal from '../commen/ProductDetailModal';
 
 const ProductListTable: React.FC = () => {
   const sellerId = useSelector((state: RootState) => state.Seller.sellerId);
   const { data: productData, refetch } = useFetchProductsQuery(sellerId);
   const [deleteProduct] = useDeleteProductMutation();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null); // State to hold the selected product
+
+  const handleImageClick = (product: any) => {
+    setSelectedProduct(product); // Set the selected product
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null); // Clear selected product when closing modal
+  };
 
   useEffect(() => {
     refetch();
   }, [refetch]);
+
   const handleDelete = async (productId: string) => {
     try {
       await deleteProduct(productId).unwrap();
@@ -25,6 +39,7 @@ const ProductListTable: React.FC = () => {
       console.error('Failed to delete the product:', error);
     }
   };
+
   return (
     <div className="container font-serif mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
@@ -37,7 +52,7 @@ const ProductListTable: React.FC = () => {
         </button>
       </div>
 
-      <div className="overflow-x-auto  bg-white shadow-md rounded-lg">
+      <div className="overflow-x-auto bg-white shadow-md rounded-lg">
         {productData?.products?.length ? (
           <table className="min-w-full table-auto">
             <thead>
@@ -46,6 +61,7 @@ const ProductListTable: React.FC = () => {
                 <th className="py-3 px-2 sm:px-6 text-left">Bid Price</th>
                 <th className="py-3 px-2 sm:px-6 text-left">Category</th>
                 <th className="py-3 px-2 sm:px-6 text-left">Status</th>
+                <th className="py-3 px-2 sm:px-6 text-left">Auction Time</th>
                 <th className="py-3 px-2 sm:px-6 text-left">Action</th>
               </tr>
             </thead>
@@ -63,14 +79,15 @@ const ProductListTable: React.FC = () => {
                           alt={product.itemTitle}
                           width={40}
                           height={40}
-                          className="rounded-full"
+                          onClick={() => handleImageClick(product)} // Pass the product to the click handler
+                          className="rounded-full cursor-pointer" // Add cursor pointer for clarity
                         />
                       </div>
                       <span className="font-medium uppercase">{product.itemTitle}</span>
-                    </div>  
+                    </div>
                   </td>
                   <td className="py-3 px-2 sm:px-6 text-left">${product.reservePrice}</td>
-                  <td className="py-3 px-2 sm:px-6 text-left uppercase">{product.category}</td>
+                  <td className="py-3 px-2 sm:px-6 text-left uppercase">{product.category.name}</td>
                   <td className="py-3 px-2 sm:px-6 text-left">
                     <span
                       className={`${
@@ -83,6 +100,21 @@ const ProductListTable: React.FC = () => {
                     </span>
                   </td>
                   <td className="py-3 px-2 sm:px-6 text-left">
+                    {product.auctionFormat === 'auction' &&
+                    product.auctionStartDateTime &&
+                    product.auctionEndDateTime ? (
+                      <div className="text-xs">
+                        <span>
+                          Start: {new Date(product.auctionStartDateTime).toLocaleString()}
+                        </span>
+                        <br />
+                        <span>End: {new Date(product.auctionEndDateTime).toLocaleString()}</span>
+                      </div>
+                    ) : (
+                      <span className="text-xs text-gray-500">No Auction</span>
+                    )}
+                  </td>
+                  <td className="py-3 px-2 sm:px-6 text-left">
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => navigate(`/profile/seller/addproduct/${product._id}`)}
@@ -91,7 +123,6 @@ const ProductListTable: React.FC = () => {
                       >
                         <Pencil size={16} />
                       </button>
-
                       <button
                         onClick={() => handleDelete(product._id ?? '')}
                         className="transform hover:text-amber-600 hover:scale-110 transition duration-300"
@@ -111,6 +142,15 @@ const ProductListTable: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Modal Component */}
+      {selectedProduct && (
+        <ProductDetailsModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          product={selectedProduct} // Pass the selected product to the modal
+        />
+      )}
 
       <div className="flex justify-end items-center mt-6 overflow-x-auto">
         <nav

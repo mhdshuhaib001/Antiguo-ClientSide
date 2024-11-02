@@ -98,7 +98,7 @@ const UserDashBoard: React.FC = () => {
     formData.append('name', values.name);
   
     if (values.profileImage) {
-      formData.append('profileImage', values.profileImage);
+      formData.append('image', values.profileImage);
     }
   
     try {
@@ -117,7 +117,7 @@ const UserDashBoard: React.FC = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-main-bg p-4 sm:p-6 lg:p-8">
       {/* Profile Section */}
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden border border-amber-200 mb-6">
         <div className="p-6 sm:p-8 border-b border-amber-200 relative">

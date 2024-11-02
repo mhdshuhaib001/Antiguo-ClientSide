@@ -1,4 +1,4 @@
-
+import { ProductType } from "../productTypes/productType";
 export interface SellerCreationRequest {
   userId?: string;
   companyName?: string;
@@ -18,32 +18,37 @@ export interface Seller {
   address?: string;
   phone?: string;
   email?: string;
+  sellerToken:string
 }
 
 export interface SellerResponse {
+  sellerToken:string
+  sellerId:string
   status: number;
   message: string;
   seller: Seller;
 }
 
 
-export interface FormDataType {
-  _id?: string;
-  itemTitle: string;
-  category: string;
-  description: string;
-  condition: string;
-  images: File[] | string[];
-  auctionFormat: string;
-  auctionDuration: string;
-  reservePrice: string;
-  shippingType: string;
-  shippingCost: string;
-  handlingTime: string;
-  returnPolicy: string;
-  auction_start_time?: Date;
-  auctionEndDateTime?: string;
-}
+// export interface ProductType {
+//   _id?: string;
+//   itemTitle: string;
+//   category: string;
+//   description: string;
+//   condition: string;
+//   images: File[] | string[];
+//   auctionFormat: string;
+//   auctionDuration: string;
+//   reservePrice: string;
+//   shippingType: string;
+//   shippingCost: string;
+//   handlingTime: string;
+//   returnPolicy: string;
+//   currentBid?:number;
+//   auctionStatus: 'live' | 'upcoming' | 'ended' | 'sold';
+//   auction_start_time?: Date;
+//   auctionEndDateTime?: string;
+// }
 
 
 export interface AddProductResponse {
@@ -52,7 +57,7 @@ export interface AddProductResponse {
 }
 
 export interface ProductsResponse {
-  products: FormDataType[];
+  products: ProductType[];
 }
 export interface Product {
   id: string;

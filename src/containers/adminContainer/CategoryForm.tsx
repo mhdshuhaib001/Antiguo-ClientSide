@@ -130,7 +130,6 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
         ) : null}
       </div>
 
-      {/* Save Button */}
       <div>
         <button
           type="submit"

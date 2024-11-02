@@ -1,14 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
-  FormDataType,
+  
   SellerCreationRequest,
   SellerResponse,
   AddProductResponse,
   ProductsResponse,
 } from '../../interface/sellerTypes/sellerApiTypes';
+import {ProductType} from '../../interface/productTypes/productType'
 import { OrderResponse } from '../../interface/orderTypes/orderType';
 
-// Define the seller API using RTK Query
 export const sellerApi = createApi({
   reducerPath: 'sellerApi',
   baseQuery: fetchBaseQuery({
@@ -62,12 +62,13 @@ export const sellerApi = createApi({
         method: 'GET',
       }),
     }),
-    fetchAllProducts: builder.query<ProductsResponse, void>({
-      query: () => ({
-        url: '/api/seller/fetchAllProducts',
+    fetchAllProducts: builder.query<ProductsResponse, { page: number; limit: number }>({
+      query: ({ page, limit }) => ({
+        url: `/api/seller/getproducts?page=${page}&limit=${limit}`,
         method: 'GET',
       }),
     }),
+    
     getProduct: builder.query<any, string>({
       query: (productId) => ({
         url: `/api/products/getProduct/${productId}`,
@@ -80,7 +81,7 @@ export const sellerApi = createApi({
         method: 'DELETE',
       }),
     }),
-    updateProduct: builder.mutation<AddProductResponse, { productId: string; formData: FormDataType }>({
+    updateProduct: builder.mutation<AddProductResponse, { productId: string; formData: ProductType }>({
       query: ({ productId, formData }) => ({
         url: `/api/seller/updateProduct/${productId}`,
         method: 'PUT',
@@ -106,6 +107,16 @@ export const sellerApi = createApi({
         method: 'GET',
       }),
     }),
+    updateProductData: builder.mutation<AddProductResponse, { productId: string; formData: FormData }>({
+      query: ({ productId, formData }) => ({
+        url: `/api/seller/updateProduct/${productId}`,
+        method: 'PUT',
+        body: formData,
+      }),
+    }),
+    
+    
+    
   }),
 
 });
@@ -119,8 +130,8 @@ export const {
   useFetchAllProductsQuery,
   useGetProductQuery,
   useDeleteProductMutation,
-  useUpdateProductMutation,
   useFetchOrdersQuery,
   useUpdateOrderStatusMutation,
-  useFetchAllSellerQuery
+  useFetchAllSellerQuery,
+  useUpdateProductMutation
 } = sellerApi;

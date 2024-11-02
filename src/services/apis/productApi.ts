@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Product } from '../../interface/productTypes/productType';
+import { ProductType } from '../../interface/productTypes/productType';
 import { getToken } from '../../utils/getHelper';
+import { ProductsResponse } from '../../interface/sellerTypes/sellerApiTypes';
 
 export const productApi = createApi({
   reducerPath: 'productApi',
@@ -17,13 +18,13 @@ export const productApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    // getProducts: builder.query<Product[], void>({
-    //   query: () => '/api/products',
-    // }),
-    getProductById: builder.query<Product, any>({
+    fetchAllProducts: builder.query<ProductsResponse, void>({
+      query: () => '/api/products/getallproduct',
+    }),
+    getProductById: builder.query<ProductType, any>({
       query: (id) => ({ url: `/api/products/${id}` }),
     }),
-    getProduct: builder.query<Product, any>({
+    getProduct: builder.query<ProductType, any>({
       query: (id) => ({ url: `/api/products/getProduct/${id}` }),
     }),
     // createProduct: builder.mutation<Product, Partial<Product>>({
@@ -33,7 +34,7 @@ export const productApi = createApi({
     //     body: productData,
     //   }),
     // }),
-    updateProduct: builder.mutation<Product, { id: string; productData: Partial<Product> }>({
+    updateProduct: builder.mutation<ProductType, { id: string; productData: Partial<ProductType> }>({
       query: ({ id, productData }) => ({
         url: `/api/products/${id}`,
         method: 'PUT',
@@ -53,7 +54,7 @@ export const productApi = createApi({
 // Export hooks for usage in functional components
 export const {
   useGetProductQuery,
-  // useGetProductsQuery,
+  useFetchAllProductsQuery,
   useGetProductByIdQuery,
   // useCreateProductMutation,
   useUpdateProductMutation,

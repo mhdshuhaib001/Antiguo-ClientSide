@@ -30,6 +30,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
       try {
         const result: AuthResponse = await login(user).unwrap();
+        
         onLogin(result);
       } catch (error: any) {
         if (error?.data?.errors) {
