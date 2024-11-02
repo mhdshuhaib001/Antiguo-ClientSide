@@ -12,3 +12,8 @@ export const getAdminToken = (): string | null => {
   const adminToken = localStorage.getItem('adminToken');
   return adminToken;
 };
+
+export const getRefreshToken =(): string|null =>{
+  const refreshToken = localStorage.getItem('refreshToken')
+  return refreshToken
+}

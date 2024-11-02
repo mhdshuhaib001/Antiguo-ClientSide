@@ -13,6 +13,7 @@ import { setSeller } from '../../store/slices/userSlice';
 import { setSellerId } from '../../store/slices/sellerSlice';
 import { useNavigate } from 'react-router-dom';
 import SellerNavigation from '../../components/Seller/SellerNavigation';
+import SellerDashBordComponent from '../../components/Seller/DashBord/SellerDashbordComponent';
 
 interface SellerProps {
   onSellerCreate?: (data: SellerResponse) => void;
@@ -140,7 +141,6 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
       </div>
 
       <Outlet />
-
       <TermsModal
         isOpen={isTermsModalOpen}
         onClose={closeTermsModal}

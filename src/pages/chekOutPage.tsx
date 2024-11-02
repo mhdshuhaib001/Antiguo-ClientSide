@@ -39,7 +39,7 @@ const CheckoutPage: React.FC = () => {
   const [createCheckoutSession] = useCreateCheckoutSessionMutation();
   const { data: address, isLoading: isLoadingAddress } = useGetAddressQuery(userId);
   const { data: product, isLoading: isLoadingProduct } = useGetProductByIdQuery(id);
-
+console.log(address,'this is the arress')
   const productData = product?.productData || {
     _id: '',
     images: [''],
@@ -208,7 +208,7 @@ const CheckoutPage: React.FC = () => {
                     <div className="space-y-4">
                       {loading ? (
                         <p>Loading...</p>
-                      ) : address && address.length > 1 ? (
+                      ) : address && address.length >= 1 ? (
                         <div className="space-y-2">
                           <h3 className="text-lg font-semibold text-gray-800">Your Addresses:</h3>
                           {address.map((addr) => (

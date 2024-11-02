@@ -38,6 +38,7 @@ export interface AuthResponse {
   name?:string;
   profileImage?:string;
   accessToken?: string|undefined;
+  refreshToken?:string|undefined;
   sellerToken?: string|undefined;
   password: string;
   email: string;

@@ -130,7 +130,7 @@ const Chat: React.FC = () => {
             </div>
             <div className="ml-4">
               <p className="font-semibold">{contact.name}</p>
-              <p className="text-sm text-gray-600">{contact.lastMessage}</p>
+              {/* <p className="text-sm text-gray-600">{contact.lastMessage}</p> */}
             </div>
           </div>
         ))}
@@ -156,7 +156,7 @@ const Chat: React.FC = () => {
                 <p
                   className={`text-sm ${selectedChat.online ? 'text-green-500' : 'text-gray-500'}`}
                 >
-                  {selectedChat.online ? 'Online' : 'Offline'}
+                  {/* {selectedChat.online ? 'Online' : 'Offline'} */}
                 </p>
               </div>
             </div>

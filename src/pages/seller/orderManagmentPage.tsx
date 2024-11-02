@@ -17,11 +17,14 @@ interface Order {
   id: string;
   buyerId: string;
   productId: string;
+  productName?: string;
+  productImage?: string;
   sellerId: string;
   orderDate: string;
   orderStatus: 'pending' | 'completed' | 'canceled';
   paymentStatus: 'pending' | 'completed' | 'failed';
   shippingAddress?: ShippingAddress;
+  bidAmount: number;
 }
 
 interface OrderResponse {
@@ -33,7 +36,7 @@ interface OrderResponse {
 export default function OrderManagementTable() {
   const userId = useSelector((state: RootState) => state.Seller.sellerId);
   const { data: responseData, isLoading, isError, error } = useFetchOrdersQuery(userId);
-  console.log(responseData,'haiii this is the response data ')
+  console.log(responseData, 'haiii this is the response data ');
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
@@ -41,13 +44,15 @@ export default function OrderManagementTable() {
     if (responseData && responseData.status === 200 && Array.isArray(responseData.orders)) {
       const formattedOrders = responseData.orders.map((order: any) => ({
         id: order._id,
-        buyerId: order.buyerId,
-        productId: order.productId,
+        buyerId: order.buyerId.name,
+        productId: order.productId.itemTitle,
+        productName: order.productId.itemTitle,
+        productImage: order.productId.images[0],
         sellerId: order.sellerId,
         orderDate: new Date(order.orderDate).toLocaleDateString(),
         orderStatus: order.orderStatus,
         paymentStatus: order.paymentStatus,
-        shippingAddress: order.shippingAddress,
+        bidAmount: order.bidAmount,
       }));
       setOrders(formattedOrders);
     } else {
@@ -92,104 +97,110 @@ export default function OrderManagementTable() {
   }
 
   return (
-    <div className="container mx-auto p-6 bg-gray-50">
+    <div className="container mx-auto p-6 bg-amber-50">
       <h1 className="text-3xl font-serif text-amber-900 mb-6 text-center">Order Management</h1>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse mb-4">
         <thead>
-    <tr className="bg-amber-100">
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-            #
+      <tr className="bg-amber-100">
+        <th className="p-2 text-left font-serif text-amber-900 border border-amber-200 text-sm">#</th>
+        <th className="p-2 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+          Order ID
         </th>
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-            Order ID
+        <th className="p-2 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+          Buyer Name
         </th>
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-            Buyer ID
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+          Product
         </th>
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-            Product ID
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+          Bid Amount
         </th>
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-            Order Date
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+          Order Date
         </th>
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-            Status
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+          Payment Status
         </th>
-        {/* <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-            Shipping Address
-        </th> */}
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200">
-            Actions
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+          Status
         </th>
-    </tr>
-</thead>
-<tbody>
-    {currentOrders.map((order, index) => (
-        <tr key={order.id} className="bg-white hover:bg-amber-50 transition-colors">
-            <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                {indexOfFirstOrder + index + 1} {/* Order Number */}
-            </td>
-            <td className="p-3 font-serif text-amber-900 border border-amber-200">
-    #{order.id.slice(0, 4)}****{order.id.slice(-4)}
-</td>
-
-            <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                {order.buyerId}
-            </td>
-            <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                {order.productId}
-            </td>
-            <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                {order.orderDate}
-            </td>
-            <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                <span
+        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+          Actions
+        </th>
+      </tr>
+    </thead>
+          <tbody>
+            {currentOrders.map((order, index) => (
+              <tr key={order.id} className="bg-white hover:bg-amber-50 transition-colors">
+                <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                  {indexOfFirstOrder + index + 1} {/* Order Number */}
+                </td>
+                <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                  #{order.id.slice(0, 4)}****{order.id.slice(-4)}
+                </td>
+                <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                  {order.buyerId}
+                </td>
+                <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                  <img
+                    src={order.productImage}
+                    alt={order.productName}
+                    className="w-16 h-16 object-cover"
+                  />
+                  <div>{order.productName}</div>
+                </td>
+                <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                  ${order.bidAmount}
+                </td>
+                <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                  {order.orderDate}
+                </td>
+                <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                  <span
                     className={`px-2 py-1 rounded ${
-                        order.orderStatus === 'pending'
-                            ? 'bg-amber-200 text-amber-800'
-                            : order.orderStatus === 'completed'
-                            ? 'bg-amber-300 text-amber-900'
-                            : 'bg-amber-400 text-amber-900'
+                      order.paymentStatus === 'pending'
+                        ? 'bg-red-200 text-red-800'
+                        : order.paymentStatus === 'completed'
+                          ? 'bg-green-200 text-green-800'
+                          : 'bg-yellow-200 text-yellow-800'
                     }`}
-                >
+                  >
+                    {order.paymentStatus}
+                  </span>
+                </td>
+                <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                  <span
+                    className={`px-2 py-1 rounded ${
+                      order.orderStatus === 'pending'
+                        ? 'bg-amber-200 text-amber-800'
+                        : order.orderStatus === 'completed'
+                          ? 'bg-amber-300 text-amber-900'
+                          : 'bg-amber-400 text-amber-900'
+                    }`}
+                  >
                     {order.orderStatus}
-                </span>
-            </td>
-            {/* <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                {order.shippingAddress ? (
-                    <div>
-                        <div>{order.shippingAddress.fullName}</div>
-                        <div>
-                            {order.shippingAddress.streetAddress}, {order.shippingAddress.city},{' '}
-                            {order.shippingAddress.state}, {order.shippingAddress.postalCode},{' '}
-                            {order.shippingAddress.country}
-                        </div>
-                        <div>Phone: {order.shippingAddress.phoneNumber}</div>
-                    </div>
-                ) : (
-                    <div>No Address Provided</div>
-                )}
-            </td> */}
-            <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                <select
+                  </span>
+                </td>
+                <td className="p-3 font-serif text-amber-900 border border-amber-200">
+                  <select
                     value={order.orderStatus}
                     onChange={(e) =>
-                        handleStatusChange(
-                            order.id,
-                            e.target.value as 'pending' | 'completed' | 'canceled',
-                        )
+                      handleStatusChange(
+                        order.id,
+                        e.target.value as 'pending' | 'completed' | 'canceled',
+                      )
                     }
                     className="bg-amber-50 border border-amber-200 rounded px-2 py-1 text-amber-900"
-                >
+                  >
                     <option value="pending">pending</option>
                     <option value="completed">completed</option>
                     <option value="canceled">canceled</option>
-                </select>
-            </td>
-        </tr>
-    ))}
-</tbody>
+                  </select>
+                </td>
+              </tr>
+            ))}
+          </tbody>
 
           {/* <tbody>
             

@@ -9,7 +9,7 @@ export const ApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:8001',
     credentials: 'include',
-    prepareHeaders: (headers ) => {
+    prepareHeaders: (headers) => {
       const token = getToken();
 
       if (token) {
@@ -80,7 +80,7 @@ export const ApiSlice = createApi({
       }),
     }),
     deleteAddress: builder.mutation({
-      query: ( id ) => ({
+      query: (id) => ({
         url: `/api/user/address/${id}`,
         method: 'DELETE',
       }),
@@ -100,16 +100,7 @@ export const ApiSlice = createApi({
     }),
     fetchCategories: builder.query<Category[], void>({
       query: () => '/api/user/categories',
-    }),
-    subscribeNotification: builder.mutation<void, { auctionId: string; userId: string; fcmToken: string |null}>({
-      query: (notificationData) => ({
-        url: '/api/user/subscribe-notification',
-        method: 'POST',
-        body: notificationData,
-      }),
-    }),
-
-
+    })
   }),
 });
 
@@ -128,5 +119,4 @@ export const {
   useUpdateAddressMutation,
   useDeleteAddressMutation,
   useFetchCategoriesQuery,
-  useSubscribeNotificationMutation,
 } = ApiSlice;

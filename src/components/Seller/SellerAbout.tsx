@@ -13,6 +13,7 @@ import { sellerValidationSchema } from '../../validations/sellerValidations';
 
 export default function SellerAboutPage() {
   const sellerId = useSelector((state: RootState) => state.Seller.sellerId);
+  console.log(sellerId,'this is for the sellerId')
   const { data: sellerData, error, isLoading } = useFetchSellerByIdQuery(sellerId);
   
   const [updateProfile, { isLoading: isUpdating }] = useUpdateSellerProfileMutation();
@@ -40,7 +41,7 @@ export default function SellerAboutPage() {
       });
     }
   }, [sellerData]);
-  console.log(sellerData?.seller,'sellerInfo============================================');
+  console.log(sellerData,'sellerInfo============================================');
   // Handle image change
   const handleImageChange = (
     e: ChangeEvent<HTMLInputElement>,

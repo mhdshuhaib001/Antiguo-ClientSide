@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 export const productListingSchema = Yup.object().shape({
   itemTitle: Yup.string().required('Item Title is required'),
-  category: Yup.string().required('Category is required'),
+  categoryId: Yup.string().required('Category is required'),
   description: Yup.string().required('Description is required'),
   condition: Yup.string().required('Condition is required'),
   auctionFormat: Yup.string().required('Auction Format is required'),
@@ -47,4 +47,36 @@ export const productListingSchema = Yup.object().shape({
       }
       return true; 
     }),
-});
+  });
+
+
+  // import * as Yup from 'yup';
+
+  // export const productListingSchema = Yup.object().shape({
+  //   itemTitle: Yup.string().required('Item Title is required'),
+  //   category: Yup.string().required('Category is required'),
+  //   description: Yup.string().required('Description is required'),
+  //   condition: Yup.string().required('Condition is required'),
+  //   auctionFormat: Yup.string().required('Auction Format is required'),
+    
+  //   reservePrice: Yup.number().when('auctionFormat', {
+  //     is: 'buy-it-now',
+  //     then: (schema) => schema.required('Reserve Price is required for buy-it-now format'),
+  //   }),
+
+  //   shippingType: Yup.string().required('Shipping Type is required'),
+  //   shippingCost: Yup.number().required('Shipping Cost is required'),
+  //   handlingTime: Yup.string().required('Handling Time is required'),
+  //   returnPolicy: Yup.string().required('Return Policy is required'),
+  //   images: Yup.array().min(1, 'At least one image is required'),
+
+  //   auctionStartDateTime: Yup.date().when('auctionFormat', {
+  //     is: 'auction',
+  //     then: (schema) => schema.required('Start date is required for auction format'),
+  //   }),
+
+  //   auctionEndDateTime: Yup.date().when('auctionFormat', {
+  //     is: 'auction',
+  //     then: (schema) => schema.required('End date is required for auction format'),
+  //   }),
+  // });

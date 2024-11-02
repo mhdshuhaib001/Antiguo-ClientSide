@@ -25,6 +25,9 @@ import OrderDetails from '../pages/userPages/orderDetailsPage';
 import AuctionPage from '../pages/userPages/auctionPage';
 import ChatPage from '../pages/userPages/ChatPage';
 import AuctionItems from '../pages/userPages/acutionItems';
+import SellerDashBord from '../pages/seller/SellerDashBord';
+import SellerProfilePage from '../pages/seller/sellerProfilePage';
+import SellerDashboardComponent from '../components/Seller/DashBord/SellerDashbordComponent';
 const UserRoute: React.FC = () => {
   return (
     <Routes>
@@ -39,6 +42,7 @@ const UserRoute: React.FC = () => {
       <Route path="/auction-items" element={<AuctionItems />} />
       <Route path="/auction-page/:id" element={<AuctionPage />} />
       <Route path="/chat" element={<ChatPage />} />
+      <Route path="/seller-profile" element={<SellerProfilePage />} />
       {/* Profile Routees */}
       <Route path="/profile" element={<UserProtectedRoute element={Profile} />}>
         <Route path="dashboard" element={<UserDashBoard />} />
@@ -46,13 +50,20 @@ const UserRoute: React.FC = () => {
         <Route path="address" element={<AddressPage />} />
         <Route path="orders" element={<OrdersPage />} />
 
-        <Route path="seller" element={<UserProtectedRoute element={Seller} />}>
+        <Route path="seller" element={<UserProtectedRoute element={SellerDashBord} />}>
+          <Route
+            path="dashboard"
+            element={<UserProtectedRoute element={SellerDashboardComponent} />}
+          />
           <Route
             path="product-management"
             element={<UserProtectedRoute element={ProductManagment} />}
           />
-<Route path="addproduct/:productId?" element={<UserProtectedRoute element={ProductListingForm} />} />
-<Route
+          <Route
+            path="addproduct/:productId?"
+            element={<UserProtectedRoute element={ProductListingForm} />}
+          />
+          <Route
             path="editproduct/:productId"
             element={<UserProtectedRoute element={EditProductForm} />}
           />
