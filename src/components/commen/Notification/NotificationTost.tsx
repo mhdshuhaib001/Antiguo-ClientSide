@@ -1,21 +1,27 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 interface NotificationProps {
   title: string;
   body: string;
   imageUrl: string;
   auctionTitle?: string;
+  redirectUrl?: string; 
 }
 
-export default function CustomNotification({ title, body, imageUrl, auctionTitle }: NotificationProps) {
-  const [isVisible, setIsVisible] = useState(true)
+export default function CustomNotification({ title, body, imageUrl, auctionTitle, redirectUrl }: NotificationProps) {
+  const [isVisible, setIsVisible] = useState(true);
 
-  if (!isVisible) return null
+  React.useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(false), 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!isVisible) return null;
 
   return (
-    <div className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-xs bg-white border border-amber-200 rounded-md shadow-sm z-50">
+    <a href={redirectUrl} className="fixed left-1/2 top-3 transform -translate-x-1/2 cursor-pointer w-full max-w-xs bg-white border border-amber-200 rounded-md shadow-sm z-50" target="_blank" rel="noopener noreferrer">
       <div className="p-3">
         <div className="flex items-start space-x-3">
           <div className="relative flex-shrink-0">
@@ -39,7 +45,10 @@ export default function CustomNotification({ title, body, imageUrl, auctionTitle
               </div>
               <button 
                 className="text-amber-600 hover:text-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 ml-2"
-                onClick={() => setIsVisible(false)}
+                onClick={(e) => {
+                  e.preventDefault(); 
+                  setIsVisible(false);
+                }}
               >
                 <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -57,6 +66,6 @@ export default function CustomNotification({ title, body, imageUrl, auctionTitle
           <span>Just now</span>
         </div>
       </div>
-    </div>
-  )
+    </a>
+  );
 }

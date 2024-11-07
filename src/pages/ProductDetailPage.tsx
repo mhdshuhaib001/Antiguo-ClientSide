@@ -82,19 +82,18 @@ export default function ProductPage() {
   }, [productData]);
 
   // Calculate the time left
-  console.log(productData?.auctionStartDateTime, 'the date and time ');
   const auctionStartDate = new Date(productData?.auctionStartDateTime || Date.now());
-  console.log(auctionStartDate, 'auctionStartDate');
   const auctionEndDate = new Date(productData?.auctionEndDateTime || Date.now());
   const isAuctionStarted = Date.now() >= auctionStartDate.getTime();
-  console.log(isAuctionStarted, 'auction date and time');
   const daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
   const hoursLeft = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutesLeft = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
   const secondsLeft = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
+
+  const isAuctionEnded = Date.now() > auctionEndDate.getTime();
+
   const handleSelectMethod = (method: string, notificationData: any) => {
-    console.log(notificationData, 'daataa in the handle selectedMethod');
     setSelectedMethod(method);
     setShowNotificationModal(false);
     handleNotifyMe(productData?._id || '', userId, method, notificationData);
@@ -107,15 +106,17 @@ export default function ProductPage() {
     notificationData: any,
   ) => {
     try {
-      const { phoneNumber, email } = notificationData;
+      const { countryCode, phoneNumber, email } = notificationData;
       let fcmToken = null;
       if (method === 'Notification') {
         fcmToken = await generateToken();
+        console.log(method, fcmToken);
+
         await subscribeNotification({ auctionId, userId, fcmToken });
+        setShowNotificationModal(false);
       } else if (method === 'WhatsApp' && phoneNumber) {
-        await subscribeNotification({ auctionId, userId, phoneNumber });
+        await subscribeNotification({ auctionId, userId, countryCode, phoneNumber });
       } else if (method === 'Email' && email) {
-        console.log('ivide data ethittaaa ');
         await subscribeNotification({ auctionId, userId, email });
       }
       toast.success('auction Notification Send');
@@ -131,7 +132,7 @@ export default function ProductPage() {
   return (
     <>
       <Header />
-      <div className="container mx-auto px-4 py-8 bg-backgroundColor">
+      <div className="container mx-auto px-4 py-8 bg-main-bg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Image Gallery */}
           <div className="flex space-x-4">
@@ -143,7 +144,7 @@ export default function ProductPage() {
                     key={index}
                     onClick={() => setMainImage({ src: image, alt: `Thumbnail ${index + 1}` })}
                     className={`relative overflow-hidden rounded-lg transition-transform duration-300 transform hover:scale-105 ${
-                      mainImage?.src === image ? 'border-2 border-blue-500' : ''
+                      mainImage?.src === image ? 'border-2 border-amber-500' : ''
                     }`}
                   >
                     <img
@@ -190,7 +191,7 @@ export default function ProductPage() {
                     ? new Date(productData.auctionEndDateTime).toLocaleString()
                     : 'N/A'}
                 </div>
-                {isAuctionStarted ? (
+                {!isAuctionEnded &&isAuctionStarted ? (
                   <div className="grid grid-cols-4 gap-2 text-center">
                     <div className="bg-white p-2 rounded shadow">
                       <div className="text-2xl font-bold">{daysLeft}</div>

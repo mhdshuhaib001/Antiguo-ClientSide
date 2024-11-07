@@ -194,8 +194,8 @@ export default function OrderManagementTable() {
                     className="bg-amber-50 border border-amber-200 rounded px-2 py-1 text-amber-900"
                   >
                     <option value="pending">pending</option>
-                    <option value="completed">completed</option>
-                    <option value="canceled">canceled</option>
+                    <option value="shipped">shipped</option>
+                    <option value="deliverd">deliverd</option>
                   </select>
                 </td>
               </tr>

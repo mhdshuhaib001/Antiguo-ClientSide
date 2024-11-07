@@ -102,7 +102,7 @@ const Registration: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
+    <div className="flex flex-col md:flex-row h-screen bg-amber-50">
       {/* Left Side */}
       <div className="w-full md:w-1/2 flex items-center justify-center relative p-4">
         <div
@@ -136,7 +136,7 @@ const Registration: React.FC = () => {
       </div>
 
       {/* Right Side */}
-      <div className="w-full md:w-1/2 bg-white flex items-center justify-center p-4">
+      <div className="w-full md:w-1/2 bg-amber-50 flex items-center justify-center p-4">
         <div className="w-full max-w-sm p-6 bg-white rounded-lg shadow-lg">
           {/* Conditional Rendering for Login and Signup */}
           {showLogin ? (
@@ -165,7 +165,7 @@ const Registration: React.FC = () => {
             <>
               {showLogin ? (
                 <>
-                  <div className="text-center mb-4">
+                  <div className="text-center mb-4 ">
                     <p className="text-gray-600">
                       Don't have an account?{' '}
                       <button
@@ -184,7 +184,7 @@ const Registration: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <div className="text-center mb-4">
+                  <div className="text-center mb-4 ">
                     <p className="text-gray-600">
                       Already have an account?{' '}
                       <button

@@ -26,7 +26,7 @@ interface FCMNotificationPayload {
 
 const App: React.FC = () => {
   const [fcmToken, setFcmToken] = useState<string | null>(null);
-  const [initialLoad, setInitialLoad] = useState(true); // Track initial load state
+  const [initialLoad, setInitialLoad] = useState(true); 
 
   useEffect(() => {
     const fcmtoken = async () => {
@@ -39,19 +39,18 @@ const App: React.FC = () => {
     };
     fcmtoken();
 
-    // Set initialLoad to false once the app has loaded
     setInitialLoad(false);
   }, []);
 
   onMessageListener().then((payload) => {
     const notificationPayload = payload as FCMNotificationPayload;
-    console.log('payload appp', notificationPayload);
     toast.custom((_t) => (
       <NotificationToast
         title={notificationPayload?.notification?.title || 'No Title'}
         body={notificationPayload?.notification?.body || 'No body'}
         imageUrl={notificationPayload?.data?.auctionImage || '/default-image.jpg'}
         auctionTitle={notificationPayload?.data?.auctionTitle || 'No Auction Title'}
+        redirectUrl={notificationPayload?.data?.productUrl|| ''}
       />
     ));
   }).catch((err) => {

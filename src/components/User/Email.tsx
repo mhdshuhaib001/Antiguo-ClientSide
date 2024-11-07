@@ -30,7 +30,7 @@ const Email: React.FC = () => {
         toast.success(result.message);
   
         setTimeout(()=>{
-          navigate('/signup')
+          navigate('/registration')
         },3000)
  
   

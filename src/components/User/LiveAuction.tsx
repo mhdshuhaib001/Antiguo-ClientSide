@@ -1,6 +1,3 @@
-
-
-
 // import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 // import { useParams } from 'react-router-dom';
 // import { ChevronRight } from 'lucide-react';
@@ -28,7 +25,7 @@
 //   const userData = useSelector((state: RootState) => state.User);
 //   const userId = userData._id;
 //   const { id } = useParams<{ id: string }>();
-  
+
 //   // Queries and Mutations
 //   const { data, error, isLoading } = useGetProductByIdQuery(id);
 //   const { data: auctionData } = useGetAuctionByIdQuery(id);
@@ -53,7 +50,7 @@
 //   const handleCheckWinner = useCallback(async () => {
 //     try {
 //       const response = await getWinner(id).unwrap();
-      
+
 //       // Notify all users about auction end
 //       if (socketRef.current) {
 //         socketRef.current.emit('auction_ended', {
@@ -72,7 +69,7 @@
 //         setModalMessage(`The auction has ended. The winning bid was $${response.winningBid}.`);
 //       }
 //       setIsModalOpen(true);
-      
+
 //     } catch (error) {
 //       console.error('Error determining auction winner:', error);
 //       toast.error('An error occurred while determining the auction winner.');
@@ -90,15 +87,14 @@
 //     if (isEnded && productData) {
 //       // Disable bidding UI
 //       setIsPlacingBid(true);
-      
+
 //       // Show auction ended message
 //       toast.error('This auction has ended');
-      
+
 //       // Automatically check winner if not already checked
 //       handleCheckWinner();
 //     }
 //   }, [isEnded, productData, handleCheckWinner]);
-
 
 //   // Generate Quick Bids
 //   const generateQuickBids = useCallback((currentBidValue: number) => {
@@ -131,7 +127,7 @@
 //         const updatedBids = [updatedBid, ...bids]
 //           .sort((a, b) => b.amount - a.amount)
 //           .slice(0, 5);
-        
+
 //         setBids(updatedBids);
 //         setCurrentBid(updatedBids[0].amount);
 //       } catch (error) {
@@ -170,9 +166,9 @@
 //         time: new Date(bid.time),
 //         avatar: bid.avatar || 'default_avatar_url',
 //       }));
-      
+
 //       const sortedBids = fetchedBids.sort((a, b) => b.amount - a.amount).slice(0, 5);
-      
+
 //       setBids(sortedBids);
 //       if (sortedBids.length > 0) {
 //         setCurrentBid(sortedBids[0].amount);
@@ -383,21 +379,6 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
@@ -407,7 +388,11 @@ import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
 
 import { useGetProductByIdQuery } from '../../services/apis/productApi';
-import { useGetAuctionByIdQuery, usePlaceBidMutation, useCheckAuctionWinnerMutation } from '../../services/apis/auctionApi';
+import {
+  useGetAuctionByIdQuery,
+  usePlaceBidMutation,
+  useCheckAuctionWinnerMutation,
+} from '../../services/apis/auctionApi';
 import { RootState } from '../../store/Store';
 import SellerProfileCard from '../Seller/SellerProfileCard';
 import AuctionSkelton from '../commen/Skelton/AuctionSkelton';
@@ -422,19 +407,16 @@ type Bid = {
   avatar: string | undefined;
 };
 
-
-
-
-
 export default function RealTimeBidding() {
   const userData = useSelector((state: RootState) => state.User);
   const userId = userData._id;
   const { id } = useParams<{ id: string }>();
-  
+
   // Queries and Mutations
   const { data, error, isLoading } = useGetProductByIdQuery(id);
   const { data: auctionData } = useGetAuctionByIdQuery(id);
   const [placeBid] = usePlaceBidMutation();
+  console.log(auctionData, 'bid dataaaaaaaaaaaaaaa');
 
   const [customBid, setCustomBid] = useState('');
   const [currentBid, setCurrentBid] = useState(0);
@@ -450,7 +432,9 @@ export default function RealTimeBidding() {
     productTitle: string;
     checkoutLink: string;
   } | null>(null);
-
+  const isBiddingDisabled = () => {
+    return isAuctionEnded || isPlacingBid || isEnded;
+  };
   // Refs and Socket
   const socketRef = useRef<any>(null);
 
@@ -465,12 +449,9 @@ export default function RealTimeBidding() {
     }
   }, [productData]);
 
-
   const { timeLeft, isEnded } = useAuctionTimer({
     endDateTime: productData?.auctionEndDateTime || new Date(),
   });
-
-
 
   // Generate Quick Bids
   const generateQuickBids = useCallback((currentBidValue: number) => {
@@ -500,10 +481,8 @@ export default function RealTimeBidding() {
           time: new Date(),
           avatar: newBid.avatar,
         };
-        const updatedBids = [updatedBid, ...bids]
-          .sort((a, b) => b.amount - a.amount)
-          .slice(0, 5);
-        
+        const updatedBids = [updatedBid, ...bids].sort((a, b) => b.amount - a.amount).slice(0, 5);
+
         setBids(updatedBids);
         setCurrentBid(updatedBids[0].amount);
       } catch (error) {
@@ -513,10 +492,6 @@ export default function RealTimeBidding() {
 
     socket.on('auction_winner', (data) => {
       console.log('Received winner notification:', data);
-      setIsAuctionEnded(true);
-      setWinnerDetails(data);
-      setIsModalOpen(true); 
-  
       if (data.winnerId === userId) {
         toast.success('Congratulations! You won the auction!', {
           duration: 5000,
@@ -528,6 +503,10 @@ export default function RealTimeBidding() {
           position: 'top-center',
         });
       }
+
+      setIsAuctionEnded(true);
+      setWinnerDetails(data);
+      setIsModalOpen(true);
     });
 
     return () => {
@@ -538,7 +517,8 @@ export default function RealTimeBidding() {
 
   useEffect(() => {
     if (productData) {
-      const initialBid = productData.reservePrice;
+      const initialBid =
+        productData.currentBid !== null ? productData.currentBid : productData.reservePrice;
       setCurrentBid(initialBid);
       setQuickBids(generateQuickBids(initialBid));
     }
@@ -554,9 +534,9 @@ export default function RealTimeBidding() {
         time: new Date(bid.time),
         avatar: bid.avatar || 'default_avatar_url',
       }));
-      
+
       const sortedBids = fetchedBids.sort((a, b) => b.amount - a.amount).slice(0, 5);
-      
+
       setBids(sortedBids);
       if (sortedBids.length > 0) {
         setCurrentBid(sortedBids[0].amount);
@@ -659,7 +639,9 @@ export default function RealTimeBidding() {
             </div>
             <div>
               <p className="text-gray-600">Current Price:</p>
-              <p className="text-2xl font-bold text-green-600">$ {currentBid.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-green-600">
+                $ {currentBid || productData.reservePrice}
+              </p>
             </div>
           </div>
           <div className="bg-gray-100 p-4 rounded-lg">
@@ -750,6 +732,7 @@ export default function RealTimeBidding() {
             <input
               type="number"
               value={customBid}
+              disabled={isBiddingDisabled()}
               onChange={(e) => setCustomBid(e.target.value)}
               placeholder="Enter your bid"
               className="flex-grow px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-300"
@@ -763,17 +746,14 @@ export default function RealTimeBidding() {
           </form>
         </div>
       </div>
-        {/* AuctionResultModal component */}
-        <AuctionResultModal
+      <AuctionResultModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         isWinner={winnerDetails?.winnerId === userId}
         productTitle={productData?.itemTitle}
-        winningBid={winnerDetails?.winningBid}
-        checkoutLink={winnerDetails?.checkoutLink}
+        winningBid={winnerDetails?.winningBid || 0}
+        checkoutLink={winnerDetails?.checkoutLink || ''}
       />
     </div>
   );
 }
-
-

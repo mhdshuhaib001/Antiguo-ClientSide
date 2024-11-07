@@ -11,16 +11,22 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomID, userID, onEndCall }) => {
   const zpRef = useRef<any>(null);
 
   useEffect(() => {
-    const appID = parseInt(import.meta.env.VITE_ZEGO_APP_ID || '0', 10); 
+    const appID = parseInt(import.meta.env.VITE_ZEGO_APP_ID);
     const serverSecret = import.meta.env.VITE_ZEGO_SERVER_SECRET || '';
     console.log('App ID:', appID);
     console.log('Server Secret:', serverSecret);
-    
+
     if (!appID || !serverSecret) {
-      console.error("Missing Zego App ID or Server Secret");
-      return; 
+      console.error('Missing Zego App ID or Server Secret');
+      return;
     }
-    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, 'User-' + userID);
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
+      appID,
+      serverSecret,
+      roomID,
+      userID,
+      'User-' + userID,
+    );
 
     try {
       zpRef.current = ZegoUIKitPrebuilt.create(kitToken);

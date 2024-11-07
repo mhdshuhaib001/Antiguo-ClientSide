@@ -32,14 +32,25 @@ const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
-  const { id } = useParams<{ id: string }>();
-  console.log(id,'this is the ad of the things ')
+  // const { id } = useParams<{ id: string }>();
+  // console.log(id,'this is the ad of the things ')
   const userId = useSelector((state: RootState) => state.User._id);
-
+  const { id, token } = useParams<{ id: string; token: string }>();
   const [createCheckoutSession] = useCreateCheckoutSessionMutation();
+
+  // let decodedUserId :string|undefined
+  // if(token){
+  //   try {
+  //     const decoded = jwtDecode<{ _id: string }>(token);
+
+  //   } catch (error) {
+
+  //   }
+  // }
+
   const { data: address, isLoading: isLoadingAddress } = useGetAddressQuery(userId);
   const { data: product, isLoading: isLoadingProduct } = useGetProductByIdQuery(id);
-console.log(address,'this is the arress')
+  console.log(product, 'this is the arress');
   const productData = product?.productData || {
     _id: '',
     images: [''],
@@ -79,7 +90,7 @@ console.log(address,'this is the arress')
     const selectedAddressId = e.target.value;
 
     if (address && address.length > 0) {
-      const selected = address.find((addr) => addr._id === selectedAddressId);
+      const selected = address.find((addr: any) => addr._id === selectedAddressId);
 
       if (selected) {
         setFormData({
@@ -105,20 +116,19 @@ console.log(address,'this is the arress')
   }, [navigate]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Selected payment method:', paymentMethod);
-
+  
     if (!selectedAddress) {
       toast.error('Please select a delivery address.');
       return;
     }
-
+  
     if (!paymentMethod) {
       toast.error('Please select a payment method.');
       return;
     }
-
+  
     if (!stripe || !elements) return;
-
+  
     if (paymentMethod === 'stripe') {
       const orderData = {
         buyerId: userId,
@@ -126,24 +136,24 @@ console.log(address,'this is the arress')
         addressId: selectedAddress,
         productId: productData._id,
       };
-
+  
       try {
         const orderResponse = await createOrder(orderData);
-        console.log(orderResponse, 'orderResponse');
         const orderId = orderResponse.data;
-
+  
+        let price = productData.finalBidAmount ? productData.finalBidAmount : productData.reservePrice;
         const product = {
           image: productData.images[0],
           name: productData.itemTitle,
-          price: productData.reservePrice,
+          price: price,
           orderId: orderId,
         };
-
+  
         const sessionResponse = await createCheckoutSession(product);
         const sessionId = sessionResponse.data?.id;
-
+  
         const result = await stripe.redirectToCheckout({ sessionId });
-
+  
         if (result.error) {
           console.error(result.error.message);
           setErrorMessage(result.error.message || 'Failed to process payment. Please try again.');
@@ -211,7 +221,7 @@ console.log(address,'this is the arress')
                       ) : address && address.length >= 1 ? (
                         <div className="space-y-2">
                           <h3 className="text-lg font-semibold text-gray-800">Your Addresses:</h3>
-                          {address.map((addr) => (
+                          {address.map((addr: any) => (
                             <div key={addr._id} className="border border-gray-300 rounded-md p-4">
                               <label className="flex items-center space-x-2">
                                 <input
@@ -249,7 +259,6 @@ console.log(address,'this is the arress')
                           ))}
                         </div>
                       ) : (
-                
                         <div>
                           <button onClick={() => navigate('/profile/address')}>Add Address</button>
                         </div>
@@ -280,27 +289,58 @@ console.log(address,'this is the arress')
                       <div className="space-y-2">
                         <div className="flex justify-between text-gray-800">
                           <span>{productData.itemTitle}</span>
-                          <span>$ {productData.reservePrice}</span>
+                          <span>
+                            ${' '}
+                            {productData.reservePrice }
+                          </span>
                         </div>
 
+                        {productData.auctionStatus === 'sold' && (
+                          <div className="mt-2 bg-gray-100 p-4 rounded-md border border-amber-300">
+                            <h3 className="text-xl font-semibold text-gray-800">
+                              Final Bid Amount
+                            </h3>
+                            <div className="flex justify-between text-gray-800">
+                              <span>Final Bid:</span>
+                              <span>${productData.finalBidAmount}</span>
+                            </div>
+                          </div>
+                        )}
+
                         <div className="border-t border-amber-300 my-2 pt-2"></div>
+
                         <div className="flex justify-between text-gray-800">
                           <span>Subtotal</span>
-                          <span>$ {productData.sold ? productData.finalBidAmount : productData.reservePrice}</span>
-                          </div>
+                          <span>
+                            ${' '}
+                            {productData.auctionStatus === 'sold'
+                              ? productData.finalBidAmount
+                              : productData.reservePrice}
+                          </span>
+                        </div>
+
+                        {/* Show Shipping cost */}
                         <div className="flex justify-between text-gray-800">
                           <span>Shipping</span>
                           <span>$ {productData.shippingCost}</span>
                         </div>
 
                         <div className="border-t border-amber-300 my-2 pt-2"></div>
+
+                        {/* Calculate the Total based on auction status */}
                         <div className="flex justify-between font-semibold text-gray-900">
                           <span>Total</span>
-                          $ {(productData.sold ? productData.finalBidAmount : productData.reservePrice) + productData.shippingCost}
-                          </div>
+                          <span>
+                            ${' '}
+                            {(productData.auctionStatus === 'sold'
+                              ? productData.finalBidAmount
+                              : productData.reservePrice) + productData.shippingCost}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
+
                   <button
                     type="submit"
                     disabled={loading}

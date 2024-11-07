@@ -3,6 +3,7 @@ import { AuthRequest, AuthResponse } from '../../interface/userTypes/apiTypes';
 import { getToken } from '../../utils/getHelper';
 import { Address } from '../../interface/userTypes/apiTypes';
 import { Category } from '../../interface/adminTypes/adminApiTypes';
+import { ChangePasswordType } from '../../interface/userTypes/changePasswordType';
 
 export const ApiSlice = createApi({
   reducerPath: 'userApi',
@@ -100,7 +101,16 @@ export const ApiSlice = createApi({
     }),
     fetchCategories: builder.query<Category[], void>({
       query: () => '/api/user/categories',
+    }),
+
+    changePassword: builder.mutation<ChangePasswordType, { userId:string,currentPassword: string; newPassword: string; confirmPassword: string }>({
+      query: ({userId, currentPassword, newPassword, confirmPassword }) => ({
+        url: '/api/user/change-password',
+        method: 'POST',
+        body: {userId, currentPassword, newPassword, confirmPassword }
+      })
     })
+    
   }),
 });
 
@@ -119,4 +129,5 @@ export const {
   useUpdateAddressMutation,
   useDeleteAddressMutation,
   useFetchCategoriesQuery,
+  useChangePasswordMutation
 } = ApiSlice;

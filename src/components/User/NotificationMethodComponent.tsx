@@ -19,11 +19,14 @@ const countryCodes = [
 interface NotificationMethodSelectorProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectMethod: (method: string, data?: { phoneNumber?: string; countryCode?: string; email?: string }) => void;
+  onSelectMethod: (
+    method: string,
+    data?: { phoneNumber?: string; countryCode?: string; email?: string },
+  ) => void;
 }
 
 interface NotificationData {
-  method: string | null; 
+  method: string | null;
   phoneNumber?: string;
   countryCode?: string;
   email?: string;
@@ -46,19 +49,26 @@ const NotificationMethodSelector: React.FC<NotificationMethodSelectorProps> = ({
   const [email, setEmail] = useState('');
 
   const handleSelect = (label: string) => {
-    setSelectedMethod(label);
-  };
-
-  const isValidWhatsAppNumber = (number: string) => {
-    const whatsappRegex = /^[0-9]{10,15}$/; // Adjust this regex as necessary
-    return whatsappRegex.test(number);
+    if (label === 'Notification') {
+      const notificationData: NotificationData = { method: 'Notification' };
+      onSelectMethod(notificationData.method??'', notificationData);
+      onClose();
+    } else {
+      setSelectedMethod(label);
+    }
   };
   
+
+  const isValidWhatsAppNumber = (number: string) => {
+    const whatsappRegex = /^[0-9]{10,15}$/;
+    return whatsappRegex.test(number);
+  };
+
   const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
-  
+
   const handleSubmit = () => {
     if (selectedMethod === 'WhatsApp' && !isValidWhatsAppNumber(whatsappNumber)) {
       toast.error('Please enter a valid WhatsApp number.');
@@ -68,23 +78,25 @@ const NotificationMethodSelector: React.FC<NotificationMethodSelectorProps> = ({
       toast.error('Please enter a valid email address.');
       return;
     }
-  
+
     const notificationData: NotificationData = { method: selectedMethod };
-  
+
     if (selectedMethod === 'WhatsApp' && whatsappNumber) {
       notificationData.phoneNumber = whatsappNumber;
-      notificationData.countryCode = countryCode; 
+      notificationData.countryCode = countryCode;
     } else if (selectedMethod === 'Email' && email) {
       notificationData.email = email;
+    } else if (selectedMethod === 'Notification') {
+      console.log('this is the normal notification area ');
+      notificationData.method = 'Notification';
     }
-  
+
     if (notificationData.method) {
-      console.log(notificationData,'this was the notificationDattaa')
-      onSelectMethod(notificationData.method, notificationData); 
+      console.log(notificationData, 'this was the notificationDattaa');
+      onSelectMethod(notificationData.method, notificationData);
     }
     onClose();
   };
-  
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="bg-white max-w-2xl mx-auto max-h-full">

@@ -438,7 +438,7 @@ export default function HeroSection() {
               >
                 <motion.a
                   href="#start-bidding"
-                  className="rounded-md bg-amber-700 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-amber-600"
+                  className="rounded-md bg-gray-700 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-600"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

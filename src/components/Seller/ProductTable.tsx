@@ -13,16 +13,16 @@ const ProductListTable: React.FC = () => {
   const [deleteProduct] = useDeleteProductMutation();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<any>(null); // State to hold the selected product
+  const [selectedProduct, setSelectedProduct] = useState<any>(null); 
 
   const handleImageClick = (product: any) => {
-    setSelectedProduct(product); // Set the selected product
+    setSelectedProduct(product);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedProduct(null); // Clear selected product when closing modal
+    setSelectedProduct(null); 
   };
 
   useEffect(() => {
@@ -79,11 +79,13 @@ const ProductListTable: React.FC = () => {
                           alt={product.itemTitle}
                           width={40}
                           height={40}
-                          onClick={() => handleImageClick(product)} // Pass the product to the click handler
-                          className="rounded-full cursor-pointer" // Add cursor pointer for clarity
+                          onClick={() => handleImageClick(product)} 
+                          className="rounded-full cursor-pointer"
                         />
                       </div>
-                      <span className="font-medium uppercase">{product.itemTitle}</span>
+                      <span className="font-medium uppercase text-sm">
+  {product.itemTitle.length > 20 ? `${product.itemTitle.slice(0, 20)}...` : product.itemTitle}
+</span>
                     </div>
                   </td>
                   <td className="py-3 px-2 sm:px-6 text-left">${product.reservePrice}</td>
@@ -163,12 +165,7 @@ const ProductListTable: React.FC = () => {
           <button className="relative inline-flex items-center px-4 py-2 border border-amber-200 bg-amber-500 text-sm font-medium text-white hover:bg-amber-400 transition duration-300">
             1
           </button>
-          <button className="relative inline-flex items-center px-4 py-2 border border-amber-200 bg-white text-sm font-medium text-amber-900 hover:bg-amber-50 transition duration-300">
-            2
-          </button>
-          <button className="relative inline-flex items-center px-4 py-2 border border-amber-200 bg-white text-sm font-medium text-amber-900 hover:bg-amber-50 transition duration-300">
-            3
-          </button>
+
           <button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-amber-200 bg-white text-sm font-medium text-amber-900 hover:bg-amber-50 transition duration-300">
             Next
           </button>
