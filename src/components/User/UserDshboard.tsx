@@ -43,27 +43,7 @@ const biddingSummary = [
     status: 'Cancel',
     date: 'June 2, 2024',
   },
-  {
-    id: '12584885548',
-    name: 'Renaissance Art',
-    amount: '$2100',
-    status: 'Winning',
-    date: 'June 8, 2024',
-  },
-  {
-    id: '12584885563',
-    name: 'Impressionism Art',
-    amount: '$2200',
-    status: 'Winning',
-    date: 'June 21, 2024',
-  },
-  {
-    id: '12584885589',
-    name: 'Romanticism Art',
-    amount: '$2300',
-    status: 'Cancel',
-    date: 'June 9, 2024',
-  },
+
 ];
 
 const UserDashBoard: React.FC = () => {

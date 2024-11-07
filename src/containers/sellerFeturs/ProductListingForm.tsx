@@ -6,13 +6,12 @@ import { Upload } from 'lucide-react';
 import { productListingSchema } from '../../utils/hooks/ProductValidation';
 import { Field, Formik, Form, ErrorMessage, FieldProps } from 'formik';
 import toast from 'react-hot-toast';
-import { DatePicker, DateValue } from '@nextui-org/react';
+import { DatePicker } from '@nextui-org/react';
 import {
-  parseDate,
+  
   CalendarDate,
   CalendarDateTime,
   ZonedDateTime,
-  getLocalTimeZone,
 } from '@internationalized/date';
 import { useNavigate, useParams } from 'react-router-dom';
 import ImageEditModal from '../../components/Seller/EditImageComponent';
@@ -20,7 +19,7 @@ import { useFetchCategoriesQuery } from '../../services/apis/userApi';
 import { useGetProductQuery, useGetProductByIdQuery } from '../../services/apis/productApi';
 
 interface FormValues {
-  itemTitle: string;
+  itemTitle: string;  
   categoryId: string;
   description: string;
   condition: string;
@@ -38,10 +37,10 @@ interface FormValues {
 const ProductListingForm: React.FC = () => {
   const { productId } = useParams<{ productId?: string }>();
 
-  console.log(productId, 'ithe vanaa mathi ');
   const { data: productDetails, isLoading: isProductLoading } = useGetProductQuery(productId, {
     skip: !productId,
   });
+  console.log(productDetails,'this si the productDetails')
   const { data: categories, isLoading: isCategoriesLoading } = useFetchCategoriesQuery();
   const sellerId = useSelector((state: RootState) => state.Seller.sellerId);
   const [auctionFormat, setAuctionFormat] = useState('');
@@ -68,7 +67,6 @@ const ProductListingForm: React.FC = () => {
     auctionEndDateTime: null,
     images: [],
   });
-  console.log(initialValues, 'this is the initial value');
   const compareDates = (date1: CalendarDateTime, date2: CalendarDateTime): number => {
     if (date1.year !== date2.year) return date1.year - date2.year;
     if (date1.month !== date2.month) return date1.month - date2.month;
@@ -141,22 +139,42 @@ const ProductListingForm: React.FC = () => {
       (image: any): image is string => typeof image === 'string',
     );
     setPreviewSource(imageUrls);
+  
     const initialData: FormValues = {
       itemTitle: productDetails.itemTitle || '',
-      categoryId: productDetails.categoryId|| productDetails.category || '',
+      categoryId: productDetails.categoryId || productDetails.category || '',
       description: productDetails.description || '',
       condition: productDetails.condition || '',
       auctionFormat: productDetails.auctionFormat || '',
-      reservePrice: productDetails.reservePrice || '',
+      reservePrice: productDetails.reservePrice?.toString() || '',
       shippingType: productDetails.shippingType || '',
-      shippingCost: productDetails.shippingCost || '',
+      shippingCost: productDetails.shippingCost?.toString() || '',
       handlingTime: productDetails.handlingTime || '',
       returnPolicy: productDetails.returnPolicy || '',
-      auctionStartDateTime: convertToCalendarDateTime(productDetails.auctionStartDateTime),
-      auctionEndDateTime: convertToCalendarDateTime(productDetails.auctionEndDateTime),
+      auctionStartDateTime:
+        productDetails.auctionStartDateTime &&
+        new CalendarDateTime(
+          new Date(productDetails.auctionStartDateTime).getUTCFullYear(),
+          new Date(productDetails.auctionStartDateTime).getUTCMonth() + 1,
+          new Date(productDetails.auctionStartDateTime).getUTCDate(),
+          new Date(productDetails.auctionStartDateTime).getUTCHours(),
+          new Date(productDetails.auctionStartDateTime).getUTCMinutes(),
+          new Date(productDetails.auctionStartDateTime).getUTCSeconds(),
+        ),
+      auctionEndDateTime:
+        productDetails.auctionEndDateTime &&
+        new CalendarDateTime(
+          new Date(productDetails.auctionEndDateTime).getUTCFullYear(),
+          new Date(productDetails.auctionEndDateTime).getUTCMonth() + 1,
+          new Date(productDetails.auctionEndDateTime).getUTCDate(),
+          new Date(productDetails.auctionEndDateTime).getUTCHours(),
+          new Date(productDetails.auctionEndDateTime).getUTCMinutes(),
+          new Date(productDetails.auctionEndDateTime).getUTCSeconds(),
+        ),
       images: [],
     };
-
+  
+console.log(initialData,'initialData=====')
     setInitialValue(initialData);
   }, [productDetails]);
 
@@ -167,7 +185,7 @@ const ProductListingForm: React.FC = () => {
       const newUrls: string[] = newFilesArray.map((file) => URL.createObjectURL(file));
   
       setPreviewSource((prev) => [...prev, ...newUrls]);
-      setFieldValue('images', newFilesArray);  // Ensure Formik's images field is updated here
+      setFieldValue('images', newFilesArray);  
     }
   };
   
@@ -574,7 +592,7 @@ const ProductListingForm: React.FC = () => {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className={`w-full bg-black hover:bg-gray-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center ${isAddProductLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`w-full bg-gray-900 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center ${isAddProductLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 // disabled={isAddProductLoading}
               >
                 {isAddProductLoading ? (

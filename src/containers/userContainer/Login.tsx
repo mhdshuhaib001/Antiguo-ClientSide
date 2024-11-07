@@ -30,7 +30,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
       try {
         const result: AuthResponse = await login(user).unwrap();
-        
+        console.log(result,'this is the result i get')
         onLogin(result);
       } catch (error: any) {
         if (error?.data?.errors) {
@@ -101,7 +101,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         <button
           type="submit"
           disabled={formik.isSubmitting}
-          className="w-full bg-black hover:bg-gray-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
+          className="w-full bg-gray-800 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
         >
           {formik.isSubmitting ? 'Signing In...' : 'Sign In'}
         </button>

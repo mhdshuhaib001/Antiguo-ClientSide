@@ -1,13 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
-  
   SellerCreationRequest,
   SellerResponse,
   AddProductResponse,
   ProductsResponse,
 } from '../../interface/sellerTypes/sellerApiTypes';
-import {ProductType} from '../../interface/productTypes/productType'
+import { ProductType } from '../../interface/productTypes/productType';
 import { OrderResponse } from '../../interface/orderTypes/orderType';
+import { Review } from '../../interface/reviewTypes/review';
 
 export const sellerApi = createApi({
   reducerPath: 'sellerApi',
@@ -47,7 +47,6 @@ export const sellerApi = createApi({
         method: 'GET',
       }),
     }),
-    
 
     addProduct: builder.mutation<any, FormData>({
       query: (formData) => ({
@@ -68,7 +67,7 @@ export const sellerApi = createApi({
         method: 'GET',
       }),
     }),
-    
+
     getProduct: builder.query<any, string>({
       query: (productId) => ({
         url: `/api/products/getProduct/${productId}`,
@@ -81,7 +80,10 @@ export const sellerApi = createApi({
         method: 'DELETE',
       }),
     }),
-    updateProduct: builder.mutation<AddProductResponse, { productId: string; formData: ProductType }>({
+    updateProduct: builder.mutation<
+      AddProductResponse,
+      { productId: string; formData: ProductType }
+    >({
       query: ({ productId, formData }) => ({
         url: `/api/seller/updateProduct/${productId}`,
         method: 'PUT',
@@ -93,7 +95,7 @@ export const sellerApi = createApi({
         url: `/api/seller/orders/${sellerId}`,
         method: 'GET',
       }),
-    }),     
+    }),
     updateOrderStatus: builder.mutation<void, { orderId: string; status: string }>({
       query: ({ orderId, status }) => ({
         url: `/api/seller/order/${orderId}`,
@@ -107,18 +109,38 @@ export const sellerApi = createApi({
         method: 'GET',
       }),
     }),
-    updateProductData: builder.mutation<AddProductResponse, { productId: string; formData: FormData }>({
+    updateProductData: builder.mutation<
+      AddProductResponse,
+      { productId: string; formData: FormData }
+    >({
       query: ({ productId, formData }) => ({
         url: `/api/seller/updateProduct/${productId}`,
         method: 'PUT',
         body: formData,
       }),
     }),
-    
-    
-    
+    fetchSellerProfile: builder.query<any, string>({
+      query: (sellerId) => ({
+        url: `/api/seller/${sellerId}/full-profile`,
+        method: 'GET',
+      }),
+    }),
+    addReview: builder.mutation<Review, Partial<Review>>({
+      query: (newReview) => ({
+        url: '/api/seller/review',
+        method: 'POST',
+        body: newReview,
+      }),
+    }),
+    getSellerDashboard: builder.query<any, { sellerId: string; timeframe: string }>({
+      query: ({ sellerId, timeframe }) => ({
+        url: `/api/seller/${sellerId}/dashboard`,
+        method: 'GET',
+        params: { timeframe },
+      }),
+      transformResponse: (response: { success: boolean; data: any }) => response.data,
+    }),
   }),
-
 });
 
 export const {
@@ -133,5 +155,8 @@ export const {
   useFetchOrdersQuery,
   useUpdateOrderStatusMutation,
   useFetchAllSellerQuery,
-  useUpdateProductMutation
+  useUpdateProductMutation,
+  useFetchSellerProfileQuery,
+  useAddReviewMutation,
+  useGetSellerDashboardQuery
 } = sellerApi;

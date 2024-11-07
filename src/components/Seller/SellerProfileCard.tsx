@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Image } from '@nextui-org/react';
 import { ReportForm } from '../Admin/ReportModal';
 import Profile from '../../../public/icons/profile.png';
+import { useNavigate } from 'react-router-dom';
 
 interface SellerProfileCardProps {
   id: string | undefined;
@@ -11,14 +12,19 @@ interface SellerProfileCardProps {
 }
 
 const SellerProfileCard: React.FC<SellerProfileCardProps> = ({ sellerName, profileImage ,id}) => {
-  console.log(id,'this is the sellerId')
+
+  const navigate = useNavigate()
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const handleReportButtonClick = () => {
     setIsReportModalOpen(true);
   };
-
+const handleCardClick = ()=>{
+  if(id){
+    navigate(`/seller-profile/${id}`)
+  }
+}
   return (
-    <div className="flex items-center justify-between bg-amber-100 p-4 rounded-lg">
+    <div className="flex items-center justify-between bg-amber-100 p-4 rounded-lg cursor-pointer" onClick={handleCardClick}>
       <div className="flex items-center space-x-2">
         <Image
           src={profileImage|| '/icons/profile.png'}

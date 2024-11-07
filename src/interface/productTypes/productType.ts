@@ -23,5 +23,5 @@ export interface ProductType {
   returnPolicy: string;
   auctionStartDateTime?: any | null;
   auctionEndDateTime?: any | null;
-  auctionStatus: 'live' | 'upcoming' | 'ended' | 'sold';
+  auctionStatus: "sold" | "end" | "live" | "upcoming";
 }

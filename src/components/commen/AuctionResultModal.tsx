@@ -17,7 +17,7 @@ const AuctionResultModal: React.FC<AuctionResultModalProps> = ({
   winningBid,
   checkoutLink 
 }) => {
-  if (!isOpen) return null;  // Only render if isOpen is true
+  if (!isOpen) return null; 
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
@@ -36,7 +36,7 @@ const AuctionResultModal: React.FC<AuctionResultModalProps> = ({
                 You've won the auction for <span className="font-semibold">"{productTitle}"</span>!
               </p>
               <p className="text-xl font-bold text-green-600">
-                Winning Bid: ${winningBid.toFixed(2)}
+                Winning Bid: ${winningBid}
               </p>
               <div className="bg-amber-50 p-4 rounded-lg">
                 <p className="font-medium mb-2">Next Steps:</p>
@@ -93,7 +93,7 @@ const AuctionResultModal: React.FC<AuctionResultModalProps> = ({
                 Close
               </button>
               <button
-                onClick={() => window.location.href = '/auctions'}
+                onClick={() => window.location.href = '/auctions-items'}
                 className="px-4 py-2 rounded bg-yellow-500 hover:bg-yellow-600 text-white"
               >
                 Browse More Auctions

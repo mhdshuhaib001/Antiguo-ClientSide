@@ -1,3 +1,4 @@
+// useSocket.ts
 import { useEffect, useState, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { Message } from '../../interface/chatTypes/chat';
@@ -7,9 +8,7 @@ const SOCKET_SERVER_URL = 'http://localhost:8001';
 export const useSocket = () => {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
-    
-    // Add typing states
-    const [typingUsers, setTypingUsers] = useState<{ [key: string]: boolean }>({}); // Store typing users
+    const [typingUsers, setTypingUsers] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
         const newSocket = io(SOCKET_SERVER_URL);
@@ -18,26 +17,26 @@ export const useSocket = () => {
             console.log('Socket connected:', newSocket.id);
         });
 
-        newSocket.on('connect_error', (error) => {
-            console.error('Connection error:', error);
-        });
-
-        newSocket.on('disconnect', () => {
-            console.log('Socket disconnected');
-        });
-
         newSocket.on('receive_message', (newMessage: Message) => {
             console.log('Received message in frontend:', newMessage);
             setMessages((prevMessages) => [...prevMessages, newMessage]);
         });
 
-        // Listen for typing events
-        newSocket.on('typing', (data) => {
-            setTypingUsers((prev) => ({ ...prev, [data.userId]: true })); 
+        // Modified typing event handlers
+        newSocket.on('typing', ({ userId, room }) => {
+            console.log('Received typing event:', { userId, room });
+            setTypingUsers((prev) => {
+                console.log('Setting typing state for room:', room, 'to true');
+                return { ...prev, [room]: true };
+            });
         });
 
-        newSocket.on('stop typing', (data) => {
-            setTypingUsers((prev) => ({ ...prev, [data.userId]: false }));
+        newSocket.on('stop_typing', ({ userId, room }) => {
+            console.log('Received stop typing event:', { userId, room });
+            setTypingUsers((prev) => {
+                console.log('Setting typing state for room:', room, 'to false');
+                return { ...prev, [room]: false };
+            });
         });
 
         setSocket(newSocket);
@@ -58,10 +57,11 @@ export const useSocket = () => {
     }, [socket]);
 
     const handleTyping = useCallback((userId: string, room: string, isTyping: boolean) => {
+        console.log('Handling typing event:', { userId, room, isTyping });
         if (isTyping) {
             socket?.emit('typing', { userId, room });
         } else {
-            socket?.emit('stop typing', { userId, room });
+            socket?.emit('stop_typing', { userId, room });
         }
     }, [socket]);
 

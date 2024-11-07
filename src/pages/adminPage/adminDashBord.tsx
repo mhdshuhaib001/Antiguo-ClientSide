@@ -4,7 +4,7 @@ import ReportAnalyticsDashboard from "../../components/Admin/ReportAnalyticsDash
 const AdminDashboard:React.FC=()=>{
     return(
         <div>
-            <ReportAnalyticsDashboard reports={[]}/>
+            <ReportAnalyticsDashboard />
         </div>
     )
 }

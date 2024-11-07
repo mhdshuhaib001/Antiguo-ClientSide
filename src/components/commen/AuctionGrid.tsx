@@ -6,6 +6,7 @@ import AuctionItem from '../User/AuctionItemComponent';
 import { ProductType } from '../../interface/productTypes/productType';
 import AuctionItemSkeleton from './Skelton/AuctionItemSkelton';
 import Pagination from './Pagination';
+import useDebounce from '../../utils/hooks/useDebounce';
 interface AuctionItem {
   _id: string;
   itemTitle: string;
@@ -26,15 +27,15 @@ interface AuctionItem {
 
 export default function Component() {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Adjust as needed
-  const { products, isLoading, error } = useProductsData(currentPage, itemsPerPage);
-  console.log(products, '============================');
+  const itemsPerPage = 10;
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [filteredItems, setFilteredItems] = useState(products);
+  const [filteredItems, setFilteredItems] = useState<ProductType[]>([]);
   const [showFilters, setShowFilters] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const { products, isLoading, error } = useProductsData(currentPage, itemsPerPage);
 
   const categories = Array.from(new Set(products.map((item) => item.categoryId.name)));
   const handlePageChange = (page: React.SetStateAction<number>) => {
@@ -58,22 +59,24 @@ export default function Component() {
   }
 
   useEffect(() => {
-    const filtered = products.filter(
-      (item) =>
-        item.itemTitle.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        ((parseFloat(item.reservePrice) >= priceRange[0] &&
-          parseFloat(item.reservePrice) <= priceRange[1]) ||
-          (item.currentBid &&
-            parseFloat(item.currentBid.toString()) >= priceRange[0] &&
-            parseFloat(item.currentBid.toString()) <= priceRange[1])) &&
-        (statusFilter.length === 0 || statusFilter.includes(getAuctionStatus(item))) &&
-        (selectedCategories.length === 0 || selectedCategories.includes(item.categoryId.name)),
-    );
-    setFilteredItems(filtered);
-  }, [searchTerm, priceRange, selectedCategories, statusFilter, products]);
+    if (products.length > 0) {
+      const filtered = products.filter(
+        (item) =>
+          item.itemTitle.toLowerCase().includes(searchTerm.toLowerCase()) &&
+          ((parseFloat(item.reservePrice) >= priceRange[0] &&
+            parseFloat(item.reservePrice) <= priceRange[1]) ||
+            (item.currentBid &&
+              parseFloat(item.currentBid.toString()) >= priceRange[0] &&
+              parseFloat(item.currentBid.toString()) <= priceRange[1])) &&
+          (statusFilter.length === 0 || statusFilter.includes(getAuctionStatus(item))) &&
+          (selectedCategories.length === 0 || selectedCategories.includes(item.categoryId.name)),
+      );
+      setFilteredItems(filtered);
+    }
+  }, [debouncedSearchTerm, searchTerm, priceRange, selectedCategories, statusFilter, products]);
 
   // const featuredItems = filteredItems.filter((item) => item.featured);
-  const totalPages = Math.ceil(products.length / itemsPerPage); // Assuming you know total items
+  const totalPages = Math.ceil(products.length / itemsPerPage);
   const displayedProducts = products.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
@@ -255,6 +258,7 @@ export default function Component() {
                       currentBid: item.currentBid ? item.currentBid : parseFloat(item.reservePrice),
                     }}
                     auctionEndTime={item.auctionEndDateTime}
+                    auctionStartTime={item.auctionStartDateTime}
                     status={getAuctionStatus(item)}
                     auctionFormat={item.auctionFormat}
                   />

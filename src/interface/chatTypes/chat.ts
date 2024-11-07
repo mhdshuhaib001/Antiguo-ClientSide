@@ -1,6 +1,7 @@
 
   
   export interface Message {
+    createdAt?: any ;
     id?: string; 
     senderId: string; 
     receiverId?: string;
@@ -10,6 +11,8 @@
 
   
   export interface Contact {
+    unreadCount: number;
+    timestamp: any;
     id: string;
     name: string;
     avatar: string;

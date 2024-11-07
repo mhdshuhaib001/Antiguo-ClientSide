@@ -1,5 +1,5 @@
-import { useFetchAllProductsQuery } from '../../services/apis/sellerApi';
 import { useEffect, useState } from 'react';
+import { useFetchAllProductsQuery } from '../../services/apis/sellerApi';
 import { ProductType } from '../../interface/productTypes/productType';
 
 export function useProductsData(page: number, limit: number) {

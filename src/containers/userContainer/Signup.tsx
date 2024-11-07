@@ -213,7 +213,7 @@ const SignupForm: React.FC<{
           <div className="flex items-center justify-between mt-4">
             <button
               type="submit"
-              className={`w-full bg-black hover:bg-gray-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center ${isOtpLoading || isSignupLoading || isOtpResendAllowed ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-full bg-gray-800 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center ${isOtpLoading || isSignupLoading || isOtpResendAllowed ? 'opacity-50 cursor-not-allowed' : ''}`}
               disabled={isOtpLoading || isSignupLoading || isOtpResendAllowed}
             >
               {isOtpLoading || isSignupLoading ? (
