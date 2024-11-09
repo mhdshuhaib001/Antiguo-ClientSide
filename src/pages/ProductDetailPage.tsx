@@ -191,7 +191,7 @@ export default function ProductPage() {
                     ? new Date(productData.auctionEndDateTime).toLocaleString()
                     : 'N/A'}
                 </div>
-                {!isAuctionEnded &&isAuctionStarted ? (
+                {isAuctionStarted ? (
                   <div className="grid grid-cols-4 gap-2 text-center">
                     <div className="bg-white p-2 rounded shadow">
                       <div className="text-2xl font-bold">{daysLeft}</div>
@@ -243,12 +243,12 @@ export default function ProductPage() {
                 //   Enter Bid{' '}
                 // </button>
                 <button
-                  onClick={() => navigate(`/auction-page/${productData?._id}`)}
-                  // onClick={() => setShowNotificationModal(true)}
+                  // onClick={() => navigate(`/auction-page/${productData?._id}`)}
+                  onClick={() => setShowNotificationModal(true)}
 
-                  className="w-full bg-amber-500 border-amber-300 text-white py-2 rounded hover:bg-amber-700 transition duration-300"
+                  className="w-full bg-amber-800 border-amber-300 text-white py-2 rounded hover:bg-amber-700 transition duration-300"
                 >
-                  Enter Bid{' '}
+                  Notify me {' '}
                 </button>
               )}
               {showNotificationModal && (

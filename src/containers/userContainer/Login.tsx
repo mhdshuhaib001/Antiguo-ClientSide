@@ -4,7 +4,6 @@ import { LoginValidation } from '../../validations/loginValidation';
 import { useLoginMutation } from '../../services/apis/userApi';
 import { AuthRequest, AuthResponse } from '../../interface/userTypes/apiTypes';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 interface LoginFormProps {
   onLogin: (data: AuthResponse) => void;
@@ -30,7 +29,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
       try {
         const result: AuthResponse = await login(user).unwrap();
-        console.log(result,'this is the result i get')
         onLogin(result);
       } catch (error: any) {
         if (error?.data?.errors) {
@@ -91,7 +89,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       <div className="mb-4 text-right">
         <a
           onClick={() => navigate('/forget-password-request')}
-          className="text-black-500 hover:text-blue-700 text-sm"
+          className="text-black-500 hover:text-blue-700 text-sm cursor-pointer"
         >
           Forgot Password?
         </a>

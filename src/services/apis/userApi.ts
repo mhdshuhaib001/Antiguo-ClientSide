@@ -59,13 +59,17 @@ export const ApiSlice = createApi({
         body: emailData,
       }),
     }),
-    forgetPassword: builder.mutation<AuthResponse, { token: string; newPassword: string }>({
-      query: (newPasswordData) => ({
-        url: '/api/auth/forget-password',
-        method: 'POST',
-        body: newPasswordData,
-      }),
-    }),
+   forgetPassword: builder.mutation<AuthResponse, { token: string; newPassword: string }>({
+  query: (newPasswordData) => {
+    console.log('Data sent to /api/auth/forget-password:', newPasswordData);
+    return {
+      url: '/api/auth/forget-password',
+      method: 'POST',
+      body: newPasswordData,
+    };
+  },
+}),
+
     addAddress: builder.mutation<AuthResponse, { address: Address }>({
       query: (addressData) => ({
         url: '/api/user/address',
