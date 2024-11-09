@@ -24,7 +24,7 @@ interface SetUserPayload {
   email: string;
   role: string;
   profileImage?: string | null;
-  
+  isSeller:boolean
 }
 
 const userSlice = createSlice({
@@ -36,6 +36,7 @@ const userSlice = createSlice({
       state.name = action.payload.name;
       state.email = action.payload.email;
       state.role = action.payload.role;
+      state.isSeller = action.payload.isSeller
       state.profileImage = action.payload.profileImage ?? null
     },
     setSeller: (state, action: PayloadAction<boolean>) => {
@@ -47,6 +48,7 @@ const userSlice = createSlice({
       state.email = '';
       state.role = '';
       state.profileImage = null; 
+      state.isSeller = false
     },
   },
 });

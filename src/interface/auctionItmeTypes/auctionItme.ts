@@ -1,7 +1,7 @@
 export default interface AuctionItemProps {
   product: {
     id: string;
-    imageUrl?: string | File | null;
+    imageUrl?:any;
     name: string;
     currentBid: Number | string;
   };

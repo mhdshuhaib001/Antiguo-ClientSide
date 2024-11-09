@@ -416,7 +416,6 @@ export default function RealTimeBidding() {
   const { data, error, isLoading } = useGetProductByIdQuery(id);
   const { data: auctionData } = useGetAuctionByIdQuery(id);
   const [placeBid] = usePlaceBidMutation();
-  console.log(auctionData, 'bid dataaaaaaaaaaaaaaa');
 
   const [customBid, setCustomBid] = useState('');
   const [currentBid, setCurrentBid] = useState(0);
@@ -553,8 +552,6 @@ export default function RealTimeBidding() {
 
     if (amount <= currentBid) {
       toast.error('Your bid must be greater than the current bid.');
-      setModalMessage('Your bid must be greater than the current bid.');
-      setIsModalOpen(true);
       return;
     }
 

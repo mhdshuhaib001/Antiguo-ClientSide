@@ -24,7 +24,7 @@ const handleCardClick = ()=>{
   }
 }
   return (
-    <div className="flex items-center justify-between bg-amber-100 p-4 rounded-lg cursor-pointer" onClick={handleCardClick}>
+    <div className="flex items-center justify-between bg-amber-100 p-4 rounded-lg cursor-pointer" >
       <div className="flex items-center space-x-2">
         <Image
           src={profileImage|| '/icons/profile.png'}

@@ -24,13 +24,12 @@ const Registration: React.FC = () => {
           email: data.userData?.email,
           name: data.userData?.name,
           role: data.userData?.role,
-          profileImage: data.userData?.profileImage || null
-
+          profileImage: data.userData?.profileImage || null,
+          isSeller: data.userData.isSeller,
         }),
       );
       const sellerId = data.sellerId;
       dispatch(setSellerId(sellerId));
-      console.log(data, 'login response');
 
       const authToken = data.accessToken;
       const sellerToken = data.sellerToken;
@@ -40,11 +39,11 @@ const Registration: React.FC = () => {
         localStorage.setItem('accessToken', authToken);
         document.cookie = `accessToken=${authToken}; path=/; secure; samesite=strict; max-age=3600`;
       }
-      console.log(data.refreshToken,'refreshToken checking ')
+      console.log(data.refreshToken, 'refreshToken checking ');
       if (data.refreshToken) {
         localStorage.setItem('refreshToken', data.refreshToken);
       }
-      
+
       if (sellerToken) {
         localStorage.setItem('sellerToken', sellerToken);
       }
@@ -56,13 +55,14 @@ const Registration: React.FC = () => {
   };
 
   const handleSignup = (data: AuthResponse) => {
-    console.log('Signup Data:', data);
     dispatch(
       setUser({
         _id: data.userData?._id,
         email: data.userData?.email,
         name: data.userData?.name,
         role: data.userData?.role,
+        isSeller:data.userData.isSeller
+
       }),
     );
 
@@ -84,9 +84,12 @@ const Registration: React.FC = () => {
             email: googleResponse.userData?.email,
             name: googleResponse.userData?.name,
             role: googleResponse.userData?.role,
+            isSeller:googleResponse.userData.isSeller
+
           }),
         );
         localStorage.setItem('accessToken', googleResponse.accessToken || '');
+        localStorage.setItem('sellerToken',googleResponse.sellerToken||'')
         const token = googleResponse.accessToken || '';
         const cookieOptions = `secure; samesite=strict;max-age=${3 * 24 * 60 * 60}`;
         document.cookie = `accessToken=${token}; ${cookieOptions}`;
@@ -204,14 +207,13 @@ const Registration: React.FC = () => {
               )}
 
               {/* Google Sign-In Button */}
-              <div className='flex justify-center items-center'>
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={handleGoogleFailure}
-                useOneTap
-              />
+              <div className="flex justify-center items-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleFailure}
+                  useOneTap
+                />
               </div>
-        
             </>
           )}
         </div>
@@ -219,6 +221,5 @@ const Registration: React.FC = () => {
     </div>
   );
 };
-
 
 export default Registration;

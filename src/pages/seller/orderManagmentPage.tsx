@@ -42,6 +42,7 @@ export default function OrderManagementTable() {
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
   useEffect(() => {
     if (responseData && responseData.status === 200 && Array.isArray(responseData.orders)) {
+      console.log(responseData,'orderssssssssssss=======================')
       const formattedOrders = responseData.orders.map((order: any) => ({
         id: order._id,
         buyerId: order.buyerId.name,
@@ -63,7 +64,6 @@ export default function OrderManagementTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 3;
 
-  // Get current orders
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
@@ -100,36 +100,43 @@ export default function OrderManagementTable() {
     <div className="container mx-auto p-6 bg-amber-50">
       <h1 className="text-3xl font-serif text-amber-900 mb-6 text-center">Order Management</h1>
       <div className="overflow-x-auto">
+         {orders.length === 0 ? (
+        <div className="text-center text-xl text-gray-700">
+          You don't have any orders.
+        </div>
+      ) : (
         <table className="w-full border-collapse mb-4">
-        <thead>
-      <tr className="bg-amber-100">
-        <th className="p-2 text-left font-serif text-amber-900 border border-amber-200 text-sm">#</th>
-        <th className="p-2 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-          Order ID
-        </th>
-        <th className="p-2 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-          Buyer Name
-        </th>
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-          Product
-        </th>
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-          Bid Amount
-        </th>
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-          Order Date
-        </th>
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-          Payment Status
-        </th>
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-          Status
-        </th>
-        <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-          Actions
-        </th>
-      </tr>
-    </thead>
+          <thead>
+            <tr className="bg-amber-100">
+              <th className="p-2 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+                #
+              </th>
+              <th className="p-2 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+                Order ID
+              </th>
+              <th className="p-2 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+                Buyer Name
+              </th>
+              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+                Product
+              </th>
+              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+                Bid Amount
+              </th>
+              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+                Order Date
+              </th>
+              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+                Payment Status
+              </th>
+              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+                Status
+              </th>
+              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
+                Actions
+              </th>
+            </tr>
+          </thead>
           <tbody>
             {currentOrders.map((order, index) => (
               <tr key={order.id} className="bg-white hover:bg-amber-50 transition-colors">
@@ -268,6 +275,7 @@ export default function OrderManagementTable() {
             ))}
           </tbody> */}
         </table>
+      )}
       </div>
       <div className="flex justify-center mt-4">
         <nav className="inline-flex rounded-md shadow">
