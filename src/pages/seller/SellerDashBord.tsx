@@ -113,7 +113,7 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
   };
 
   return (
-    <div className="flex flex-col h-full w-full p-6 shadow-md overflow-">
+    <div className="flex flex-col h-full w-full p-6 shadow-md overflow-y-auto">
       <h1 className="text-2xl font-medium mb-3 sm:text-3xl">
         Seller Dashboard
       </h1>

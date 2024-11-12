@@ -1,4 +1,4 @@
-// useSocket.ts
+
 import { useEffect, useState, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { Message } from '../../interface/chatTypes/chat';
@@ -24,7 +24,6 @@ export const useSocket = () => {
 
         // Modified typing event handlers
         newSocket.on('typing', ({ userId, room }) => {
-            console.log('Received typing event:', { userId, room });
             setTypingUsers((prev) => {
                 console.log('Setting typing state for room:', room, 'to true');
                 return { ...prev, [room]: true };
@@ -65,5 +64,5 @@ export const useSocket = () => {
         }
     }, [socket]);
 
-    return { messages, sendMessage, joinRoom, typingUsers, handleTyping };
+    return {socket, messages, sendMessage, joinRoom, typingUsers, handleTyping };
 };
