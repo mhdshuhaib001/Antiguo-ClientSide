@@ -9,4 +9,4 @@ const ProductManagment: React.FC = () => {
   );
 };
 
-export default ProductManagment
+export default ProductManagment 

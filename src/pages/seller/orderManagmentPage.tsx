@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useFetchOrdersQuery, useUpdateOrderStatusMutation } from '../../services/apis/sellerApi';
 import { RootState } from '../../store/Store';
 import { useSelector } from 'react-redux';
+import { CheckCircle, XCircle, Truck } from 'lucide-react';
 
 interface ShippingAddress {
   fullName?: string;
@@ -42,24 +43,25 @@ export default function OrderManagementTable() {
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
   useEffect(() => {
     if (responseData && responseData.status === 200 && Array.isArray(responseData.orders)) {
-      console.log(responseData,'orderssssssssssss=======================')
       const formattedOrders = responseData.orders.map((order: any) => ({
         id: order._id,
-        buyerId: order.buyerId.name,
-        productId: order.productId.itemTitle,
-        productName: order.productId.itemTitle,
-        productImage: order.productId.images[0],
+        buyerId: order.buyerId ? order.buyerId.name : 'N/A', // Handle missing buyerId
+        productId: order.productId ? order.productId.itemTitle : 'N/A', // Handle missing productId
+        productName: order.productId ? order.productId.itemTitle : 'N/A',
+        productImage: order.productId && order.productId.images ? order.productId.images[0] : '', // Check for image availability
         sellerId: order.sellerId,
         orderDate: new Date(order.orderDate).toLocaleDateString(),
         orderStatus: order.orderStatus,
         paymentStatus: order.paymentStatus,
         bidAmount: order.bidAmount,
+        shippingAddress: order.shippingAddress // Pass the shipping address as is, if available
       }));
       setOrders(formattedOrders);
     } else {
       console.error('Unexpected response format:', responseData);
     }
   }, [responseData]);
+  
 
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 3;
@@ -99,183 +101,56 @@ export default function OrderManagementTable() {
   return (
     <div className="container mx-auto p-6 bg-amber-50">
       <h1 className="text-3xl font-serif text-amber-900 mb-6 text-center">Order Management</h1>
-      <div className="overflow-x-auto">
-         {orders.length === 0 ? (
-        <div className="text-center text-xl text-gray-700">
-          You don't have any orders.
-        </div>
-      ) : (
-        <table className="w-full border-collapse mb-4">
-          <thead>
-            <tr className="bg-amber-100">
-              <th className="p-2 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-                #
-              </th>
-              <th className="p-2 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-                Order ID
-              </th>
-              <th className="p-2 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-                Buyer Name
-              </th>
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-                Product
-              </th>
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-                Bid Amount
-              </th>
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-                Order Date
-              </th>
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-                Payment Status
-              </th>
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-                Status
-              </th>
-              <th className="p-3 text-left font-serif text-amber-900 border border-amber-200 text-sm">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentOrders.map((order, index) => (
-              <tr key={order.id} className="bg-white hover:bg-amber-50 transition-colors">
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  {indexOfFirstOrder + index + 1} {/* Order Number */}
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  #{order.id.slice(0, 4)}****{order.id.slice(-4)}
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  {order.buyerId}
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  <img
-                    src={order.productImage}
-                    alt={order.productName}
-                    className="w-16 h-16 object-cover"
-                  />
-                  <div>{order.productName}</div>
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  ${order.bidAmount}
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  {order.orderDate}
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  <span
-                    className={`px-2 py-1 rounded ${
-                      order.paymentStatus === 'pending'
-                        ? 'bg-red-200 text-red-800'
-                        : order.paymentStatus === 'completed'
-                          ? 'bg-green-200 text-green-800'
-                          : 'bg-yellow-200 text-yellow-800'
-                    }`}
-                  >
-                    {order.paymentStatus}
-                  </span>
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  <span
-                    className={`px-2 py-1 rounded ${
-                      order.orderStatus === 'pending'
-                        ? 'bg-amber-200 text-amber-800'
-                        : order.orderStatus === 'completed'
-                          ? 'bg-amber-300 text-amber-900'
-                          : 'bg-amber-400 text-amber-900'
-                    }`}
-                  >
-                    {order.orderStatus}
-                  </span>
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  <select
-                    value={order.orderStatus}
-                    onChange={(e) =>
-                      handleStatusChange(
-                        order.id,
-                        e.target.value as 'pending' | 'completed' | 'canceled',
-                      )
-                    }
-                    className="bg-amber-50 border border-amber-200 rounded px-2 py-1 text-amber-900"
-                  >
-                    <option value="pending">pending</option>
-                    <option value="shipped">shipped</option>
-                    <option value="deliverd">deliverd</option>
-                  </select>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-
-          {/* <tbody>
-            
-            {currentOrders.map((order) => (
-              <tr key={order.id} className="bg-white hover:bg-amber-50 transition-colors">
-             
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  #{order.id}
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  {order.buyerId}
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  {order.productId}
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  {order.orderDate}
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  <span
-                    className={`px-2 py-1 rounded ${
-                      order.orderStatus === 'pending'
-                        ? 'bg-amber-200 text-amber-800'
-                        : order.orderStatus === 'completed'
-                          ? 'bg-amber-300 text-amber-900'
-                          : 'bg-amber-400 text-amber-900'
-                    }`}
-                  >
-                    {order.orderStatus}
-                  </span>
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  {order.shippingAddress ? (
-                    <div>
-                      <div>{order.shippingAddress.fullName}</div>
-                      <div>
-                        {order.shippingAddress.streetAddress}, {order.shippingAddress.city},{' '}
-                        {order.shippingAddress.state}, {order.shippingAddress.postalCode},{' '}
-                        {order.shippingAddress.country}
-                      </div>
-                      <div>Phone: {order.shippingAddress.phoneNumber}</div>
-                    </div>
-                  ) : (
-                    <div>No Address Provided</div>
-                  )}
-                </td>
-                <td className="p-3 font-serif text-amber-900 border border-amber-200">
-                  <select
-                    value={order.orderStatus}
-                    onChange={(e) =>
-                      handleStatusChange(
-                        order.id,
-                        e.target.value as 'pending' | 'completed' | 'canceled',
-                      )
-                    }
-                    className="bg-amber-50 border border-amber-200 rounded px-2 py-1 text-amber-900"
-                  >
-                    <option value="pending">pending</option>
-                    <option value="completed">completed</option>
-                    <option value="canceled">canceled</option>
-                    
-                  </select>
-                </td>
-              </tr>
-            ))}
-          </tbody> */}
-        </table>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4"> 
+        {orders.length === 0 ? (
+          <div className="text-center text-xl text-gray-700 col-span-2">
+            You don't have any orders.
+          </div>
+        ) : (
+          currentOrders.map((order) => (
+            <div key={order.id} className={`bg-white shadow-md rounded-lg p-3 transition-transform transform hover:scale-105 ${selectedOrderId === order.id ? 'border-2 border-amber-500' : ''}`}>
+              <h2 className="text-lg font-bold text-amber-900">{order.productName}</h2>
+              <img src={order.productImage} alt={order.productName} className="w-full h-24 object-cover rounded-md mb-2" /> {/* Reduced height */}
+              <p><strong>Order ID:</strong> #{order.id.slice(0, 4)}****{order.id.slice(-4)}</p>
+              <p><strong>Buyer:</strong> {order.buyerId}</p>
+              <p><strong>Bid Amount:</strong> ${order.bidAmount}</p>
+              <p><strong>Order Date:</strong> {order.orderDate}</p>
+              <p>
+                <strong>Status:</strong>
+                <span className={`ml-2 px-2 py-1 rounded ${order.orderStatus === 'pending' ? 'bg-red-200 text-red-800' : order.orderStatus === 'completed' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'}`}>
+                  {order.orderStatus}
+                </span>
+              </p>
+              <div className="flex justify-between mt-2">
+                <select
+                  value={order.orderStatus}
+                  onChange={(e) =>
+                    handleStatusChange(
+                      order.id,
+                      e.target.value as 'pending' | 'completed' | 'canceled',
+                    )
+                  }
+                  className="bg-amber-50 border border-amber-200 rounded px-2 py-1 text-amber-900"
+                >
+                  <option value="pending">Pending</option>
+                  <option value="shipped">Shipped</option>
+                  <option value="delivered">Delivered</option>
+                </select>
+                <div className="flex space-x-2">
+                  <button className="text-green-500 hover:text-green-700" title="Complete Order">
+                    <CheckCircle size={20} />
+                  </button>
+                  <button className="text-red-500 hover:text-red-700" title="Cancel Order">
+                    <XCircle size={20} /> 
+                  </button>
+                  <button className="text-blue-500 hover:text-blue-700" title="Ship Order">
+                    <Truck size={20} /> 
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
       <div className="flex justify-center mt-4">
         <nav className="inline-flex rounded-md shadow">
@@ -299,3 +174,4 @@ export default function OrderManagementTable() {
     </div>
   );
 }
+
