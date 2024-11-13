@@ -141,7 +141,7 @@ const Header: React.FC = () => {
   const { socket, messages } = useSocket();
   const currentUserId = useSelector((state: RootState) => state.User._id);
 
-  // Message notifications
+ 
   const {
     notifications: messageNotifications,
     unreadCount,
@@ -192,7 +192,7 @@ const Header: React.FC = () => {
           </button>
           
           <button className="text-gray-600 hover:text-gray-900">
-            Wishlist
+            About us
           </button>
 
           {/* Regular Notifications */}
@@ -336,7 +336,7 @@ const Header: React.FC = () => {
           Live Auction
         </button>
         <button className="block w-full text-left py-2 text-gray-600 hover:text-gray-900">
-          Wishlist
+          About Us
         </button>
         {token ? (
           <button
