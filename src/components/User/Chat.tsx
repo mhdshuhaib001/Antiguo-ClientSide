@@ -7,11 +7,7 @@ import { useFetchAllSellerQuery } from '../../services/apis/sellerApi';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 import { Message, Contact } from '../../interface/chatTypes/chat';
-import {
-  useSendMessageMutation,
-  useGetMessagesQuery,
-  useCreateRoomMutation,
-} from '../../services/apis/chatApi';
+import {useGetMessagesQuery} from '../../services/apis/chatApi';
 import VideoChat from '../../components/User/VideoChat';
 
 const getInitials = (name: string) => {

@@ -32,6 +32,7 @@ export const useMessageNotification = (socket: Socket | null, currentUserId: str
       }
     };
     const handleNewNotification = (notification: MessageNotification) => {
+      console.log('New notification received:', notification);
       setNotifications((prev) => [...prev, notification]);
       setUnreadCount((prev) => prev + 1);
 
