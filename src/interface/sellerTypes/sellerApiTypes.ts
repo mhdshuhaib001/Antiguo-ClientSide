@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
 import { ProductType } from "../productTypes/productType";
 export interface SellerCreationRequest {
   userId?: string;
@@ -27,6 +31,33 @@ export interface SellerResponse {
   status: number;
   message: string;
   seller: Seller;
+<<<<<<< HEAD
+=======
+=======
+
+export interface SellerCreationRequest {
+  UserID?: string;
+  CompanyName?: string;
+  contactInfo?: string;
+  about?: string;
+  image?:string
+}
+
+export interface SellerResponse {
+  sellerId: string;
+  sellerToken: string;
+  id: string;
+  UserId?: string;
+  companyName: string;
+  email?: string; 
+  phone?: string; 
+  address?: string; 
+  about?: string; 
+  image?: string; 
+  createdAt: string;
+  updatedAt?: string;
+>>>>>>> admin/category
+>>>>>>> dev
 }
 
 

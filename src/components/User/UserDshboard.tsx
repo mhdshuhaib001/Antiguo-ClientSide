@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
 import React, { useEffect, useState } from 'react';
 import { useUpdateProfileMutation, useFetchUserByIdQuery } from '../../services/apis/userApi';
 import {
@@ -14,13 +18,26 @@ import { useSelector } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
+<<<<<<< HEAD
+=======
+=======
+import React, { useState } from 'react';
+>>>>>>> admin/category
+>>>>>>> dev
 
 const state = [
   { title: 'Auction Attend', value: 280 },
   { title: 'Auction Win', value: 50 },
   { title: 'Cancel Auction', value: 25 },
 ];
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> admin/category
+>>>>>>> dev
 const biddingSummary = [
   {
     id: '12584885465',
@@ -43,6 +60,10 @@ const biddingSummary = [
     status: 'Cancel',
     date: 'June 2, 2024',
   },
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
 
 ];
 
@@ -104,26 +125,90 @@ const UserDashBoard: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center gap-4">
             <img
               src={imagePreview || 'default_image_url'}
+<<<<<<< HEAD
+=======
+=======
+  {
+    id: '12584885548',
+    name: 'Renaissance Art',
+    amount: '$2100',
+    status: 'Winning',
+    date: 'June 8, 2024',
+  },
+  {
+    id: '12584885563',
+    name: 'Impressionism Art',
+    amount: '$2200',
+    status: 'Winning',
+    date: 'June 21, 2024',
+  },
+  {
+    id: '12584885589',
+    name: 'Romanticism Art',
+    amount: '$2300',
+    status: 'Cancel',
+    date: 'June 9, 2024',
+  },
+];
+
+const UserDashBoard: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(biddingSummary.length / itemsPerPage);
+  return (
+    <div className="min-h-screen bg:gray-50 p-4 sm:p-6 lg:p-8">
+      {/* motion frame add here first  */}
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md  overflow-hidden border border-amber-200">
+        <div className="p-6 sm:p-8 border-b border-amber-200 relative">
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            {/* Motion next one is here image area profile */}
+            <img
+              src="/placeholder.svg?height=100&width=100"
+>>>>>>> admin/category
+>>>>>>> dev
               alt="profile"
               className="w-20 h-20 rounded-full border-full border-2 border-amber-200"
             />
             <div className="text-center sm:text-left">
+<<<<<<< HEAD
               <h1 className="text-2xl font-semibold text-gray-800">Hi,{userData?.name}</h1>
+=======
+<<<<<<< HEAD
+              <h1 className="text-2xl font-semibold text-gray-800">Hi,{userData?.name}</h1>
+=======
+              <h1 className="text-2xl font-semibold text-gray-800">Hi, Muhammed Shuhaib</h1>
+>>>>>>> admin/category
+>>>>>>> dev
               <p className="text-gray-600">
                 You have completed 10 auctions in the last month. Start your auction today!
               </p>
             </div>
           </div>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
           <button
             onClick={onOpen}
             className="bg-[#975f26] text-white py-1 px-3 rounded-md hover:bg-[#3663f21] focus:outline-none transition duration-300 absolute bottom-4 right-4"
           >
             Edit Profile
+<<<<<<< HEAD
+=======
+=======
+          <button className="bg-[#975f26] text-white py-1 px-3 rounded-md hover:bg-[#3663f21] focus:outline-none transition duration-300 absolute bottom-4 right-4">
+            Edit
+>>>>>>> admin/category
+>>>>>>> dev
           </button>
         </div>
       </div>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
       {/* Stats Table */}
       <div className="m-3 grid grid-cols-1 sm:grid-cols-3 gap-4 p-6 sm:p-8 bg-[#f1f1df] border-50 border-b border-amber-200">
         {state.map((state) => (
@@ -131,6 +216,15 @@ const UserDashBoard: React.FC = () => {
             key={state.title}
             className="bg-white p-4 rounded-lg shadow-sm text-center border border-amber-100 hover:border-amber-300 transition-colors duration-300"
           >
+<<<<<<< HEAD
+=======
+=======
+      {/* Table */}
+      <div className=" m-3 grid grid-cols-1 sm:grid-cols-3 gap-4 p-6 sm:p-8 bg-[#f1f1df] border-50 border-b border-amber-200">
+        {state.map((state, index) => (
+          <div className="bg-white p-4 rounded-lg shadow-sm text-center border border-amber-100 hover:border-amber-300 transition-colors duration-300">
+>>>>>>> admin/category
+>>>>>>> dev
             <h2 className="text-3xl font-bold text-amber-600">{state.title}</h2>
             <p className="text-gray-600 font-semibold text-lg">{state.value}</p>
           </div>
@@ -142,6 +236,10 @@ const UserDashBoard: React.FC = () => {
         <div className="overflow-x-auto overflow-hidden">
           <table className="w-full text-sm text-left text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-amber-50">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
               <tr>
                 <th className="px-4 py-2">Auction ID</th>
                 <th className="px-4 py-2">Product name</th>
@@ -149,16 +247,41 @@ const UserDashBoard: React.FC = () => {
                 <th className="px-4 py-2">Status</th>
                 <th className="px-4 py-2">Auction Date</th>
               </tr>
+<<<<<<< HEAD
+=======
+=======
+              <th className="px-4 py-2">Auction ID</th>
+              <th className="px-4 py-2">Product name</th>
+              <th className="px-4 py-2">Amount</th>
+              <th className="px-4 py-2">Status</th>
+              <th className="px-4 py-2">Auction Date</th>
+>>>>>>> admin/category
+>>>>>>> dev
             </thead>
             <tbody>
               {biddingSummary
                 .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+<<<<<<< HEAD
                 .map((item) => (
+=======
+<<<<<<< HEAD
+                .map((item) => (
+=======
+                .map((item, index) => (
+>>>>>>> admin/category
+>>>>>>> dev
                   <tr
                     key={item.id}
                     className="bg-white border-b border-amber-100 hover:bg-amber-50 transition-colors duration-300"
                   >
                     <td className="px-4 py-2">{item.id}</td>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> admin/category
+>>>>>>> dev
                     <td className="px-4 py-2 font-medium text-gray-900">{item.name}</td>
                     <td className="px-4 py-2">{item.amount}</td>
                     <td className="px-4 py-2">
@@ -177,7 +300,14 @@ const UserDashBoard: React.FC = () => {
         <div className="flex justify-center mt-4 gap-2">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
+<<<<<<< HEAD
               key={page}
+=======
+<<<<<<< HEAD
+              key={page}
+=======
+>>>>>>> admin/category
+>>>>>>> dev
               onClick={() => setCurrentPage(page)}
               className={`px-3 py-1 rounded ${currentPage === page ? 'bg-amber-200' : 'bg-white text-gray-600 hover:bg-amber-100'} transition-colors duration-300`}
             >
@@ -186,6 +316,10 @@ const UserDashBoard: React.FC = () => {
           ))}
         </div>
       </div>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
 
       {/* Profile Update Modal Component */}
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -277,6 +411,11 @@ const UserDashBoard: React.FC = () => {
           )}
         </ModalContent>
       </Modal>
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> admin/category
+>>>>>>> dev
     </div>
   );
 };

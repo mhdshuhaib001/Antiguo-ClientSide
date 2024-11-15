@@ -11,7 +11,15 @@ const Sidebar: React.FC = () => {
   const handleLogout = () => {
     dispatch(userLogOut());
     localStorage.clear();
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+    
+>>>>>>> admin/category
+>>>>>>> dev
     navigate('/');
   };
 

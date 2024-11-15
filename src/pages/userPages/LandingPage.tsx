@@ -1,14 +1,30 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
 
 
 import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+<<<<<<< HEAD
+=======
+=======
+// pages/User/LandingPage.tsx
+
+import React from 'react';
+>>>>>>> admin/category
+>>>>>>> dev
 import Header from '../../components/User/Header';
 import HeroSection from '../../components/User/HeroSection';
 import CategorySection from '../../components/User/Category';
 import HotDeal from '../../components/User/HotDeal';
 import FeaturedHighlights from '../../components/User/FeaturedHighlights';
 import Footer from '../../components/User/Footer';
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
 import { useFetchAllProductsQuery } from '../../services/apis/productApi';
 import { ProductType } from '../../interface/productTypes/productType';
 import ProductSlider from '../../components/User/ActiveSlider';
@@ -16,12 +32,24 @@ import ChatBot from '../../components/commen/ChatBot';
 import ChatButton from '../../components/commen/Buttons/ChatBotButton';
 
 gsap.registerPlugin(ScrollTrigger);
+<<<<<<< HEAD
+=======
+=======
+import { useFetchAllProductsQuery } from '../../services/apis/sellerApi';
+import { FormDataType } from '../../interface/sellerTypes/sellerApiTypes';
+import ProductSlider from '../../components/User/ActiveSlider';
+>>>>>>> admin/category
+>>>>>>> dev
 
 const LandingPage: React.FC = () => {
   const [products,setProducts]= useState<ProductType[]>([])
   const { data, isLoading, isError } = useFetchAllProductsQuery();
   
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
 
   const [isChatOpen, setChatOpen] = useState(false);
 console.log(products,'-----------------------------------')
@@ -111,11 +139,19 @@ console.log(products,'-----------------------------------')
 
   return (
     <div className="flex flex-col min-h-screen bg-amber-50">
+<<<<<<< HEAD
+=======
+=======
+  return (
+    <div className="flex flex-col min-h-screen bg-[#fcfaee]">
+>>>>>>> admin/category
+>>>>>>> dev
       <Header />
       <main className="flex-grow">
         <HeroSection />
 
         <div className="container mx-auto px-4 space-y-12 py-12">
+<<<<<<< HEAD
           <div ref={productSliderRef}>
             <ProductSlider products={products} isLoading={isLoading} />
           </div>
@@ -134,6 +170,36 @@ console.log(products,'-----------------------------------')
           <div ref={featuredHighlightsRef}>
             <FeaturedHighlights />
           </div>
+=======
+<<<<<<< HEAD
+          <div ref={productSliderRef}>
+            <ProductSlider products={products} isLoading={isLoading} />
+          </div>
+          <ChatButton onClick={handleOpenChat} position={{ bottom: '20px', right: '20px' }} />
+          {isChatOpen && (
+            <div className="fixed bottom-20 right-20 z-50">
+              <ChatBot onClose={handleCloseChat} />
+            </div>
+          )}
+          <div ref={categorySectionRef}>
+            <CategorySection />
+          </div>
+          <div ref={hotDealRef}>
+            <HotDeal />
+          </div>
+          <div ref={featuredHighlightsRef}>
+            <FeaturedHighlights />
+          </div>
+=======
+          {/* Auction Items in a Slider */}
+          <ProductSlider products={products} />
+
+          {/* Rest of the sections */}
+          <CategorySection />
+          <HotDeal />
+          <FeaturedHighlights />
+>>>>>>> admin/category
+>>>>>>> dev
         </div>
       </main>
       <Footer />

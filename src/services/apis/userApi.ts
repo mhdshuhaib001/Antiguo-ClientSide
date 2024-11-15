@@ -1,9 +1,20 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { AuthRequest, AuthResponse } from '../../interface/userTypes/apiTypes';
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
 import { getToken } from '../../utils/getHelper';
 import { Address } from '../../interface/userTypes/apiTypes';
 import { Category } from '../../interface/adminTypes/adminApiTypes';
 import { ChangePasswordType } from '../../interface/userTypes/changePasswordType';
+<<<<<<< HEAD
+=======
+=======
+import { getToken } from '../../utils/getHelper'
+
+>>>>>>> admin/category
+>>>>>>> dev
 
 export const ApiSlice = createApi({
   reducerPath: 'userApi',
@@ -12,7 +23,15 @@ export const ApiSlice = createApi({
     credentials: 'include',
     prepareHeaders: (headers) => {
       const token = getToken();
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+      console.log(token,'userApiTokenchjekkjfn kgjv')
+>>>>>>> admin/category
+>>>>>>> dev
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
@@ -59,6 +78,10 @@ export const ApiSlice = createApi({
         body: emailData,
       }),
     }),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
    forgetPassword: builder.mutation<AuthResponse, { token: string; newPassword: string }>({
   query: (newPasswordData) => {
     console.log('Data sent to /api/auth/forget-password:', newPasswordData);
@@ -73,6 +96,14 @@ export const ApiSlice = createApi({
     addAddress: builder.mutation<AuthResponse, { address: Address }>({
       query: (addressData) => ({
         url: '/api/user/address',
+<<<<<<< HEAD
+=======
+=======
+    forgetPassword: builder.mutation<AuthResponse, { token: string; newPassword: string }>({
+      query: (newPasswordData) => ({
+        url: '/api/auth/forget-password',
+>>>>>>> admin/category
+>>>>>>> dev
         method: 'POST',
         body: addressData,
       }),
@@ -126,6 +157,10 @@ export const {
   useEmailSendMutation,
   useForgetPasswordMutation,
   useIsBlockedQuery,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
   useAddAddressMutation,
   useGetAddressQuery,
   useUpdateProfileMutation,
@@ -134,4 +169,9 @@ export const {
   useDeleteAddressMutation,
   useFetchCategoriesQuery,
   useChangePasswordMutation
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> admin/category
+>>>>>>> dev
 } = ApiSlice;

@@ -29,7 +29,14 @@ export interface AuthRequest {
 }
 
 export interface AuthResponse {
+<<<<<<< HEAD
  sellerId:string;
+=======
+<<<<<<< HEAD
+ sellerId:string;
+=======
+>>>>>>> admin/category
+>>>>>>> dev
   localStorage: any;
   message:string;
   userData: any;
@@ -38,7 +45,14 @@ export interface AuthResponse {
   name?:string;
   profileImage?:string;
   accessToken?: string|undefined;
+<<<<<<< HEAD
   refreshToken?:string|undefined;
+=======
+<<<<<<< HEAD
+  refreshToken?:string|undefined;
+=======
+>>>>>>> admin/category
+>>>>>>> dev
   sellerToken?: string|undefined;
   password: string;
   email: string;

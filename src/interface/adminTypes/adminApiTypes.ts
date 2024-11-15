@@ -9,7 +9,14 @@ export interface AdminLoginResponse {
 }
 
 export interface Category {
+<<<<<<< HEAD
   items: any;
+=======
+<<<<<<< HEAD
+  items: any;
+=======
+>>>>>>> admin/category
+>>>>>>> dev
   _id: string;
   id: string; 
   name: string; 
@@ -35,6 +42,10 @@ export interface AddCategoryRequest {
   icon: File; 
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
 export interface AddReportRequest {
   sellerId:string|undefined
   reason: string;
@@ -65,3 +76,8 @@ export interface FetchReportsResponse {
   map(arg0: (report: any) => { id: any; sellerId: any; sellerName: any; reportedBy: any; reason: any; details: any; status: "pending" | "resolved" | "dismissed"; createdAt: any; }): Report[];
   reports: Report[]; 
 }
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> admin/category
+>>>>>>> dev

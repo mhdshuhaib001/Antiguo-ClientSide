@@ -32,6 +32,7 @@ export const sellerApi = createApi({
         url: '/api/seller/createseller',
         method: 'POST',
         body: sellerBrand,
+<<<<<<< HEAD
       }),
     }),
     updateSellerProfile: builder.mutation<SellerResponse, FormData>({
@@ -49,6 +50,38 @@ export const sellerApi = createApi({
     }),
 
     addProduct: builder.mutation<any, FormData>({
+=======
+<<<<<<< HEAD
+      }),
+    }),
+    updateSellerProfile: builder.mutation<SellerResponse, FormData>({
+      query: (formData) => ({
+        url: '/api/seller/updateseller',
+        method: 'PUT',
+        body: formData,
+      }),
+    }),
+    fetchSellerById: builder.query<SellerResponse, string>({
+      query: (sellerId) => ({
+        url: `/api/seller/${sellerId}`,
+        method: 'GET',
+      }),
+    }),
+
+    addProduct: builder.mutation<any, FormData>({
+=======
+      }),
+    }),
+    updatescellerprofile: builder.mutation<SellerResponse, FormData>({
+      query: (formData) => ({
+        url: '/api/seller/updateseller',
+        method: 'PUT',
+        body: formData,
+      }),
+    }),
+    addProduct: builder.mutation<AddProductResponse, FormDataType>({
+>>>>>>> admin/category
+>>>>>>> dev
       query: (formData) => ({
         url: '/api/seller/createproduct',
         method: 'POST',
@@ -61,6 +94,7 @@ export const sellerApi = createApi({
         method: 'GET',
       }),
     }),
+<<<<<<< HEAD
     fetchAllProducts: builder.query<ProductsResponse, { page: number; limit: number }>({
       query: ({ page, limit }) => ({
         url: `/api/seller/getproducts?page=${page}&limit=${limit}`,
@@ -71,6 +105,30 @@ export const sellerApi = createApi({
     getProduct: builder.query<any, string>({
       query: (productId) => ({
         url: `/api/products/getProduct/${productId}`,
+=======
+<<<<<<< HEAD
+    fetchAllProducts: builder.query<ProductsResponse, { page: number; limit: number }>({
+      query: ({ page, limit }) => ({
+        url: `/api/seller/getproducts?page=${page}&limit=${limit}`,
+        method: 'GET',
+      }),
+    }),
+
+    getProduct: builder.query<any, string>({
+      query: (productId) => ({
+        url: `/api/products/getProduct/${productId}`,
+=======
+    fetchAllProducts: builder.query<ProductsResponse, void>({
+      query: () => ({
+        url: '/api/seller/fetchAllProducts',
+        method: 'GET',
+      }),
+    }),
+    getProduct: builder.query<any, string>({
+      query: (productId) => ({
+        url: `/api/seller/getProduct/${productId}`,
+>>>>>>> admin/category
+>>>>>>> dev
         method: 'GET',
       }),
     }),
@@ -80,16 +138,30 @@ export const sellerApi = createApi({
         method: 'DELETE',
       }),
     }),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
     updateProduct: builder.mutation<
       AddProductResponse,
       { productId: string; formData: ProductType }
     >({
+<<<<<<< HEAD
+=======
+=======
+    updateProduct: builder.mutation<AddProductResponse, { productId: string; formData: FormDataType }>({
+>>>>>>> admin/category
+>>>>>>> dev
       query: ({ productId, formData }) => ({
         url: `/api/seller/updateProduct/${productId}`,
         method: 'PUT',
         body: formData,
       }),
     }),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> dev
     fetchOrders: builder.query<OrderResponse, string>({
       query: (sellerId) => ({
         url: `/api/seller/orders/${sellerId}`,
@@ -140,13 +212,33 @@ export const sellerApi = createApi({
       }),
       transformResponse: (response: { success: boolean; data: any }) => response.data,
     }),
+<<<<<<< HEAD
+=======
+=======
+    // New query to fetch seller data
+    fetchSeller: builder.query<SellerResponse, string>({
+      query: (sellerId) => ({
+        url: `/api/seller/fetchSeller/${sellerId}`,
+        method: 'GET',
+      }),
+    }),
+>>>>>>> admin/category
+>>>>>>> dev
   }),
 });
 
 export const {
   useFetchSellerByIdQuery,
   useCreateSellerMutation,
+<<<<<<< HEAD
   useUpdateSellerProfileMutation,
+=======
+<<<<<<< HEAD
+  useUpdateSellerProfileMutation,
+=======
+  useUpdatescellerprofileMutation,
+>>>>>>> admin/category
+>>>>>>> dev
   useAddProductMutation,
   useFetchProductsQuery,
   useFetchAllProductsQuery,
@@ -156,7 +248,17 @@ export const {
   useUpdateOrderStatusMutation,
   useFetchAllSellerQuery,
   useUpdateProductMutation,
+<<<<<<< HEAD
   useFetchSellerProfileQuery,
   useAddReviewMutation,
   useGetSellerDashboardQuery
+=======
+<<<<<<< HEAD
+  useFetchSellerProfileQuery,
+  useAddReviewMutation,
+  useGetSellerDashboardQuery
+=======
+  useFetchSellerQuery,
+>>>>>>> admin/category
+>>>>>>> dev
 } = sellerApi;
