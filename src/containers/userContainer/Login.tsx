@@ -12,7 +12,12 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [login] = useLoginMutation();
   const navigate = useNavigate();
+<<<<<<< HEAD
   const { loginValidationScema } = LoginValidation();
+=======
+  const dispatch = useDispatch();
+  const { loginValidationScema } = useLoginValidation();
+>>>>>>> admin/category
   const formik = useFormik({
     initialValues: {
       email: '',

@@ -54,8 +54,50 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const SellerNavigation: React.FC = () => {
+<<<<<<< HEAD
   const location = useLocation();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+=======
+  return (
+    <div className=" w-full bg-white">
+      <div className="relative mb-6">
+        {/* Navigation Links */}
+        <div className="absolute inset-x-0 top-0 flex justify-between px-6">
+          <Link
+            to="/seller/dashboard"
+            className="text-gray-800 text-sm font-medium py-2 px-4 hover:bg-gray-100"
+          >
+            Seller Dashboard
+          </Link>
+          <Link
+            to="/profile/seller/product-management"
+            className="text-gray-800 text-sm font-medium py-2 px-4 hover:bg-gray-100"
+          >
+            Product Management
+          </Link>
+          <Link
+            to="/profile/seller/ad-area"
+            className="text-gray-800 text-sm font-medium py-2 px-4 hover:bg-gray-100"
+          >
+            Ad Area
+          </Link>
+          <Link
+            to="/profile/seller/about"
+            className="text-gray-800 text-sm font-medium py-2 px-4 hover:bg-gray-100"
+          >
+            About Area
+          </Link>
+          <Link
+            to="/profile/seller/order-area"
+            className="text-gray-800 text-sm font-medium py-2 px-4 hover:bg-gray-100"
+          >
+            Order Area
+          </Link>
+        </div>
+      </div>
+      {/* Horizontal Line */}
+      <div className="w-full border-t border-gray-300 mt-8"></div>
+>>>>>>> admin/category
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen((prev) => !prev);

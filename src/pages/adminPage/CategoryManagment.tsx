@@ -4,7 +4,10 @@ import {
   useAddCategoryMutation,
   useFetchCategoryQuery,
   useUpdateCategoryMutation,
+<<<<<<< HEAD
   useDeleteCategoryMutation,
+=======
+>>>>>>> admin/category
 } from '../../services/apis/adminApi';
 import toast from 'react-hot-toast';
 import { Category, UploadCategory } from '../../interface/adminTypes/adminApiTypes';
@@ -26,7 +29,10 @@ const AdminCategoryTable: React.FC = () => {
 
   const [addCategory] = useAddCategoryMutation();
   const [updateCategory] = useUpdateCategoryMutation();
+<<<<<<< HEAD
   const [deleteCategory] = useDeleteCategoryMutation();
+=======
+>>>>>>> admin/category
   const [loading, setLoading] = useState<boolean>(false);
 
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
@@ -68,7 +74,11 @@ const AdminCategoryTable: React.FC = () => {
           !isEditMode ? 'Category added successfully!' : 'Category edited successfully',
         );
         handleModalClose();
+<<<<<<< HEAD
         refetch();
+=======
+        refetch(); // Refetch to get updated categories
+>>>>>>> admin/category
       }
     } catch (error) {
       console.error('Error adding category:', error);
@@ -77,6 +87,7 @@ const AdminCategoryTable: React.FC = () => {
     }
   };
 
+<<<<<<< HEAD
   const handleDeleteCategoryClick = async (categoryId: string) => {
     console.log(categoryId, 'categoryId');
     const response = await deleteCategory(categoryId).unwrap();
@@ -85,6 +96,8 @@ const AdminCategoryTable: React.FC = () => {
     toast.success('Category deleted successfully');
     refetch();
   };
+=======
+>>>>>>> admin/category
   const handleAddCategoryClick = () => {
     setIsEditMode(false);
     setCurrentCategory(null);
@@ -157,7 +170,11 @@ const AdminCategoryTable: React.FC = () => {
                   >
                     Edit
                   </button>
+<<<<<<< HEAD
                   <button onClick={() => handleDeleteCategoryClick(category._id)} className="text-red-600 hover:text-red-900">Delete</button>
+=======
+                  <button className="text-red-600 hover:text-red-900">Delete</button>
+>>>>>>> admin/category
                 </td>
               </tr>
             ))}

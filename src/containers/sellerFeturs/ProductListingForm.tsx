@@ -359,7 +359,7 @@ console.log(initialData,'initialData=====')
                         className="hidden"
                         name="images"
                         multiple
-                        onChange={(e) => handleFileInputChange(e, setFieldValue)}
+                        onChange={(e) => handleFileInputChange(e, setFieldValue)  }
                       />
                     </label>
                   </div>

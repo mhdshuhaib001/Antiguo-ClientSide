@@ -7,8 +7,12 @@ import AdminRouteProtector from './ProtectRout/AdminRoutProtector';
 import AdminAuthProtector from './ProtectRout/AdminAuthProtector';
 import React from 'react';
 import CategoryManagementTable from '../pages/adminPage/CategoryManagment';
+<<<<<<< HEAD
 import ReportManagment from '../components/Admin/ReportManagment';
 import AdminDashBord from '../pages/adminPage/adminDashBord'
+=======
+
+>>>>>>> admin/category
 const AdminRoute: React.FC = () => {
   return (
     <Routes>
@@ -16,10 +20,17 @@ const AdminRoute: React.FC = () => {
       <Route path="/" element={<AdminAuthProtector element={AdminLoginPage} />} />
 
       <Route path="/admin-dashboard" element={<AdminRouteProtector element={AdminDashboard} />}>
+<<<<<<< HEAD
       <Route path='dashboard' element={<AdminDashBord/>}/>
         <Route path="user-management" element={<AdminUserManagementTable />} />
         <Route path="category-management" element={<CategoryManagementTable />} />
         <Route path="report-management" element={<ReportManagment />} />
+=======
+        <Route path="user-management" element={<AdminUserManagementTable />} />
+        <Route path="category-management" element={<CategoryManagementTable />} />
+
+        {/* Corrected spelling */}
+>>>>>>> admin/category
       </Route>
     </Routes>
   );

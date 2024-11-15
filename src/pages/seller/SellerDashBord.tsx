@@ -84,8 +84,13 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
       }
 
       const sellerBrand: SellerCreationRequest = {
+<<<<<<< HEAD
         companyName: companyName,
         userId: userId,
+=======
+        CompanyName: companyName,
+        UserID: userId,
+>>>>>>> admin/category
       };
 
       const response = await createSeller(sellerBrand).unwrap();
@@ -113,7 +118,11 @@ const SellerDashBord: React.FC<SellerProps> = ({ onSellerCreate }) => {
   };
 
   return (
+<<<<<<< HEAD
     <div className="flex flex-col h-full w-full p-6 shadow-md overflow-y-auto">
+=======
+    <div className="flex flex-col h-full w-full p-6 shadow-md overflow-">
+>>>>>>> admin/category
       <h1 className="text-2xl font-medium mb-3 sm:text-3xl">
         Seller Dashboard
       </h1>

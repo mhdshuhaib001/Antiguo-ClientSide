@@ -1,5 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+<<<<<<< HEAD
 import { AdminLoginRequest, AdminLoginResponse ,AddCategoryRequest, FetchCategoriesResponse,AddReportRequest,AddReportResponse, FetchReportsResponse} from '../../interface/adminTypes/adminApiTypes';
+=======
+import { AdminLoginRequest, AdminLoginResponse ,AddCategoryRequest, FetchCategoriesResponse} from '../../interface/adminTypes/adminApiTypes';
+>>>>>>> admin/category
 
 export const adminApi = createApi({
   reducerPath: 'adminApi',
@@ -33,6 +37,10 @@ export const adminApi = createApi({
         url: `/api/admin/categories`,
         method: 'POST',
         body: formData,
+<<<<<<< HEAD
+=======
+      
+>>>>>>> admin/category
       }),
     }),
     fetchCategory:builder.query<FetchCategoriesResponse,{page:number,limit:number}>({
@@ -47,6 +55,7 @@ export const adminApi = createApi({
         method: 'PUT',
         body: formData,
       }),
+<<<<<<< HEAD
     }),
 
     deleteCategory: builder.mutation<void, string>({
@@ -90,16 +99,28 @@ export const adminApi = createApi({
   })
 
 
+=======
+      
+    }),
+    
+  }),
+});
+
+>>>>>>> admin/category
 export const {
   useAdminLoginMutation,
   useFetchAllUsersQuery,
   useUpdateUserStatusMutation,
   useAddCategoryMutation,
   useFetchCategoryQuery,
+<<<<<<< HEAD
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
   useAddReportMutation,
   useFetchReportsQuery,
   useUpdateReportStatusMutation,
   useSubscribeNotificationMutation
+=======
+  useUpdateCategoryMutation
+>>>>>>> admin/category
 } = adminApi;

@@ -24,6 +24,10 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     },
     validationSchema: categoryValidationSchema(isEditMode),
     onSubmit: async (values) => {
+<<<<<<< HEAD
+=======
+      // Prepare the final value to submit
+>>>>>>> admin/category
       const finalValue: UploadCategory = {
         name: values.name,
         image: values.image || (isEditMode && initialData ? initialData.imageUrl : null),
@@ -130,6 +134,10 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
         ) : null}
       </div>
 
+<<<<<<< HEAD
+=======
+      {/* Save Button */}
+>>>>>>> admin/category
       <div>
         <button
           type="submit"

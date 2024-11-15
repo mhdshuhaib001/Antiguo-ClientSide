@@ -18,12 +18,17 @@ const Registration: React.FC = () => {
 
   const handleLogin = async (data: AuthResponse) => {
     try {
+<<<<<<< HEAD
+=======
+      // Dispatch user data to the Redux store
+>>>>>>> admin/category
       dispatch(
         setUser({
           _id: data.userData?._id,
           email: data.userData?.email,
           name: data.userData?.name,
           role: data.userData?.role,
+<<<<<<< HEAD
           profileImage: data.userData?.profileImage || null,
           isSeller: data.userData.isSeller,
         }),
@@ -31,6 +36,14 @@ const Registration: React.FC = () => {
       const sellerId = data.sellerId;
       dispatch(setSellerId(sellerId));
 
+=======
+        }),
+      );
+
+      console.log(data, 'login response');
+
+      // Extract tokens
+>>>>>>> admin/category
       const authToken = data.accessToken;
       const sellerToken = data.sellerToken;
 
@@ -39,10 +52,13 @@ const Registration: React.FC = () => {
         localStorage.setItem('accessToken', authToken);
         document.cookie = `accessToken=${authToken}; path=/; secure; samesite=strict; max-age=3600`;
       }
+<<<<<<< HEAD
       console.log(data.refreshToken, 'refreshToken checking ');
       if (data.refreshToken) {
         localStorage.setItem('refreshToken', data.refreshToken);
       }
+=======
+>>>>>>> admin/category
 
       if (sellerToken) {
         localStorage.setItem('sellerToken', sellerToken);
@@ -55,6 +71,10 @@ const Registration: React.FC = () => {
   };
 
   const handleSignup = (data: AuthResponse) => {
+<<<<<<< HEAD
+=======
+    console.log('Signup Data:', data);
+>>>>>>> admin/category
     dispatch(
       setUser({
         _id: data.userData?._id,
@@ -89,7 +109,10 @@ const Registration: React.FC = () => {
           }),
         );
         localStorage.setItem('accessToken', googleResponse.accessToken || '');
+<<<<<<< HEAD
         localStorage.setItem('sellerToken',googleResponse.sellerToken||'')
+=======
+>>>>>>> admin/category
         const token = googleResponse.accessToken || '';
         const cookieOptions = `secure; samesite=strict;max-age=${3 * 24 * 60 * 60}`;
         document.cookie = `accessToken=${token}; ${cookieOptions}`;

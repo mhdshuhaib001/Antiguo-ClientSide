@@ -33,9 +33,13 @@ const AdminSideBare: React.FC = () => {
         <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
           <Link to="/admin/admin-dashboard/category-management"> Category Managment</Link>
         </li>
+<<<<<<< HEAD
         <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">
           <Link to={'/admin/admin-dashboard/report-management'}>ReportManagment</Link>
         </li>
+=======
+        <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">Orders</li>
+>>>>>>> admin/category
         <li className="hover:bg-gray-700 p-2 rounded cursor-pointer">Settings</li>
       </ul>
 

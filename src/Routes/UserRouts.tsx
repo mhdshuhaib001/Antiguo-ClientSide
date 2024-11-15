@@ -3,6 +3,7 @@ import React, { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import UserProtectedRoute from './ProtectRout/UserVerifyRoute';
 import AuthRoute from './ProtectRout/AuthRoute';
+<<<<<<< HEAD
 import Loader from '../components/commen/Loader';
 
 // Lazy-loaded components
@@ -50,6 +51,30 @@ const UserRoute: React.FC = () => {
         <Route path="/auction-page/:id" element={<AuctionPage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/seller-profile/:sellerId" element={<SellerProfilePage />} />
+=======
+import ForgetPasswordPage from '../pages/userPages/PasswordForgetPage';
+import EmailSendPage from '../pages/userPages/EmailSendPage';
+import ProductManagment from '../pages/seller/ProductManagment';
+import AuctionItemForm from '../components/Seller/auction-item-form';
+import UserDashBoard from '../components/User/UserDshboard';
+import SellerAboutPage from '../components/Seller/SellerAbout'
+
+const UserRoute: React.FC = () => {
+  return (
+    <Routes>
+      <Route path="/signup" element={<AuthRoute element={Registration} />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/forget-password" element={<ForgetPasswordPage />} />
+      <Route path="/forget-password-request" element={<EmailSendPage />} />
+      <Route path="/profile" element={<UserProtectedRoute element={Profile} />}>
+        <Route path="dashboard" element={<UserDashBoard />} />
+        <Route path="password" element={<AuctionItemForm />} />
+        <Route path="seller" element={<UserProtectedRoute element={Seller} />}>
+          <Route path="product-management" element={<UserProtectedRoute element={ProductManagment} />} />
+          <Route path="addproduct" element={<UserProtectedRoute element={ProductListingForm} />} />
+          <Route path="editproduct/:productId" element={<UserProtectedRoute element={EditProductForm} />} />
+          <Route path="about" element={<SellerAboutPage/>} />
+>>>>>>> admin/category
 
         <Route path="/profile" element={<UserProtectedRoute element={Profile} />}>
           <Route path="dashboard" element={<UserDashBoard />} />
@@ -81,8 +106,13 @@ const UserRoute: React.FC = () => {
             <Route path="about" element={<SellerAboutPage />} />
           </Route>
         </Route>
+<<<<<<< HEAD
       </Routes>
     </Suspense>
+=======
+      </Route>
+    </Routes>
+>>>>>>> admin/category
   );
 };
 

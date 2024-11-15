@@ -1,9 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { AuthRequest, AuthResponse } from '../../interface/userTypes/apiTypes';
+<<<<<<< HEAD
 import { getToken } from '../../utils/getHelper';
 import { Address } from '../../interface/userTypes/apiTypes';
 import { Category } from '../../interface/adminTypes/adminApiTypes';
 import { ChangePasswordType } from '../../interface/userTypes/changePasswordType';
+=======
+import { getToken } from '../../utils/getHelper'
+
+>>>>>>> admin/category
 
 export const ApiSlice = createApi({
   reducerPath: 'userApi',
@@ -12,7 +17,11 @@ export const ApiSlice = createApi({
     credentials: 'include',
     prepareHeaders: (headers) => {
       const token = getToken();
+<<<<<<< HEAD
 
+=======
+      console.log(token,'userApiTokenchjekkjfn kgjv')
+>>>>>>> admin/category
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }
@@ -59,6 +68,7 @@ export const ApiSlice = createApi({
         body: emailData,
       }),
     }),
+<<<<<<< HEAD
    forgetPassword: builder.mutation<AuthResponse, { token: string; newPassword: string }>({
   query: (newPasswordData) => {
     console.log('Data sent to /api/auth/forget-password:', newPasswordData);
@@ -73,6 +83,11 @@ export const ApiSlice = createApi({
     addAddress: builder.mutation<AuthResponse, { address: Address }>({
       query: (addressData) => ({
         url: '/api/user/address',
+=======
+    forgetPassword: builder.mutation<AuthResponse, { token: string; newPassword: string }>({
+      query: (newPasswordData) => ({
+        url: '/api/auth/forget-password',
+>>>>>>> admin/category
         method: 'POST',
         body: addressData,
       }),
@@ -126,6 +141,7 @@ export const {
   useEmailSendMutation,
   useForgetPasswordMutation,
   useIsBlockedQuery,
+<<<<<<< HEAD
   useAddAddressMutation,
   useGetAddressQuery,
   useUpdateProfileMutation,
@@ -134,4 +150,6 @@ export const {
   useDeleteAddressMutation,
   useFetchCategoriesQuery,
   useChangePasswordMutation
+=======
+>>>>>>> admin/category
 } = ApiSlice;
