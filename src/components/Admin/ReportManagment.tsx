@@ -157,7 +157,7 @@ const SellerReportManagement = () => {
                   <td className="border px-4 py-2">
                     <Button
                       variant="contained"
-                      color={color}
+                      color={color as any}
                       onClick={(e) => handleMenuOpen(e, report)}
                     >
                       {label}

@@ -4,7 +4,7 @@ import { AdminLoginRequest, AdminLoginResponse ,AddCategoryRequest, FetchCategor
 export const adminApi = createApi({
   reducerPath: 'adminApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8001',
+    baseUrl: import.meta.env.VITE_SERVER_URL,
     credentials: 'include',
   }),
   endpoints: (builder) => ({

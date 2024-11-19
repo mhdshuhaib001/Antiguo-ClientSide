@@ -7,7 +7,7 @@ export default function UserManagementTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 7;
-  const { data: users = [], isLoading } = useFetchAllUsersQuery();
+  const { data: users = [] } = useFetchAllUsersQuery();
   const [updateUserBlock] = useUpdateUserStatusMutation();
 
   const [localUsers, setLocalUsers] = useState(users);
@@ -120,7 +120,7 @@ export default function UserManagementTable() {
                 <td className="p-3">
                   <select
                     value={user.isActive ? 'block' : 'unblock'}
-                    onChange={(e) => handleBlockUnblock(user._id)}
+                    onChange={() => handleBlockUnblock(user._id)}
                     className="border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="block">Block</option>

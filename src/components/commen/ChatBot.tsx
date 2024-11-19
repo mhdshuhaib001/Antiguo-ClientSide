@@ -167,7 +167,7 @@
 // export default ChatBot;
 
 import React, { useState, useEffect } from 'react';
-import { Clock, SendHorizontal, X, MessageSquare, Watch } from 'lucide-react';
+import { Clock, SendHorizontal, X, Watch } from 'lucide-react';
 import { useChatBotMutation } from '../../services/apis/chatApi';
 
 interface Message {

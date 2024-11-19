@@ -20,9 +20,9 @@
 
 import * as Yup from 'yup';
 
-export const categoryValidationSchema = (isEditMode: boolean) => 
+export const categoryValidationSchema = () => 
   Yup.object().shape({
     name: Yup.string().required('Category name is required'),
-    image: Yup.mixed().nullable(), // No validation for image
-    icon: Yup.mixed().nullable(), // Keep or modify this based on your requirements
+    image: Yup.mixed().nullable(), 
+    icon: Yup.mixed().nullable(),
   });

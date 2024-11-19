@@ -1,4 +1,3 @@
-import { CalendarDateTime } from '@internationalized/date';
 import { Seller } from '../sellerTypes/sellerApiTypes';
 
 export type ProductImage = any;
@@ -13,7 +12,7 @@ export interface ProductType {
   description: string;
   condition: string;
   images: ProductImage[];
-  currentBid:Number
+  currentBid:any
   auctionFormat: string;
   sold: boolean;
   reservePrice: string;

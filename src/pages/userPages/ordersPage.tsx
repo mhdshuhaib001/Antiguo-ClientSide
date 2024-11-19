@@ -35,9 +35,8 @@ const UserOrderedProducts: React.FC = () => {
   const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState<OrderedProduct | null>(null);
   const userId = useSelector((state: RootState) => state.User._id);
-  const { data: orders, isLoading, error } = useFetchOrderByUserQuery(userId);
-  console.log('userId', userId);
-  console.log(orders, 'orders');
+  const { data: orders, isLoading } = useFetchOrderByUserQuery(userId);
+
   const handleViewDetails = (product: OrderedProduct) => {
     setSelectedProduct(product);
   };

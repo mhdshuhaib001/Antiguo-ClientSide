@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { CreditCard, Landmark, Truck } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { CreditCard, WalletMinimal , Truck } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { useGetProductByIdQuery } from '../services/apis/productApi';
 import { useGetAddressQuery } from '../services/apis/userApi';
@@ -12,30 +12,17 @@ import Header from '../components/User/Header';
 import Footer from '../components/User/Footer';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/Store';
-import { loadStripe } from '@stripe/stripe-js';
 import { useStripe, useElements } from '@stripe/react-stripe-js';
 import toast from 'react-hot-toast';
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
-interface FormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  address: string;
-  city: string;
-  zipCode: string;
-  country: string;
-}
 
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
-  // const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
   // console.log(id,'this is the ad of the things ')
   const userId = useSelector((state: RootState) => state.User._id);
-  const { id, token } = useParams<{ id: string; token: string }>();
+  // const { id, token } = useParams<{ id: string; token: string }>();
   const [createCheckoutSession] = useCreateCheckoutSessionMutation();
 
   // let decodedUserId :string|undefined
@@ -48,8 +35,8 @@ const CheckoutPage: React.FC = () => {
   //   }
   // }
 
-  const { data: address, isLoading: isLoadingAddress } = useGetAddressQuery(userId);
-  const { data: product, isLoading: isLoadingProduct } = useGetProductByIdQuery(id);
+  const { data: address } = useGetAddressQuery(userId);
+  const { data: product } = useGetProductByIdQuery(id);
   console.log(product, 'this is the arress');
   const productData = product?.productData || {
     _id: '',
@@ -65,46 +52,37 @@ const CheckoutPage: React.FC = () => {
   const [createOrder, { isLoading: loading }] = useCreateOrderMutation();
 
   const [paymentMethod, setPaymentMethod] = useState('credit-card');
-  const [formData, setFormData] = useState<FormData>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    address: '',
-    city: '',
-    zipCode: '',
-    country: '',
-  });
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setPaymentMethod(value);
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  //   const { name, value } = e.target;
+  //   setPaymentMethod(value);
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  // };
 
-  const handleAddressChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedAddressId = e.target.value;
+  // const handleAddressChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const selectedAddressId = e.target.value;
 
-    if (address && address.length > 0) {
-      const selected = address.find((addr: any) => addr._id === selectedAddressId);
+  //   if (address && address.length > 0) {
+  //     const selected = address.find((addr: any) => addr._id === selectedAddressId);
 
-      if (selected) {
-        setFormData({
-          firstName: selected.fullName.split(' ')[0],
-          lastName: selected.fullName.split(' ')[1],
-          email: '',
-          address: selected.streetAddress,
-          city: selected.city,
-          zipCode: selected.postalCode,
-          country: selected.country,
-        });
-      }
-    }
-  };
+  //     if (selected) {
+  //       setFormData({
+  //         firstName: selected.fullName.split(' ')[0],
+  //         lastName: selected.fullName.split(' ')[1],
+  //         email: '',
+  //         address: selected.streetAddress,
+  //         city: selected.city,
+  //         zipCode: selected.postalCode,
+  //         country: selected.country,
+  //       });
+  //     }
+  //   }
+  // };
   useEffect(() => {
     const orderCompleted = localStorage.getItem('orderCompleted');
     if (orderCompleted === 'true') {
@@ -116,19 +94,19 @@ const CheckoutPage: React.FC = () => {
   }, [navigate]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (!selectedAddress) {
       toast.error('Please select a delivery address.');
       return;
     }
-  
+
     if (!paymentMethod) {
       toast.error('Please select a payment method.');
       return;
     }
-  
+
     if (!stripe || !elements) return;
-  
+
     if (paymentMethod === 'stripe') {
       const orderData = {
         buyerId: userId,
@@ -136,33 +114,33 @@ const CheckoutPage: React.FC = () => {
         addressId: selectedAddress,
         productId: productData._id,
       };
-  
+
       try {
         const orderResponse = await createOrder(orderData);
         const orderId = orderResponse.data;
-  
-        let price = productData.finalBidAmount ? productData.finalBidAmount : productData.reservePrice;
+
+        let price = productData.finalBidAmount
+          ? productData.finalBidAmount
+          : productData.reservePrice;
         const product = {
           image: productData.images[0],
           name: productData.itemTitle,
           price: price,
           orderId: orderId,
         };
-  
+
         const sessionResponse = await createCheckoutSession(product);
         const sessionId = sessionResponse.data?.id;
-  
+
         const result = await stripe.redirectToCheckout({ sessionId });
-  
+
         if (result.error) {
           console.error(result.error.message);
-          setErrorMessage(result.error.message || 'Failed to process payment. Please try again.');
         } else {
           navigate(`/order-confirmation/${orderId}`);
         }
       } catch (error) {
         console.error('Error:', error);
-        setErrorMessage('Failed to process payment. Please try again.');
       }
     } else {
       console.log('Other payment method selected:', paymentMethod);
@@ -189,7 +167,7 @@ const CheckoutPage: React.FC = () => {
                     <div className="space-y-2">
                       {[
                         { id: 'credit-card', label: 'Credit Card', icon: CreditCard },
-                        { id: 'bank-transfer', label: 'Bank Transfer', icon: Landmark },
+                        { id: 'wallet', label: 'Bank Transfer', icon: WalletMinimal  },
                         { id: 'stripe', label: 'stripe', icon: Truck },
                       ].map((method) => (
                         <label
@@ -280,7 +258,6 @@ const CheckoutPage: React.FC = () => {
                       <h3 className="text-lg font-semibold text-gray-800">
                         {product?.productData.itemTitle}
                       </h3>
-                      <p className="text-sm text-gray-600">{product?.productData.description}</p>
                     </div>
                   </div>
                   <div>
@@ -289,10 +266,7 @@ const CheckoutPage: React.FC = () => {
                       <div className="space-y-2">
                         <div className="flex justify-between text-gray-800">
                           <span>{productData.itemTitle}</span>
-                          <span>
-                            ${' '}
-                            {productData.reservePrice }
-                          </span>
+                          <span>$ {productData.reservePrice}</span>
                         </div>
 
                         {productData.auctionStatus === 'sold' && (

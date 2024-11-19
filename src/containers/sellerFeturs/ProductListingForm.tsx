@@ -16,7 +16,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import ImageEditModal from '../../components/Seller/EditImageComponent';
 import { useFetchCategoriesQuery } from '../../services/apis/userApi';
-import { useGetProductQuery, useGetProductByIdQuery } from '../../services/apis/productApi';
+import { useGetProductQuery } from '../../services/apis/productApi';
 
 interface FormValues {
   itemTitle: string;  
@@ -37,21 +37,21 @@ interface FormValues {
 const ProductListingForm: React.FC = () => {
   const { productId } = useParams<{ productId?: string }>();
 
-  const { data: productDetails, isLoading: isProductLoading } = useGetProductQuery(productId, {
+  const { data: productDetails } = useGetProductQuery(productId, {
     skip: !productId,
   });
   console.log(productDetails,'this si the productDetails')
-  const { data: categories, isLoading: isCategoriesLoading } = useFetchCategoriesQuery();
+  const { data: categories } = useFetchCategoriesQuery();
   const sellerId = useSelector((state: RootState) => state.Seller.sellerId);
   const [auctionFormat, setAuctionFormat] = useState('');
   const navigate = useNavigate();
   const [addProduct, { isLoading: isAddProductLoading }] = useAddProductMutation();
   const [previewSource, setPreviewSource] = useState<string[]>([]);
-  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
-  const [errMsg, setErrMsg] = useState('');
+  // const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+  // const [errMsg, setErrMsg] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  // const [croppedImage, setCroppedImage] = useState<string | null>(null);
   const [initialValues, setInitialValue] = useState<FormValues>({
     itemTitle: '',
     categoryId: '',
@@ -110,24 +110,24 @@ const ProductListingForm: React.FC = () => {
     }
   };
 
-  const convertToCalendarDateTime = (dateString: string): CalendarDateTime | null => {
-    try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) return null;
+  // const convertToCalendarDateTime = (dateString: string): CalendarDateTime | null => {
+  //   try {
+  //     const date = new Date(dateString);
+  //     if (isNaN(date.getTime())) return null;
 
-      return new CalendarDateTime(
-        date.getUTCFullYear(),
-        date.getUTCMonth() + 1,
-        date.getUTCDate(),
-        date.getUTCHours(),
-        date.getUTCMinutes(),
-        date.getUTCSeconds(),
-      );
-    } catch (error) {
-      console.error('Invalid date conversion:', error);
-      return null;
-    }
-  };
+  //     return new CalendarDateTime(
+  //       date.getUTCFullYear(),
+  //       date.getUTCMonth() + 1,
+  //       date.getUTCDate(),
+  //       date.getUTCHours(),
+  //       date.getUTCMinutes(),
+  //       date.getUTCSeconds(),
+  //     );
+  //   } catch (error) {
+  //     console.error('Invalid date conversion:', error);
+  //     return null;
+  //   }
+  // };
 
   useEffect(() => {
     if (!productDetails) {
@@ -201,7 +201,7 @@ console.log(initialData,'initialData=====')
 
   const handleCropImage = (cropped: string | null) => {
     if (cropped) {
-      setCroppedImage(cropped);
+      // setCroppedImage(cropped);
       setPreviewSource((prev: any) =>
         prev.map((image: string | null) => (image === selectedImage ? cropped : image)),
       );
@@ -269,7 +269,7 @@ console.log(initialData,'initialData=====')
         validationSchema={productListingSchema}
         onSubmit={handleSubmit}
       >
-        {({ setFieldValue, values, errors }) => (
+        {({ setFieldValue }) => (
           <Form>
             {/* Item Details */}
             <div className="border border-gray-300 p-4 bg-white rounded-md mb-8">

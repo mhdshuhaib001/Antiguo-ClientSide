@@ -3,13 +3,7 @@ import { useChangePasswordMutation } from '../../services/apis/userApi';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/Store';
 
-interface FormState {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-  error: string;
-  success: boolean;
-}
+
 
 const ChangePassword: React.FC = () => {
   const userId = useSelector((state: RootState) => state.User._id);

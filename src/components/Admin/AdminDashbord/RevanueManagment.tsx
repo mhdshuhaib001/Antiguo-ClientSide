@@ -14,9 +14,9 @@ const RevenueManagement: React.FC = () => {
   const [totalRevenue, setTotalRevenue] = useState<number>(0);
   const [averageSale, setAverageSale] = useState<number>(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [monthlyRevenue, setMonthlyRevenue] = useState<{ name: string; revenue: number }[]>([]);
-  const [weeklyRevenue, setWeeklyRevenue] = useState<{ name: string; revenue: number }[]>([]);
-  const [yearlyRevenue, setYearlyRevenue] = useState<{ name: string; revenue: number }[]>([]);
+  const [, setMonthlyRevenue] = useState<{ name: string; revenue: number }[]>([]);
+  const [, setWeeklyRevenue] = useState<{ name: string; revenue: number }[]>([]);
+  const [, setYearlyRevenue] = useState<{ name: string; revenue: number }[]>([]);
   const [currentChartView, setCurrentChartView] = useState<'weekly' | 'monthly' | 'yearly'>('monthly');
 
   useEffect(() => {

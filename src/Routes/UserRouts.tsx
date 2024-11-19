@@ -4,14 +4,14 @@ import { Route, Routes } from 'react-router-dom';
 import UserProtectedRoute from './ProtectRout/UserVerifyRoute';
 import AuthRoute from './ProtectRout/AuthRoute';
 import Loader from '../components/commen/Loader';
-
+import Error from '../components/commen/ErrorPage'
 // Lazy-loaded components
 const Registration = lazy(() => import('../pages/userPages/Registration'));
 const Home = lazy(() => import('../pages/userPages/LandingPage'));
 const Profile = lazy(() => import('../pages/userPages/Profile'));
 const SellerDashBord = lazy(() => import('../pages/seller/SellerDashBord'));
 const ProductListingForm = lazy(() => import('../containers/sellerFeturs/ProductListingForm'));
-const EditProductForm = lazy(() => import('../containers/sellerFeturs/EditProductForm'));
+// const EditProductForm = lazy(() => import('../containers/sellerFeturs/EditProductForm'));
 const ForgetPasswordPage = lazy(() => import('../pages/userPages/PasswordForgetPage'));
 const EmailSendPage = lazy(() => import('../pages/userPages/EmailSendPage'));
 const ProductManagment = lazy(() => import('../pages/seller/ProductManagment'));
@@ -49,6 +49,7 @@ const UserRoute: React.FC = () => {
         <Route path="/auction-items" element={<AuctionItems />} />
         <Route path="/auction-page/:id" element={<AuctionPage />} />
         <Route path="/chat" element={<ChatPage />} />
+        {/* <Route path="/error" element={<Error/>}/> */}
         <Route path="/seller-profile/:sellerId" element={<SellerProfilePage />} />
 
         <Route path="/profile" element={<UserProtectedRoute element={Profile} />}>
@@ -70,10 +71,10 @@ const UserRoute: React.FC = () => {
               path="addproduct/:productId?"
               element={<UserProtectedRoute element={ProductListingForm} />}
             />
-            <Route
+            {/* <Route
               path="editproduct/:productId"
               element={<UserProtectedRoute element={EditProductForm} />}
-            />
+            /> */}
             <Route
               path="order-management"
               element={<UserProtectedRoute element={OrderManagementTable} />}

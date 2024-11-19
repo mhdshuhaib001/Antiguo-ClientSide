@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { Message } from '../../interface/chatTypes/chat';
 
-const SOCKET_SERVER_URL = 'http://localhost:8001';
+const SOCKET_SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 export const useSocket = () => {
     const [socket, setSocket] = useState<Socket | null>(null);
@@ -23,7 +23,7 @@ export const useSocket = () => {
         });
 
         // Modified typing event handlers
-        newSocket.on('typing', ({ userId, room }) => {
+        newSocket.on('typing', ({room }) => {
             setTypingUsers((prev) => {
                 console.log('Setting typing state for room:', room, 'to true');
                 return { ...prev, [room]: true };

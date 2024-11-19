@@ -116,7 +116,6 @@
 
 // export default Header;
 
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, MessageCircle, Bell } from 'lucide-react';
@@ -138,10 +137,10 @@ const Header: React.FC = () => {
 
   // Hooks
   const navigate = useNavigate();
-  const { socket, messages } = useSocket();
+  const { socket } = useSocket();
   const currentUserId = useSelector((state: RootState) => state.User._id);
+  
 
- 
   const {
     notifications: messageNotifications,
     unreadCount,
@@ -150,18 +149,27 @@ const Header: React.FC = () => {
     clearNotifications,
   } = useMessageNotification(socket, currentUserId);
 
-  // Handlers
-  const handleNotificationClick = (notification: any) => {
-    navigate('/chat', { state: { contactId: notification.senderId } });
-    setIsMessageDropdownOpen(false);
-  };
+  useEffect(() => {
+    setNotifications(notifications);
+  }, [messageNotifications]);
 
-  const handleRegularNotificationClick = () => {
-    setIsModalOpen(true);
-    setIsDropdownOpen(false);
-  };
+  const handleNotificationClick = (notification: { type: string; senderId: string; orderId?: string }) => {
+  switch (notification.type) {
+    case 'message':
+      navigate('/chat', { state: { contactId: notification.senderId } });
+      break;
+    case 'order':
+      navigate(`/seller/orders/${notification.orderId}`);
+      break;
+  }
+  setIsMessageDropdownOpen(false);
+};
 
-  // Effect to check for token
+  // const handleRegularNotificationClick = () => {
+  //   setIsModalOpen(true);
+  //   setIsDropdownOpen(false);
+  // };
+
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
     setToken(storedToken);
@@ -186,18 +194,14 @@ const Header: React.FC = () => {
           >
             Auction
           </button>
-          
-          <button className="text-gray-600 hover:text-gray-900">
-            Live Auction
-          </button>
-          
-          <button className="text-gray-600 hover:text-gray-900">
-            About us
-          </button>
+
+          <button className="text-gray-600 hover:text-gray-900">Live Auction</button>
+
+          <button className="text-gray-600 hover:text-gray-900">About us</button>
 
           {/* Regular Notifications */}
           <div className="relative">
-            <button
+            {/* <button
               className="text-gray-600 hover:text-gray-900 flex items-center"
               onClick={handleRegularNotificationClick}
               onMouseEnter={() => setIsDropdownOpen(true)}
@@ -209,10 +213,10 @@ const Header: React.FC = () => {
                   {notifications.length}
                 </span>
               )}
-            </button>
+            </button> */}
 
             {/* Regular Notifications Dropdown */}
-            {isDropdownOpen && (
+            {/* {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-300 rounded-md shadow-lg z-10">
                 {notifications.length > 0 ? (
                   notifications.map((notification) => (
@@ -237,7 +241,7 @@ const Header: React.FC = () => {
                   <div className="px-4 py-2 text-gray-600">No new notifications</div>
                 )}
               </div>
-            )}
+            )} */}
           </div>
 
           {/* Message Notifications */}
@@ -245,8 +249,10 @@ const Header: React.FC = () => {
             <button
               className="text-gray-600 hover:text-gray-900 flex items-center"
               onClick={() => setIsMessageDropdownOpen(!isMessageDropdownOpen)}
+              onMouseEnter={() => setIsMessageDropdownOpen(true)}
+              onMouseLeave={() => setIsDropdownOpen(false)}
             >
-              <MessageCircle size={24} />
+              <Bell size={24} />
               {unreadCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-amber-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {unreadCount}
@@ -262,16 +268,13 @@ const Header: React.FC = () => {
                 onMarkAllAsRead={markAllAsRead}
                 onClear={clearNotifications}
                 onClose={() => setIsMessageDropdownOpen(false)}
-                onNotificationClick={handleNotificationClick}
+                onNotificationClick={(notification) => handleNotificationClick(notification as { type: string; senderId: string; orderId?: string; })}
               />
             )}
           </div>
 
           {/* Chat Button */}
-          <button
-            onClick={() => navigate('/chat')}
-            className="text-gray-600 hover:text-gray-900"
-          >
+          <button onClick={() => navigate('/chat')} className="text-gray-600 hover:text-gray-900">
             <img
               src="/svg/icons/chat.svg"
               alt="Chat"
@@ -357,10 +360,7 @@ const Header: React.FC = () => {
 
       {/* Notification Modal */}
       {isModalOpen && (
-        <NotificationModal
-          notifications={notifications}
-          onClose={() => setIsModalOpen(false)}
-        />
+        <NotificationModal notifications={notifications} onClose={() => setIsModalOpen(false)} />
       )}
     </header>
   );

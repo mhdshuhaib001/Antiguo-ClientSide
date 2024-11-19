@@ -87,42 +87,40 @@ export default function AddressBook(): JSX.Element {
 
       {/* Add Address Dialog */}
       {isAddDialogOpen && (
-  <div className="fixed inset-0 flex items-center justify-center z-50">
-    <div className="absolute inset-0 bg-black opacity-50 backdrop-blur-md" />
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-black opacity-50 backdrop-blur-md" />
 
-    <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full bg-[#f1f1df] relative z-10">
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full relative z-10">
+            <button
+              className="absolute top-4 right-4 text-red-600 hover:text-red-800 text-lg"
+              onClick={() => setIsAddDialogOpen(false)}
+            >
+              &times;
+            </button>
 
-      <button
-        className="absolute top-4 right-4 text-red-600 hover:text-red-800 text-lg"
-        onClick={() => setIsAddDialogOpen(false)}
-      >
-        &times; 
-      </button>
-
-      <h3 className="text-xl font-bold mb-4">Add New Address</h3>
-      <AddressForm
-        onSuccess={() => {
-          setIsAddDialogOpen(false);
-          toast.success('Address added successfully');
-        }}
-      />
-      {/* <button
+            <h3 className="text-xl font-bold mb-4">Add New Address</h3>
+            <AddressForm
+              onSuccess={() => {
+                setIsAddDialogOpen(false);
+                toast.success('Address added successfully');
+              }}
+            />
+            {/* <button
         className="text-red-600 hover:text-red-800 underline mt-4"
         onClick={() => setIsAddDialogOpen(false)}
       >
         Cancel
       </button> */}
-    </div>
-  </div>
-)}
-
+          </div>
+        </div>
+      )}
 
       {/* Edit Address Dialog */}
       {isEditDialogOpen && currentAddress && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           {/* Background blur effect */}
           <div className="absolute inset-0 bg-black opacity-50 backdrop-blur-md" />
-          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md bg-[#f1f1df] relative z-10">
+          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative z-10">
             <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Edit Address</h3>
             <AddressForm
               address={currentAddress}
