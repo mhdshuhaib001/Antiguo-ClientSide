@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, MapPin, Phone, Mail, Flag, MessageCircle } from 'lucide-react';
+import { Star, MapPin, Phone, Mail, Flag } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { useFetchSellerProfileQuery, useAddReviewMutation } from '../../services/apis/sellerApi';
 import { Review } from '../../interface/reviewTypes/review';
@@ -40,7 +40,7 @@ export default function SellerProfile() {
   const { sellerId } = useParams();
   const [activeTab, setActiveTab] = useState('shop');
   const [newReview, setNewReview] = useState({ rating: 0, comment: '' });
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [_isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState<{
     [key: string]: { days: number; hours: number; minutes: number; seconds: number };
   }>({});
@@ -79,7 +79,6 @@ export default function SellerProfile() {
 
     return () => clearInterval(timer);
   }, [sellerData?.sellerProducts]);
-  const handleBidNow = () => {};
   const handleSubmitReview = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {

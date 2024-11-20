@@ -29,7 +29,8 @@ export default function AddressBook(): JSX.Element {
     state: '',
     postalCode: '',
     country: '',
-    userId: userId
+    userId: userId,
+    _id: ''
   };
 
   const [newAddress, setNewAddress] = useState<Address>(initialAddressState);

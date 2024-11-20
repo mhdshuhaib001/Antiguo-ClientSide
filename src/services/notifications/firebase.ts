@@ -33,14 +33,20 @@ export const generateToken = async () => {
 };
 onMessage(messaging, (payload) => {
   console.log('Message received. ', payload);
-  // Handle foreground messages here
 });
 
-export const  onMessageListener=()=>{  
+export const onMessageListener = (): Promise<any> => {
   return new Promise((resolve, reject) => {
-    onMessage(messaging, (payload) => {
-      resolve(payload);
-    });
+    try {
+      onMessage(messaging, (payload) => {
+        if (payload) {
+          resolve(payload);
+        } else {
+          reject(new Error("Message payload is empty"));
+        }
+      });
+    } catch (error) {
+      reject(error);
+    }
   });
-  
-}
+};

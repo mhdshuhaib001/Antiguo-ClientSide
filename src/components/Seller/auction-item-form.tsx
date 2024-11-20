@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { PlusCircle, Edit2 } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 
 export default function AuctionItemForm() {
   const [images, setImages] = useState<string[]>([

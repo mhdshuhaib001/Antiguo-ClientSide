@@ -22,7 +22,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
       image: null,
       icon: null,
     },
-    validationSchema: categoryValidationSchema(isEditMode),
+    validationSchema: categoryValidationSchema(),
     onSubmit: async (values) => {
 <<<<<<< HEAD
 =======

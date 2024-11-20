@@ -6,7 +6,7 @@ import { useFetchCategoriesQuery } from '../../services/apis/userApi';
 
 export default function CategorySection() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const { data: categories, isLoading } = useFetchCategoriesQuery();
+  const { data: categories } = useFetchCategoriesQuery();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);

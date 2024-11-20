@@ -46,15 +46,15 @@ const Footer: React.FC = () => {
 
             {/* Logo and Social Media */}
             <div className="text-center">
-              <h2 className="text-2xl font-bold mb-2">Antigo</h2>
+              <h2 className="text-2xl font-bold mb-2">Auction Gems</h2>
               <p className="text-sm mb-4">Old High-End Blog Shop Blogger</p>
               <h3 className="font-bold mb-2">Stay Connected With Us!</h3>
               <p className="text-sm mb-4">Follow us on social media for updates</p>
               <div className="flex justify-center space-x-4">
-                <Linkedin size={20} />
-                <Facebook size={20} />
-                <Twitter size={20} />
-                <Instagram size={20} />
+                <Linkedin size={20} className='cursor-pointer' />
+                <Facebook size={20} className='cursor-pointer'/>
+                <Twitter size={20} className='cursor-pointer' />
+                <Instagram size={20} className='cursor-pointer'/>
               </div>
             </div>
 

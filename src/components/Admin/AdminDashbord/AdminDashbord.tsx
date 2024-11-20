@@ -1,5 +1,3 @@
-"use client"
-
 import React from 'react'
 import { BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from "recharts"
 import { Gavel, Users, ShoppingBag, DollarSign } from "lucide-react"
@@ -100,7 +98,7 @@ export default function AdminDashboard() {
                 fill="#8884d8"
                 dataKey="value"
               >
-                {categorySales.map((entry, index) => (
+                {categorySales.map((_item, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

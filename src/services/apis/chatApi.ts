@@ -3,7 +3,7 @@ import { Message } from '../../interface/chatTypes/chat';
 
 export const chatApi = createApi({
   reducerPath: 'chatApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8001' }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_SERVER_URL  }),
   endpoints: (builder) => ({
 
     createRoom: builder.mutation<any, { userId: string; selectedChatId: string }>({

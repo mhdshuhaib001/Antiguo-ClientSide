@@ -7,7 +7,7 @@ import { AuthResponse } from '../../interface/userTypes/apiTypes';
 const Email: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [emailSend, { isLoading, isError }] = useEmailSendMutation();
+  const [emailSend, { isLoading }] = useEmailSendMutation();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -72,7 +72,7 @@ const UserDashBoard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const userId = useSelector((state: RootState) => state.User._id);
-  const { data: userData, error, isLoading: profileLoading } = useFetchUserByIdQuery(userId);
+  const { data: userData } = useFetchUserByIdQuery(userId);
   const totalPages = Math.ceil(biddingSummary.length / itemsPerPage);
   const [updateProfile, { isLoading: updateLoading }] = useUpdateProfileMutation();
   const [imagePreview, setImagePreview] = useState<string | null>(null);

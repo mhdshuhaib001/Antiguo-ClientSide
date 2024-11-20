@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const auctionApi = createApi({
   reducerPath: 'auctionApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8001' }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_SERVER_URL  }),
   endpoints: (builder) => ({
     getAuctionById: builder.query({
       query: (id) => `api/auction/biddes/${id}`,

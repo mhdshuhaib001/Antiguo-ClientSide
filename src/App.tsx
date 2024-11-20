@@ -6,7 +6,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { generateToken, onMessageListener } from './services/notifications/firebase';
 import NotificationToast from './components/commen/Notification/NotificationTost';
-
+import ErrorBoundary from './components/commen/ErrorBoundry';
 const UserRoutes = lazy(() => import('./Routes/UserRouts'));
 const AdminRoutes = lazy(() => import('./Routes/AdminRouts'));
 import ProtectedRoute from './Routes/ProtectRout/ProtectedRoute';
@@ -25,14 +25,12 @@ interface FCMNotificationPayload {
 }
 
 const App: React.FC = () => {
-  const [fcmToken, setFcmToken] = useState<string | null>(null);
   const [initialLoad, setInitialLoad] = useState(true); 
 
   useEffect(() => {
     const fcmtoken = async () => {
       try {
-        const token = await generateToken();
-        setFcmToken(token);
+         await generateToken();
       } catch (error) {
         console.log(error);
       }
@@ -60,12 +58,14 @@ const App: React.FC = () => {
   return (
     <Router>
       <Elements stripe={stripePromise}>
+      <ErrorBoundary> 
         <Suspense fallback={initialLoad ? <Loader /> : null}>
           <Routes>
             <Route path="/*" element={<ProtectedRoute><UserRoutes /></ProtectedRoute>} />
             <Route path="/admin/*" element={<AdminRoutes />} />
           </Routes>
         </Suspense>
+        </ErrorBoundary>
       </Elements>
       <Toaster />
     </Router>

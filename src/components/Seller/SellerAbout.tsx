@@ -74,7 +74,7 @@ export default function SellerAboutPage() {
     }
 
     try {
-      const response = await updateProfile(formData).unwrap();
+      await updateProfile(formData).unwrap();
       setIsEditing(false);
       toast.success('Profile updated successfully!');
     } catch (error) {

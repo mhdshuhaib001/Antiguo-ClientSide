@@ -20,18 +20,14 @@ const Chat: React.FC = () => {
   const sellerId = useSelector((state: RootState) => state.Seller.sellerId);
   const userId = useSelector((state: RootState) => state.User._id);
   const userRole = useSelector((state: RootState) => state.User.role);
-
   const { data: sellerContacts } = useFetchAllSellerQuery();
   const { data: userContacts } = useFetchAllUsersQuery();
   const [selectedChat, setSelectedChat] = useState<Contact | null>(null);
   const [newMessage, setNewMessage] = useState('');
   const [showVideoCall, setShowVideoCall] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState('');
+  
 
-  // const [lastMessages, setLastMessages] = useState<{ [key: string]: Message }>({});
-  const [unreadMessages, setUnreadMessages] = useState<{ [key: string]: number }>({});
-
-  const isSeller = useSelector((state: RootState) => state.User.isSeller);
   const [combinedMessages, setCombinedMessages] = useState<Message[]>([]);
 
   const {
@@ -43,25 +39,26 @@ const Chat: React.FC = () => {
   } = useSocket();
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  // Map contacts based on user type
+ 
   const contacts: Contact[] =
-    userRole === 'user'
-      ? sellerContacts?.map((contact: any) => ({
+  userRole === 'user'
+    ? sellerContacts?.map((contact: any) => ({
+        id: contact._id,
+        name: contact.companyName,
+        avatar: contact.profile || '',
+        lastMessage: 'No messages yet',
+        online: false,
+      })) || []
+    : userContacts
+        ?.filter((contact: any) => contact.role === 'user')
+        .map((contact: any) => ({
           id: contact._id,
-          name: contact.companyName,
-          avatar: contact.profile || '',
+
+          name: contact.name,
+          avatar: contact.profileImage || '',
           lastMessage: 'No messages yet',
           online: false,
-        })) || []
-      : userContacts
-          ?.filter((contact: any) => contact.role === 'user')
-          .map((contact: any) => ({
-            id: contact._id,
-            name: contact.name,
-            avatar: contact.profileImage || '',
-            lastMessage: 'No messages yet',
-            online: false,
-          })) || [];
+        })) || [];
 
   // Filter contacts based on search query
   const filteredContacts = contacts.filter((contact) =>
@@ -69,7 +66,7 @@ const Chat: React.FC = () => {
   );
 
   const currentUserId = sellerId ? sellerId : userId;
-  const { data: messagesData, refetch } = useGetMessagesQuery({
+  const { data: messagesData } = useGetMessagesQuery({
     senderId: currentUserId,
     receiverId: selectedChat?.id || '',
   });
@@ -81,7 +78,6 @@ const Chat: React.FC = () => {
   }, [selectedChat, currentUserId, joinRoom]);
 
   useEffect(() => {
-    console.log('Combined Messages:', [...(messagesData || []), ...socketMessages]);
     setCombinedMessages([...(messagesData || []), ...socketMessages]);
   }, [messagesData, socketMessages]);
 
@@ -120,7 +116,6 @@ const Chat: React.FC = () => {
 
     if (selectedChat && e.target.value) {
       const roomId = getRoomId(currentUserId, selectedChat.id);
-      console.log('Triggering typing event for room....:', roomId);
 
       if (typingTimeout) {
         clearTimeout(typingTimeout);
@@ -158,11 +153,12 @@ const Chat: React.FC = () => {
     e.preventDefault();
     if (!newMessage || !selectedChat) return;
 
-    const message: Message = {
+    const message = {
       senderId: currentUserId,
       receiverId: selectedChat.id,
       message: newMessage,
       timestamp: new Date().toISOString(),
+      senderRole: userRole, 
     };
 
     sendMessage(message);
@@ -173,7 +169,6 @@ const Chat: React.FC = () => {
   const getRoomTypingStatus = useCallback(() => {
     if (!selectedChat || !currentUserId) return false;
     const roomId = getRoomId(currentUserId, selectedChat.id);
-    console.log('Checking typing status for room:', roomId, 'Status:', typingUsers[roomId]);
     return typingUsers[roomId];
   }, [selectedChat, currentUserId, typingUsers]);
 

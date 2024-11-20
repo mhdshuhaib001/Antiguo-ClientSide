@@ -28,33 +28,28 @@ interface Order {
   bidAmount: number;
 }
 
-interface OrderResponse {
-  success: boolean;
-  message: string;
-  orders: Order[];
-}
+
 
 export default function OrderManagementTable() {
   const userId = useSelector((state: RootState) => state.Seller.sellerId);
   const { data: responseData, isLoading, isError, error } = useFetchOrdersQuery(userId);
   console.log(responseData, 'haiii this is the response data ');
   const [orders, setOrders] = useState<Order[]>([]);
-  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
   useEffect(() => {
     if (responseData && responseData.status === 200 && Array.isArray(responseData.orders)) {
       const formattedOrders = responseData.orders.map((order: any) => ({
         id: order._id,
-        buyerId: order.buyerId ? order.buyerId.name : 'N/A', // Handle missing buyerId
-        productId: order.productId ? order.productId.itemTitle : 'N/A', // Handle missing productId
+        buyerId: order.buyerId ? order.buyerId.name : 'N/A', 
+        productId: order.productId ? order.productId.itemTitle : 'N/A', 
         productName: order.productId ? order.productId.itemTitle : 'N/A',
-        productImage: order.productId && order.productId.images ? order.productId.images[0] : '', // Check for image availability
+        productImage: order.productId && order.productId.images ? order.productId.images[0] : '', 
         sellerId: order.sellerId,
         orderDate: new Date(order.orderDate).toLocaleDateString(),
         orderStatus: order.orderStatus,
         paymentStatus: order.paymentStatus,
         bidAmount: order.bidAmount,
-        shippingAddress: order.shippingAddress // Pass the shipping address as is, if available
+        shippingAddress: order.shippingAddress 
       }));
       setOrders(formattedOrders);
     } else {
@@ -86,17 +81,13 @@ export default function OrderManagementTable() {
     );
 
     try {
-      console.log(setOrders, newStatus, 'id, newStatus');
-      const result = await updateOrderStatus({ orderId: id, status: newStatus });
-      console.log(result, 'result');
+      await updateOrderStatus({ orderId: id, status: newStatus });
     } catch (err) {
       console.error('Error updating order status:', err);
     }
   }
 
-  function handleSelectOrder(id: string) {
-    setSelectedOrderId(id);
-  }
+
 
   return (
     <div className="container mx-auto p-6 bg-amber-50">
@@ -108,7 +99,7 @@ export default function OrderManagementTable() {
           </div>
         ) : (
           currentOrders.map((order) => (
-            <div key={order.id} className={`bg-white shadow-md rounded-lg p-3 transition-transform transform hover:scale-105 ${selectedOrderId === order.id ? 'border-2 border-amber-500' : ''}`}>
+            <div key={order.id} className={`bg-white shadow-md rounded-lg p-3 transition-transform transform hover:scale-105 ${order.id ? 'border-2 border-amber-500' : ''}`}>
               <h2 className="text-lg font-bold text-amber-900">{order.productName}</h2>
               <img src={order.productImage} alt={order.productName} className="w-full h-24 object-cover rounded-md mb-2" /> {/* Reduced height */}
               <p><strong>Order ID:</strong> #{order.id.slice(0, 4)}****{order.id.slice(-4)}</p>

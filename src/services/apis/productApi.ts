@@ -6,7 +6,7 @@ import { ProductsResponse } from '../../interface/sellerTypes/sellerApiTypes';
 export const productApi = createApi({
   reducerPath: 'productApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8001',
+    baseUrl: import.meta.env.VITE_SERVER_URL,
     credentials: 'include',
     prepareHeaders: (headers) => {
       const token = getToken();

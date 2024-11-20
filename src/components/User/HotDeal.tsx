@@ -1,4 +1,3 @@
-import Image from '../../../public/assets/signup.jpg'
 import React from 'react'
 interface AuctionItem {
   id: string

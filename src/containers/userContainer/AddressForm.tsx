@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Address } from '../../interface/userTypes/apiTypes';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -74,20 +74,20 @@ console.log(address?._id,'address');
   const [addAddress] = useAddAddressMutation();
   const [updateAddress] = useUpdateAddressMutation();
 
-  const handleSubmit = async (values: Address) => {
-    try {
-      if (address) {
-        await updateAddress({ id: address._id, address: values }).unwrap();
-      } else {
-        console.log(values, 'values address');
-        await addAddress({ address: values }).unwrap(); 
-      }
-      onSuccess();
-    } catch (error) {
-      console.error('Error submitting address:', error);
-      alert('There was an error updating the address. Please try again.');
-    }
-  };
+  // const handleSubmit = async (values: Address) => {
+  //   try {
+  //     if (address) {
+  //       await updateAddress({ id: address._id, address: values }).unwrap();
+  //     } else {
+  //       console.log(values, 'values address');
+  //       await addAddress({ address: values }).unwrap(); 
+  //     }
+  //     onSuccess();
+  //   } catch (error) {
+  //     console.error('Error submitting address:', error);
+  //     alert('There was an error updating the address. Please try again.');
+  //   }
+  // };
   
 
   return (

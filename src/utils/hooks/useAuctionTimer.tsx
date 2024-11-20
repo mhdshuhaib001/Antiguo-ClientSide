@@ -55,6 +55,13 @@ export const useAuctionTimer = ({
     });
   }, [endDateTime, onTimeEnd, isEnded]);
 
+  useEffect(() => {
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000); 
+
+    return () => clearInterval(timer);
+  }, [calculateTimeLeft]); 
+
   const formattedEndTime = {
     date: new Date(endDateTime).toLocaleDateString(undefined, {
       year: 'numeric',
@@ -67,13 +74,6 @@ export const useAuctionTimer = ({
       hour12: true,
     })
   };
-
-  useEffect(() => {
-    calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 1000);
-
-    return () => clearInterval(timer);
-  }, [calculateTimeLeft]);
 
   return {
     timeLeft,

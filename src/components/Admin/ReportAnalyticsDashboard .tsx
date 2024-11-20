@@ -139,7 +139,7 @@ export default function AdminDashboard() {
                 fill="#8884d8"
                 dataKey="value"
               >
-                {categorySales.map((entry, index) => (
+                {categorySales.map((_entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

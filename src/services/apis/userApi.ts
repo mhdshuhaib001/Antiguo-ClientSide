@@ -19,7 +19,7 @@ import { getToken } from '../../utils/getHelper'
 export const ApiSlice = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8001',
+    baseUrl: import.meta.env.VITE_SERVER_URL ,
     credentials: 'include',
     prepareHeaders: (headers) => {
       const token = getToken();

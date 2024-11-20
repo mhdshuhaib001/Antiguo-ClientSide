@@ -12,7 +12,7 @@ import { Review } from '../../interface/reviewTypes/review';
 export const sellerApi = createApi({
   reducerPath: 'sellerApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8001',
+    baseUrl: import.meta.env.VITE_SERVER_URL,
     credentials: 'include',
     prepareHeaders: (headers) => {
       const seller = localStorage.getItem('sellerToken');
@@ -251,6 +251,7 @@ export const {
 <<<<<<< HEAD
   useFetchSellerProfileQuery,
   useAddReviewMutation,
+<<<<<<< HEAD
   useGetSellerDashboardQuery
 =======
 <<<<<<< HEAD
@@ -261,4 +262,7 @@ export const {
   useFetchSellerQuery,
 >>>>>>> admin/category
 >>>>>>> dev
+=======
+  useGetSellerDashboardQuery,
+>>>>>>> 926a801
 } = sellerApi;

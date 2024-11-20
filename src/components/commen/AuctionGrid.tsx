@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, Heart, Search, Filter, X } from 'lucide-react';
+import { Search, Filter} from 'lucide-react';
 import { useProductsData } from '../../utils/hooks/useProductsData';
 import AuctionItem from '../User/AuctionItemComponent';
 import { ProductType } from '../../interface/productTypes/productType';
@@ -35,14 +35,14 @@ export default function Component() {
   const [showFilters, setShowFilters] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
-  const { products, isLoading, error } = useProductsData(currentPage, itemsPerPage);
+  const { products, isLoading } = useProductsData(currentPage, itemsPerPage);
 
   const categories = Array.from(new Set(products.map((item) => item.categoryId.name)));
   const handlePageChange = (page: React.SetStateAction<number>) => {
     setCurrentPage(page);
   };
 
-  function getAuctionStatus(item: ProductType): 'live' | 'upcoming' | 'ended' | 'sold' {
+  function getAuctionStatus(item: ProductType): 'live' | 'upcoming' | 'end' | 'sold' {
     const now = new Date().getTime();
     const startTime = item.auctionStartDateTime
       ? new Date(item.auctionStartDateTime).getTime()
@@ -55,7 +55,7 @@ export default function Component() {
     if (item.sold) return 'sold';
     if (now < startTime) return 'upcoming';
     if (now >= startTime && now <= endTime) return 'live';
-    return 'ended';
+    return 'end';
   }
 
   useEffect(() => {
@@ -77,10 +77,10 @@ export default function Component() {
 
   // const featuredItems = filteredItems.filter((item) => item.featured);
   const totalPages = Math.ceil(products.length / itemsPerPage);
-  const displayedProducts = products.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
-  );
+  // const displayedProducts = products.slice(
+  //   (currentPage - 1) * itemsPerPage,
+  //   currentPage * itemsPerPage,
+  // );
 
   return (
     <div className="container mx-auto px-4 py-8 bg-gradient-to-br from-amber-50 to-amber-100 font-serif">

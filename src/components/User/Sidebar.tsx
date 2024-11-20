@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { userLogOut } from '../../store/slices/userSlice';
-import { User, ShoppingBag, Key, Gavel, CreditCard, Package, LogOut } from 'lucide-react';
+import { User, ShoppingBag, Key, CreditCard, Package, LogOut } from 'lucide-react';
 
 const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
